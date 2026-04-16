@@ -28,7 +28,7 @@ export function renderProfile(container, S, stateChanged) {
       <div class="stat-card"><div class="stat-val">${fmtVol(totalVolume)}</div><div class="stat-label">总训练量 (kg)</div></div>
       <div class="stat-card"><div class="stat-val">${Math.round(totalDuration / 3600)}</div><div class="stat-label">总时长 (h)</div></div>
     </div>
-    <div class="ai-card ai-pulse">
+    <div class="ai-card">
       <div class="ai-header"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.5 3.5L13 6l-3.5 1.5L8 11 6.5 7.5 3 6l3.5-1.5L8 1z"/></svg> ${report.title}</div>
       <div class="ai-body">${report.body}</div>
     </div>
@@ -95,12 +95,13 @@ export function renderProfile(container, S, stateChanged) {
   // AI config
   container.querySelector('#toggleApiBtn').addEventListener('click', () => {
     const apiKey = container.querySelector('#apiKeyInput').value.trim();
-    const newConfig = {
-      apiKey,
-      enabled: apiKey.length > 5 && !apiConfig.enabled,
-      model: 'claude-sonnet-4-6-20250514'
-    };
-    setApiConfig(newConfig);
+    if (!apiKey || apiKey.length <= 5) {
+      // If key is empty/short, disable AI
+      setApiConfig({ apiKey: '', enabled: false, model: 'claude-sonnet-4-6-20250514' });
+    } else {
+      // Toggle: if currently enabled, disable; if disabled, enable
+      setApiConfig({ apiKey, enabled: !apiConfig.enabled, model: 'claude-sonnet-4-6-20250514' });
+    }
     stateChanged();
   });
 

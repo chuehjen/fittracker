@@ -56,7 +56,7 @@ export function aiPreWorkout(state) {
   const recent = recs.slice(-14);
 
   if (recent.length === 0) {
-    return { title: '开启你的赛博健身之旅', body: '还没有训练记录。选择一个部位开始吧！建议从大肌群（胸、背、腿）开始。' };
+    return { title: '开始你的健身之旅', body: '还没有训练记录。选择一个部位开始吧！建议从大肌群（胸、背、腿）开始。' };
   }
 
   const partCount = {};

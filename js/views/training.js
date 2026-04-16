@@ -13,8 +13,16 @@ const EMPTY_TRAINING = '';
 let timerManager = null;
 let onStateChange = null;
 let currentRender = null;
+let currentContainer = null;
 
 export function renderTraining(container, S, stateChanged) {
+  // Clear timer interval when re-rendering (tab switch or state change)
+  if (S._timerInterval && currentContainer !== container) {
+    clearInterval(S._timerInterval);
+    S._timerInterval = null;
+  }
+  currentContainer = container;
+
   onStateChange = stateChanged;
   currentRender = () => renderTraining(container, S, stateChanged);
   timerManager = createTimerManager(S);
@@ -37,9 +45,9 @@ function renderTrainingHome(container, S) {
   container.innerHTML = `
     <div class="cyber-header">
       <div class="title">FITTRACKER PRO</div>
-      <div class="subtitle">CYBER EDITION · 记录每一次进化</div>
+      <div class="subtitle">极简健身追踪</div>
     </div>
-    <div class="ai-card ai-pulse">
+    <div class="ai-card">
       <div class="ai-header"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.5 3.5L13 6l-3.5 1.5L8 11 6.5 7.5 3 6l3.5-1.5L8 1z"/></svg> ${ai.title}</div>
       <div class="ai-body">${ai.body}</div>
     </div>
@@ -213,7 +221,7 @@ function renderActiveTraining(container, S) {
         <div style="display:flex;gap:4px" id="restPicker">
           ${[30, 60, 90, 120, 180].map(s => `<button class="rest-pick${S.restSeconds === s ? ' active' : ''}" data-sec="${s}">${s >= 60 && s % 60 === 0 ? s / 60 + 'min' : s + 's'}</button>`).join('')}
         </div>
-        <button class="rest-start-btn" id="btnRestTimer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5,3 19,12 5,21"/></svg>开始</button>
+        <button class="rest-start-btn" onclick="window._startRestTimer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5,3 19,12 5,21"/></svg>开始</button>
       </div>
     </div>
     ${ct.exercises.map((ex, ei) => {
@@ -269,10 +277,8 @@ function renderActiveTraining(container, S) {
     onStateChange();
   }));
 
-  // Rest timer
-  container.querySelector('#btnRestTimer').addEventListener('click', () => {
-    showRestTimerOverlay(S.restSeconds || 90);
-  });
+  // Rest timer — inline onclick uses global handler (avoids losing listener on re-render)
+  window._startRestTimer = () => showRestTimerOverlay(S.restSeconds || 90);
 
   // Add set buttons
   container.querySelectorAll('.s-check-btn').forEach(btn => {
@@ -339,7 +345,7 @@ function renderTrainingSummary(container, S) {
       <div class="stat-card"><div class="stat-val">${fmtVol(summary.vol)}</div><div class="stat-label">总训练量 (kg)</div></div>
       <div class="stat-card"><div class="stat-val">${ct.exercises.reduce((t, e) => t + e.sets.length, 0)}</div><div class="stat-label">总组数</div></div>
     </div>
-    <div class="ai-card ai-pulse">
+    <div class="ai-card">
       <div class="ai-header"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.5 3.5L13 6l-3.5 1.5L8 11 6.5 7.5 3 6l3.5-1.5L8 1z"/></svg> AI 训练总结</div>
       <div class="ai-body">
         ${summary.comp ? summary.comp + '<br>' : ''}

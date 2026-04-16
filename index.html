@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-  <title>FitTracker Pro - 赛博版</title>
-  <meta name="description" content="赛博朋克风格健身追踪应用">
-  <meta name="theme-color" content="#030308">
+  <title>FitTracker Pro</title>
+  <meta name="description" content="极简健身追踪应用">
+  <meta name="theme-color" content="#000000">
+  <link rel="manifest" href="./manifest.json">
   <link rel="stylesheet" href="./css/style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" onerror="window._chartLoadFailed=true"></script>
 </head>
@@ -16,7 +17,7 @@
   </div>
   <div id="errBox" style="position:fixed;inset:0;z-index:9999;background:#1a0000;color:#ff6666;padding:20px;font-family:monospace;font-size:14px;display:none;overflow:auto;white-space:pre-wrap;word-break:break-all;"></div>
   <script>
-    // Unregister ALL service workers immediately
+    // Unregister ALL service workers to prevent stale caching
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.getRegistrations().then(regs => {
         regs.forEach(r => r.unregister());
