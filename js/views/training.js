@@ -437,30 +437,34 @@ function showRestTimerOverlay(seconds) {
   const circumference = 2 * Math.PI * 90;
   let remaining = seconds;
 
+  overlay.innerHTML = `
+    <div class="timer-label">REST TIMER</div>
+    <div class="timer-circle">
+      <svg viewBox="0 0 200 200">
+        <circle class="track" cx="100" cy="100" r="90"/>
+        <circle class="progress" cx="100" cy="100" r="90" stroke-dasharray="${circumference}" stroke-dashoffset="0"/>
+      </svg>
+      <div class="timer-text">
+        <div style="font-size:14px;color:var(--t2);font-weight:500">准备</div>
+        <div id="timerCountdown" style="font-size:52px;font-weight:700;line-height:1;color:var(--t1);font-variant-numeric:tabular-nums">${remaining}</div>
+        <div style="font-size:12px;color:var(--t3);margin-top:4px">组间${seconds}秒</div>
+      </div>
+    </div>
+    <button class="btn btn-outline btn-block" id="timerSkip" style="max-width:200px;margin-top:8px">跳过</button>
+  `;
+
+  const progressCircle = overlay.querySelector('.progress');
+  const countdownEl = overlay.querySelector('#timerCountdown');
+  const skipBtn = overlay.querySelector('#timerSkip');
+
   function update() {
     const pct = remaining / seconds;
     const offset = circumference * (1 - pct);
-    overlay.innerHTML = `
-      <div class="timer-label">REST TIMER</div>
-      <div class="timer-circle">
-        <svg viewBox="0 0 200 200">
-          <circle class="track" cx="100" cy="100" r="90"/>
-          <circle class="progress" cx="100" cy="100" r="90" stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"/>
-        </svg>
-        <div class="timer-text">
-          <div style="font-size:14px;color:var(--t2);font-weight:500">准备</div>
-          <div style="font-size:52px;font-weight:700;line-height:1;color:var(--t1);font-variant-numeric:tabular-nums">${remaining}</div>
-          <div style="font-size:12px;color:var(--t3);margin-top:4px">组间${seconds}秒</div>
-        </div>
-      </div>
-      <button class="btn btn-outline btn-block" id="timerSkip" style="max-width:200px;margin-top:8px">跳过</button>
-    `;
+    progressCircle.setAttribute('stroke-dashoffset', offset);
+    countdownEl.textContent = remaining;
   }
 
-  update();
-  document.body.appendChild(overlay);
-
-  overlay.querySelector('#timerSkip').addEventListener('click', () => {
+  skipBtn.addEventListener('click', () => {
     clearInterval(interval);
     overlay.remove();
   });
