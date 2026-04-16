@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Test</title></head>
+<body>
+  <div id="status">Loading modules...</div>
+  <script type="module">
+    const status = document.getElementById('status');
+    try {
+      status.textContent = 'Step 1: Importing app.js...';
+      const mod = await import('./js/app.js');
+      status.textContent = 'Step 1: OK';
+    } catch(e) {
+      status.innerHTML = 'ERROR: ' + e.message + '<br>' + (e.stack || '');
+    }
+  </script>
+</body>
+</html>

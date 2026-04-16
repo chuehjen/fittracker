@@ -1,0 +1,19 @@
+{
+  "name": "FitTracker Pro",
+  "short_name": "FitTracker",
+  "description": "赛博朋克风格健身追踪应用",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#030308",
+  "theme_color": "#030308",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='36' fill='%230a0a16'/><path d='M60 96h72M96 60v72' stroke='%2300f3ff' stroke-width='12' stroke-linecap='round'/><circle cx='96' cy='96' r='80' stroke='%2300f3ff' stroke-width='2' fill='none' opacity='.3'/></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["health", "fitness", "productivity"]
+}
