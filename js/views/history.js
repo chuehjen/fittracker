@@ -51,7 +51,7 @@ function renderTrainingHistory(container, S, stateChanged) {
           </div>
           <div class="hc-right">
             <div class="hc-vol">${fmtVol(vol)} kg</div>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
           </div>
         </div>
         <div class="hc-detail">
@@ -62,7 +62,7 @@ function renderTrainingHistory(container, S, stateChanged) {
           ${r.photo ? `<img class="hc-photo" src="${r.photo}" onclick="event.stopPropagation();viewPhoto('${r.id}')">` : ''}
           ${r.notes ? `<div class="hc-notes">${r.notes}</div>` : ''}
           <button class="btn btn-danger btn-sm mt-8" data-del-training="${r.id}">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg> 删除记录
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg> 删除记录
           </button>
         </div>
       </div>`;
@@ -103,10 +103,10 @@ function renderBodyHistory(container, S, stateChanged) {
             ${r.weight ? `<span class="badge badge-accent">${r.weight}kg</span>` : ''}
             ${r.bodyFat ? `<span class="badge badge-warn">${r.bodyFat}%</span>` : ''}
             <button class="btn-ghost btn-sm edit-body-btn" data-id="${r.id}" style="padding:2px 6px;color:var(--acc)">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
             </button>
             <button class="btn-ghost btn-sm del-body-btn" data-id="${r.id}" style="padding:2px 6px;color:var(--err)">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
             </button>
           </div>
         </div>
@@ -176,12 +176,12 @@ window.viewPhoto = function(id) {
 function emptyState(type) {
   if (type === 'training') {
     return `<div class="empty">
-      <div class="empty-state-svg"><svg viewBox="0 0 80 80" fill="none" stroke="#00f3ff" stroke-width="1.5" stroke-linecap="round"><rect x="20" y="30" width="40" height="6" rx="3" opacity=".3"/><line x1="22" y1="26" x2="22" y2="40" stroke-width="2" opacity=".3"/><line x1="58" y1="26" x2="58" y2="40" stroke-width="2" opacity=".3"/></svg></div>
+      <div class="empty-state-svg"><svg viewBox="0 0 80 80" fill="none" stroke="var(--acc)" stroke-width="1.5" stroke-linecap="round"><rect x="20" y="30" width="40" height="6" rx="3" opacity=".3"/><line x1="22" y1="26" x2="22" y2="40" stroke-width="2" opacity=".3"/><line x1="58" y1="26" x2="58" y2="40" stroke-width="2" opacity=".3"/></svg></div>
       <p>还没有训练记录</p>
     </div>`;
   }
   return `<div class="empty">
-    <div class="empty-state-svg"><svg viewBox="0 0 80 80" fill="none" stroke="#00f3ff" stroke-width="1.5" stroke-linecap="round"><circle cx="40" cy="30" r="12" opacity=".3"/><path d="M28 30c0 10 6 20 12 20s12-10 12-20" opacity=".3"/><line x1="40" y1="50" x2="40" y2="65" stroke-width="2"/></svg></div>
+    <div class="empty-state-svg"><svg viewBox="0 0 80 80" fill="none" stroke="var(--acc)" stroke-width="1.5" stroke-linecap="round"><circle cx="40" cy="30" r="12" opacity=".3"/><path d="M28 30c0 10 6 20 12 20s12-10 12-20" opacity=".3"/><line x1="40" y1="50" x2="40" y2="65" stroke-width="2"/></svg></div>
     <p>还没有体重/饮食记录</p>
   </div>`;
 }

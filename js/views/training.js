@@ -1,14 +1,14 @@
 // ===== Training View =====
 // Home → Select Body Part → Select Exercise → Active Training → Summary
 
-import { BODY_PARTS, BODY_PART_ICONS, EXERCISES, getExMeta } from '../exercises.js';
+import { BODY_PARTS, EXERCISES, getExMeta } from '../exercises.js';
 import { getWeeklyNews } from '../news.js';
 import { ACHIEVEMENTS, getUnlockedAchievements } from '../achievements.js';
 import { aiPreWorkout, aiPostWorkout } from '../ai.js';
 import { createTimerManager } from '../timer.js';
 
-// Empty state SVG
-const EMPTY_TRAINING = `<div class="empty-state-svg"><svg viewBox="0 0 80 80" fill="none" stroke="#00f3ff" stroke-width="1.5" stroke-linecap="round"><rect x="20" y="30" width="40" height="6" rx="3" opacity=".3"/><line x1="22" y1="26" x2="22" y2="40" stroke-width="2" opacity=".3"/><line x1="58" y1="26" x2="58" y2="40" stroke-width="2" opacity=".3"/><circle cx="40" cy="20" r="4" opacity=".4"/><path d="M36 24v8" stroke-width="2"/><path d="M38 28l-6 6M42 28l6 6" stroke-width="1.5"/></svg></div>`;
+// Empty state
+const EMPTY_TRAINING = '';
 
 let timerManager = null;
 let onStateChange = null;
@@ -100,8 +100,8 @@ function renderSelectPart(container, S) {
       <button class="btn btn-ghost btn-sm" id="btnBackHome">取消</button>
     </div>
     <div class="bp-grid">${BODY_PARTS.map(bp => `
-      <div class="bp-card" data-part="${bp.id}">
-        ${BODY_PART_ICONS[bp.icon]}
+      <div class="bp-card" data-part="${bp.id}" style="--acc-color:${bp.color};background:rgba(${hexToRgb(bp.color)},.06)">
+        <span class="bp-char" style="color:${bp.color}">${bp.name}</span>
         <div class="bp-name">${bp.name}</div>
       </div>
     `).join('')}</div>
@@ -130,10 +130,10 @@ function renderSelectExercise(container, S) {
     const m = getExMeta(e.name);
     const badgeCls = type === 'machine' ? 'badge-machine' : 'badge-free';
     const badgeTxt = type === 'machine' ? '器械' : '自由';
-    return `<div class="ex-card" data-name="${e.name}" data-type="${type}">
+    const barColor = type === 'machine' ? '#a78bfa' : '#fbbf24';
+    return `<div class="ex-card" data-name="${e.name}" data-type="${type}" style="--ex-color:${barColor}">
       <div class="ex-add"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></div>
       <span class="ex-badge badge ${badgeCls} text-xs">${badgeTxt}</span>
-      <div class="ex-icon">${m.icon || ''}</div>
       <div class="ex-name">${e.name}</div>
       ${m.tip ? `<div class="ex-tip">${m.tip}</div>` : ''}
     </div>`;
@@ -240,7 +240,7 @@ function renderActiveTraining(container, S) {
               <div class="s-num">${si + 1}</div>
               <div class="s-val">${s.weight}</div>
               <div class="s-val">${s.reps}</div>
-              <div style="text-align:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00ff88" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div style="text-align:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ok)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
             </div>
           </div>`).join('')}
           <div class="set-tbl-row">
@@ -330,7 +330,7 @@ function renderTrainingSummary(container, S) {
   container.innerHTML = `
     <div class="text-center mb-16">
       <div style="font-size:48px;margin-bottom:8px">
-        <svg width="48" height="48" viewBox="0 0 32 32" fill="none" stroke="#00f3ff" stroke-width="1.5" stroke-linecap="round" style="display:inline"><circle cx="16" cy="16" r="14" opacity=".2"/><path d="M16 8v8l5 5"/></svg>
+        <svg width="48" height="48" viewBox="0 0 32 32" fill="none" stroke="var(--acc)" stroke-width="1.5" stroke-linecap="round" style="display:inline"><circle cx="16" cy="16" r="14" opacity=".2"/><path d="M16 8v8l5 5"/></svg>
       </div>
       <div class="section-title" style="font-size:20px;margin-bottom:4px">训练完成！</div>
       <div class="text-muted">${fmtDuration(summary.duration)} · ${getBodyPartName(S, ct.bodyPart)}</div>
@@ -355,7 +355,7 @@ function renderTrainingSummary(container, S) {
       <label>训练拍照</label>
       <div style="display:flex;gap:8px;align-items:center">
         <label class="btn btn-outline btn-sm" style="cursor:pointer">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg> 拍照/选择
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg> 拍照/选择
           <input type="file" accept="image/*" capture="environment" id="trainingPhoto" style="display:none">
         </label>
         ${ct.photo ? `<img src="${ct.photo}" style="width:48px;height:48px;border-radius:var(--r-s);object-fit:cover">` : '<span class="text-sm text-muted">未添加照片</span>'}
@@ -536,6 +536,13 @@ function showAddExerciseModal(S, stateChanged) {
 }
 
 // ===== Helpers =====
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `${r},${g},${b}`;
+}
+
 function calcVolume(exercises) {
   return exercises.reduce((t, ex) => t + ex.sets.reduce((st, s) => st + s.weight * s.reps, 0), 0);
 }

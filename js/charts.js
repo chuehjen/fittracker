@@ -41,8 +41,8 @@ function renderWeightChart(container, S) {
       datasets: [{
         label: '体重 (kg)',
         data: weightData.map(d => d.weight),
-        borderColor: '#00f3ff',
-        backgroundColor: 'rgba(0,243,255,.1)',
+        borderColor: '#32CD32',
+        backgroundColor: 'rgba(50,205,50,.1)',
         tension: .4,
         fill: true
       }]
@@ -67,7 +67,7 @@ function renderFreqChart(container, S) {
       datasets: [{
         label: '训练次数',
         data: freqData,
-        backgroundColor: 'rgba(0,243,255,.5)',
+        backgroundColor: 'rgba(50,205,50,.5)',
         borderRadius: 4
       }]
     },
@@ -90,7 +90,7 @@ function renderDistChart(container, S) {
       labels: partDist.map(p => p.name),
       datasets: [{
         data: partDist.map(p => p.count),
-        backgroundColor: ['#00f3ff', '#00ff88', '#ffcc00', '#ff3366', '#a78bfa', '#fb923c']
+        backgroundColor: BODY_PARTS.map(bp => bp.color)
       }]
     },
     options: { responsive: true, maintainAspectRatio: false, cutout: '60%', plugins: { legend: { position: 'right', labels: { color: '#8899aa' } } } }
@@ -129,8 +129,8 @@ function renderProgressChart(container, S) {
       datasets: [{
         label: selectedEx + ' PR',
         data: progressData,
-        borderColor: '#00ff88',
-        backgroundColor: 'rgba(0,255,136,.1)',
+        borderColor: '#32CD32',
+        backgroundColor: 'rgba(50,205,50,.1)',
         tension: .4,
         fill: true
       }]

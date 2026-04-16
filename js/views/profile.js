@@ -14,7 +14,7 @@ export function renderProfile(container, S, stateChanged) {
   container.innerHTML = `
     <div class="profile-header">
       <div class="avatar" id="avatarBtn">
-        ${S.profile.avatar ? `<img src="${S.profile.avatar}">` : `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/></svg>`}
+        ${S.profile.avatar ? `<img src="${S.profile.avatar}">` : `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/></svg>`}
         <input type="file" accept="image/*" id="avatarInput" style="display:none">
       </div>
       <div class="profile-info">
@@ -68,10 +68,10 @@ export function renderProfile(container, S, stateChanged) {
     <div class="section-title" style="font-size:15px">数据管理</div>
     <div style="display:flex;gap:8px;margin-bottom:80px">
       <button class="btn btn-outline btn-sm" style="flex:1" id="btnExport">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> 导出数据
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> 导出数据
       </button>
       <label class="btn btn-outline btn-sm" style="flex:1;cursor:pointer">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg> 导入数据
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg> 导入数据
         <input type="file" accept=".json" id="importFile" style="display:none">
       </label>
     </div>

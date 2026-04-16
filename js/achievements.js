@@ -4,14 +4,14 @@
 const ALL_BODY_PARTS = ['chest', 'back', 'legs', 'shoulders', 'arms', 'core'];
 
 const ACH_SVG = {
-  first_train: `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="12"/><circle cx="16" cy="16" r="4" fill="currentColor" opacity=".3"/><line x1="16" y1="4" x2="16" y2="8"/><line x1="16" y1="24" x2="16" y2="28"/></svg>`,
-  train_3days: `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4v6l-4-2M16 4v6l4-2"/><path d="M10 8h12l2 18H8l2-18z"/><line x1="12" y1="14" x2="20" y2="14"/></svg>`,
-  train_7days: `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4L4 12l12 8 12-8-12-8z"/><path d="M4 20l12 8 12-8"/><path d="M4 16l12 8 12-8"/></svg>`,
-  train_30days: `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4l3 9h10l-8 6 3 9-8-6-8 6 3-9-8-6h10z"/></svg>`,
-  total_10: `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16h6l-4 8"/><path d="M26 16h-6l4 8"/><path d="M12 16h8"/><circle cx="16" cy="10" r="6" opacity=".3"/><path d="M12 26h8"/></svg>`,
-  total_50: `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="8" width="20" height="18" rx="3"/><path d="M10 16h4l-3 6"/><path d="M22 16h-4l3 6"/><line x1="16" y1="8" x2="16" y2="4"/></svg>`,
-  volume_100k: `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4v12"/><path d="M16 16l-6 12"/><path d="M16 16l6 12"/><path d="M6 28h20"/><path d="M10 22h12"/></svg>`,
-  all_parts: `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="10" r="4"/><path d="M16 14v8"/><path d="M12 18l4-4 4 4"/><path d="M12 22l4 4 4-4"/><path d="M16 26v2"/></svg>`
+  first_train: `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="17,4 10,18 17,18 15,28 22,14 15,14"/></svg>`,
+  train_3days: `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 28c0-6 4-10 4-16"/><path d="M20 28c0-6-4-10-4-16"/><path d="M8 28h16"/><path d="M13 16c-1-3-1-5 0-7"/><path d="M19 16c1-3 1-5 0-7"/></svg>`,
+  train_7days: `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="12"/><circle cx="16" cy="16" r="6"/><circle cx="16" cy="16" r="1.5" fill="currentColor"/></svg>`,
+  train_30days: `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 26l4-8 4 4 4-10 4 6 4-4"/><path d="M6 26h20"/><circle cx="10" cy="10" r="2" fill="none"/><path d="M10 12v4"/><path d="M8 12h4"/></svg>`,
+  total_10: `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8h16v8c0 5-4 8-8 12-4-4-8-7-8-12V8z"/><path d="M12 8V6a4 4 0 018 0v2"/><line x1="16" y1="28" x2="16" y2="22"/></svg>`,
+  total_50: `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="18" r="8"/><path d="M12 10V6h8v4"/><path d="M12 10H8l-1-3"/><path d="M20 10h4l1-3"/><path d="M16 26v2"/><circle cx="16" cy="18" r="3" opacity=".3"/></svg>`,
+  volume_100k: `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 28l8-12 4 4 8-12 4 6"/><path d="M4 28h24"/><path d="M12 16l2-2 4 4"/></svg>`,
+  all_parts: `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4l-2 4H6v20h20V8H18l-2-4z"/><path d="M12 28V18h8v10"/><path d="M6 8h20"/></svg>`
 };
 
 export const ACHIEVEMENTS = [
