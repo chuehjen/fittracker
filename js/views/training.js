@@ -161,7 +161,6 @@ function renderSelectExercise(container, S) {
   container.querySelector('#btnAddCustom').addEventListener('click', () => showAddExerciseModal(S, onStateChange));
 
   container.querySelectorAll('.ex-card').forEach(el => el.addEventListener('click', (e) => {
-    // If clicked on the add button, also add
     addExerciseToTraining(el.dataset.name, el.dataset.type, S);
   }));
 }
@@ -180,11 +179,13 @@ function addExerciseToTraining(name, type, S) {
     };
     S.trainingTimerActive = true;
     S.trainingTimerStart = Date.now();
-    if (!S.trainingTimerElapsed) S.trainingTimerElapsed = 0;
+    S.trainingTimerElapsed = 0;
   }
   if (!S.currentTraining.exercises.find(e => e.name === name)) {
     S.currentTraining.exercises.push({ name, type, sets: [] });
   }
+  // Switch to active training screen
+  S.trainingScreen = 'active';
   onStateChange();
 }
 
