@@ -3,6 +3,8 @@
 
 import { aiWeeklyReport, getApiConfig, setApiConfig } from '../ai.js';
 import { renderCharts } from '../charts.js';
+import { calcVolume, fmtVol } from '../helpers.js';
+import { doExport, doImport } from '../data.js';
 
 export function renderProfile(container, S, stateChanged) {
   const totalTrainings = S.trainingRecords.length;
@@ -96,10 +98,8 @@ export function renderProfile(container, S, stateChanged) {
   container.querySelector('#toggleApiBtn').addEventListener('click', () => {
     const apiKey = container.querySelector('#apiKeyInput').value.trim();
     if (!apiKey || apiKey.length <= 5) {
-      // If key is empty/short, disable AI
       setApiConfig({ apiKey: '', enabled: false, model: 'claude-sonnet-4-6-20250514' });
     } else {
-      // Toggle: if currently enabled, disable; if disabled, enable
       setApiConfig({ apiKey, enabled: !apiConfig.enabled, model: 'claude-sonnet-4-6-20250514' });
     }
     stateChanged();
@@ -110,7 +110,7 @@ export function renderProfile(container, S, stateChanged) {
 
   // Export/Import
   container.querySelector('#btnExport').addEventListener('click', () => doExport(S));
-  container.querySelector('#importFile').addEventListener('change', e => doImport(e, S, stateChanged));
+  container.querySelector('#importFile').addEventListener('change', e => doImport(e.target.files[0], S, stateChanged));
 }
 
 function showProfileModal(S, stateChanged) {
@@ -135,64 +135,9 @@ function showProfileModal(S, stateChanged) {
   });
 }
 
-function doExport(S) {
-  const data = {
-    version: 2,
-    exportedAt: new Date().toISOString(),
-    profile: S.profile,
-    trainingRecords: S.trainingRecords,
-    bodyRecords: S.bodyRecords,
-    customExercises: S.customExercises,
-    restSeconds: S.restSeconds,
-  };
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `fittracker_backup_${today()}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-async function doImport(e, S, stateChanged) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    try {
-      const data = JSON.parse(ev.target.result);
-      if (confirm('导入数据将覆盖当前所有记录，确定继续？')) {
-        S.profile = data.profile || {};
-        S.trainingRecords = data.trainingRecords || [];
-        S.bodyRecords = data.bodyRecords || [];
-        S.customExercises = data.customExercises || [];
-        S.restSeconds = data.restSeconds || 90;
-        stateChanged();
-        alert('导入成功！');
-      }
-    } catch (err) {
-      alert('文件格式错误');
-    }
-  };
-  reader.readAsText(file);
-}
-
 function getExerciseOptions(S) {
   const allEx = new Set();
   S.trainingRecords.forEach(r => r.exercises.forEach(ex => allEx.add(ex.name)));
   if (allEx.size === 0) return '<option value="">无数据</option>';
   return [...allEx].map(e => `<option value="${e}">${e}</option>`).join('');
 }
-
-function calcVolume(exercises) {
-  return exercises.reduce((t, ex) => t + ex.sets.reduce((st, s) => st + s.weight * s.reps, 0), 0);
-}
-
-function fmtVol(v) {
-  if (v === 0) return '0';
-  if (v >= 10000) return (v / 1000).toFixed(0) + 'k';
-  if (v >= 1000) return (v / 1000).toFixed(1) + 'k';
-  return Math.round(v).toString();
-}
-
-const today = () => new Date().toISOString().slice(0, 10);

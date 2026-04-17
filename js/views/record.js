@@ -2,6 +2,8 @@
 // Body weight, body fat, diet logging + edit support
 
 import { aiDietFeedback } from '../ai.js';
+import { genId, today, fmtDate } from '../helpers.js';
+import { showUndoToast } from '../toast.js';
 
 export function renderRecord(container, S, stateChanged) {
   const recent = S.bodyRecords.slice(-5).reverse();
@@ -55,14 +57,18 @@ export function renderRecord(container, S, stateChanged) {
     stateChanged();
   });
 
-  // Delete buttons
   container.querySelectorAll('.del-record-btn').forEach(btn => btn.addEventListener('click', () => {
-    if (!confirm('确定删除？')) return;
-    S.bodyRecords = S.bodyRecords.filter(r => r.id !== btn.dataset.id);
+    const id = btn.dataset.id;
+    const idx = S.bodyRecords.findIndex(r => r.id === id);
+    if (idx === -1) return;
+    const removed = S.bodyRecords.splice(idx, 1)[0];
     stateChanged();
+    showUndoToast('已删除记录', () => {
+      S.bodyRecords.splice(idx, 0, removed);
+      stateChanged();
+    });
   }));
 
-  // Edit buttons
   container.querySelectorAll('.edit-record-btn').forEach(btn => btn.addEventListener('click', () => {
     const rec = S.bodyRecords.find(r => r.id === btn.dataset.id);
     if (!rec) return;
@@ -100,7 +106,3 @@ function showEditRecordModal(rec, S, stateChanged) {
     stateChanged();
   });
 }
-
-const today = () => new Date().toISOString().slice(0, 10);
-const fmtDate = d => { const p = d.split('-'); return `${p[1]}月${p[2]}日`; };
-const genId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);

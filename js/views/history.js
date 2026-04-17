@@ -2,6 +2,8 @@
 // Training history with filters + body records with edit
 
 import { BODY_PARTS } from '../exercises.js';
+import { fmtDateFull, fmtDuration, fmtVol, calcVolume } from '../helpers.js';
+import { showUndoToast } from '../toast.js';
 
 export function renderHistory(container, S, stateChanged) {
   container.innerHTML = `
@@ -59,7 +61,7 @@ function renderTrainingHistory(container, S, stateChanged) {
             <div class="flex-between"><span class="text-sm fw-700">${ex.name}</span><span class="badge ${ex.type === 'machine' ? 'badge-machine' : 'badge-free'} text-xs">${ex.type === 'machine' ? '器械' : '自由'}</span></div>
             ${ex.sets.map((s, i) => `<div class="set-row"><div class="set-num">${i + 1}</div><div class="set-info"><strong>${s.weight}kg</strong> <span>× ${s.reps}次</span></div></div>`).join('')}
           </div>`).join('')}
-          ${r.photo ? `<img class="hc-photo" src="${r.photo}" onclick="event.stopPropagation();viewPhoto('${r.id}')">` : ''}
+          ${r.photo ? `<img class="hc-photo" src="${r.photo}" onclick="event.stopPropagation();window.viewPhoto('${r.id}')">` : ''}
           ${r.notes ? `<div class="hc-notes">${r.notes}</div>` : ''}
           <button class="btn btn-danger btn-sm mt-8" data-del-training="${r.id}">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg> 删除记录
@@ -69,24 +71,27 @@ function renderTrainingHistory(container, S, stateChanged) {
     }).join('')}
   `;
 
-  // Filter chips
   container.querySelectorAll('.filter-chip').forEach(el => el.addEventListener('click', () => {
     S.historyFilter = el.dataset.filter;
     renderTrainingHistory(container, S, stateChanged);
   }));
 
-  // Toggle expand
   container.querySelectorAll('[data-toggle]').forEach(el => el.addEventListener('click', () => {
     const card = container.querySelector(`#hc-${el.dataset.toggle}`);
     if (card) card.classList.toggle('expanded');
   }));
 
-  // Delete training record
   container.querySelectorAll('[data-del-training]').forEach(btn => btn.addEventListener('click', (e) => {
     e.stopPropagation();
-    if (!confirm('确定删除这条训练记录？')) return;
-    S.trainingRecords = S.trainingRecords.filter(r => r.id !== btn.dataset.delTraining);
+    const id = btn.dataset.delTraining;
+    const idx = S.trainingRecords.findIndex(r => r.id === id);
+    if (idx === -1) return;
+    const removed = S.trainingRecords.splice(idx, 1)[0];
     stateChanged();
+    showUndoToast('已删除训练记录', () => {
+      S.trainingRecords.splice(idx, 0, removed);
+      stateChanged();
+    });
   }));
 }
 
@@ -114,18 +119,22 @@ function renderBodyHistory(container, S, stateChanged) {
       </div>
     `).join('');
 
-  // Edit buttons
   container.querySelectorAll('.edit-body-btn').forEach(btn => btn.addEventListener('click', () => {
     const rec = S.bodyRecords.find(r => r.id === btn.dataset.id);
     if (!rec) return;
     showEditBodyModal(rec, S, stateChanged);
   }));
 
-  // Delete buttons
   container.querySelectorAll('.del-body-btn').forEach(btn => btn.addEventListener('click', () => {
-    if (!confirm('确定删除？')) return;
-    S.bodyRecords = S.bodyRecords.filter(r => r.id !== btn.dataset.id);
+    const id = btn.dataset.id;
+    const idx = S.bodyRecords.findIndex(r => r.id === id);
+    if (idx === -1) return;
+    const removed = S.bodyRecords.splice(idx, 1)[0];
     stateChanged();
+    showUndoToast('已删除记录', () => {
+      S.bodyRecords.splice(idx, 0, removed);
+      stateChanged();
+    });
   }));
 }
 
@@ -161,7 +170,6 @@ function showEditBodyModal(rec, S, stateChanged) {
 }
 
 window.viewPhoto = function(id) {
-  // Will be called from inline onclick
   const rec = (window._appState || {}).trainingRecords || [];
   const found = rec.find(r => r.id === id);
   if (!found || !found.photo) return;
@@ -190,11 +198,3 @@ function getBodyPartName(id) {
   const bp = BODY_PARTS.find(b => b.id === id);
   return bp ? bp.name : id;
 }
-
-function calcVolume(exercises) {
-  return exercises.reduce((t, ex) => t + ex.sets.reduce((st, s) => st + s.weight * s.reps, 0), 0);
-}
-
-const fmtDateFull = d => { const p = d.split('-'); return `${p[0]}年${p[1]}月${p[2]}日`; };
-const fmtDuration = s => { const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60); return h > 0 ? `${h}小时${m}分钟` : `${m}分钟`; };
-const fmtVol = v => { if (v === 0) return '0'; if (v >= 10000) return (v / 1000).toFixed(0) + 'k'; if (v >= 1000) return (v / 1000).toFixed(1) + 'k'; return Math.round(v).toString(); };

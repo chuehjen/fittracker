@@ -6,9 +6,8 @@ import { getWeeklyNews } from '../news.js';
 import { ACHIEVEMENTS, getUnlockedAchievements } from '../achievements.js';
 import { aiPreWorkout, aiPostWorkout } from '../ai.js';
 import { createTimerManager } from '../timer.js';
-
-// Empty state
-const EMPTY_TRAINING = '';
+import { genId, today, fmtDate, fmtDuration, fmtTime, fmtVol, calcVolume } from '../helpers.js';
+import { doExport, doImport } from '../data.js';
 
 let timerManager = null;
 let onStateChange = null;
@@ -35,6 +34,11 @@ export function renderTraining(container, S, stateChanged) {
   };
   const fn = screens[S.trainingScreen] || screens.home;
   fn(container, S);
+
+  // Show onboarding for first-time users
+  if (!localStorage.getItem('fittracker_welcome_shown')) {
+    showOnboarding();
+  }
 }
 
 function renderTrainingHome(container, S) {
@@ -43,7 +47,7 @@ function renderTrainingHome(container, S) {
   const unlocked = getUnlockedAchievements(S);
 
   container.innerHTML = `
-    <div class="cyber-header">
+    <div class="app-header">
       <div class="title">FITTRACKER PRO</div>
       <div class="subtitle">极简健身追踪</div>
     </div>
@@ -81,12 +85,37 @@ function renderTrainingHome(container, S) {
       `).join('')}
     </div>
     ${renderRecentTraining(S)}
+    ${renderQuickActions()}
   `;
 
   container.querySelector('#btnStartTraining').addEventListener('click', () => {
     S.trainingScreen = 'selectPart';
     onStateChange();
   });
+
+  // Quick actions
+  const backupBtn = container.querySelector('#btnBackup');
+  const restoreBtn = container.querySelector('#btnRestore');
+  if (backupBtn) backupBtn.addEventListener('click', () => doExport(S));
+  if (restoreBtn) restoreBtn.addEventListener('click', () => {
+    const input = container.querySelector('#restoreInput');
+    input.addEventListener('change', e => doImport(e.target.files[0], S, onStateChange));
+    input.click();
+  });
+}
+
+function renderQuickActions() {
+  return `<div class="quick-actions">
+    <button class="quick-action-btn" id="btnBackup">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      备份数据
+    </button>
+    <button class="quick-action-btn" id="btnRestore">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+      恢复数据
+    </button>
+    <input type="file" accept=".json" id="restoreInput" style="display:none">
+  </div>`;
 }
 
 function renderRecentTraining(S) {
@@ -192,7 +221,6 @@ function addExerciseToTraining(name, type, S) {
   if (!S.currentTraining.exercises.find(e => e.name === name)) {
     S.currentTraining.exercises.push({ name, type, sets: [] });
   }
-  // Switch to active training screen
   S.trainingScreen = 'active';
   onStateChange();
 }
@@ -262,7 +290,6 @@ function renderActiveTraining(container, S) {
     }).join('')}
   `;
 
-  // Event bindings
   container.querySelector('#btnAddMore').addEventListener('click', () => {
     S.trainingScreen = 'selectExercise';
     onStateChange();
@@ -270,22 +297,18 @@ function renderActiveTraining(container, S) {
 
   container.querySelector('#btnFinish').addEventListener('click', () => finishTraining(S));
 
-  // Rest picker
   container.querySelectorAll('#restPicker .rest-pick').forEach(btn => btn.addEventListener('click', () => {
     S.restSeconds = parseInt(btn.dataset.sec);
     container.querySelectorAll('#restPicker .rest-pick').forEach(b => b.classList.toggle('active', b === btn));
     onStateChange();
   }));
 
-  // Rest timer — inline onclick uses global handler (avoids losing listener on re-render)
   window._startRestTimer = () => showRestTimerOverlay(S.restSeconds || 90);
 
-  // Add set buttons
   container.querySelectorAll('.s-check-btn').forEach(btn => {
     btn.addEventListener('click', () => addSet(parseInt(btn.dataset.ei), S));
   });
 
-  // Enter key to add set
   ct.exercises.forEach((ex, ei) => {
     const wI = container.querySelector(`#w-${ei}`);
     const rI = container.querySelector(`#r-${ei}`);
@@ -293,7 +316,6 @@ function renderActiveTraining(container, S) {
     if (rI) rI.addEventListener('keydown', e => { if (e.key === 'Enter') addSet(ei, S); });
   });
 
-  // Swipe to delete
   container.querySelectorAll('.swipe-wrap').forEach(wrap => {
     const content = wrap.querySelector('.swipe-content');
     let startX = 0, currentX = 0, swiping = false;
@@ -316,7 +338,6 @@ function renderActiveTraining(container, S) {
     });
   });
 
-  // Training timer update
   if (S.trainingTimerActive && !S._timerInterval) {
     S._timerInterval = setInterval(() => {
       const el = container.querySelector('#trainingTime');
@@ -479,7 +500,6 @@ function showRestTimerOverlay(seconds) {
     remaining--;
     if (remaining <= 0) {
       clearInterval(interval);
-      // Play beep
       try {
         if (!window._audioCtx) window._audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         const ctx = window._audioCtx;
@@ -541,16 +561,11 @@ function showAddExerciseModal(S, stateChanged) {
   });
 }
 
-// ===== Helpers =====
 function hexToRgb(hex) {
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);
   const b = parseInt(hex.slice(5, 7), 16);
   return `${r},${g},${b}`;
-}
-
-function calcVolume(exercises) {
-  return exercises.reduce((t, ex) => t + ex.sets.reduce((st, s) => st + s.weight * s.reps, 0), 0);
 }
 
 function getPR(S, name) {
@@ -574,9 +589,53 @@ function getBodyPartName(S, id) {
   return bp ? bp.name : id;
 }
 
-const genId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
-const today = () => new Date().toISOString().slice(0, 10);
-const fmtDate = d => { const p = d.split('-'); return `${p[1]}月${p[2]}日`; };
-const fmtDuration = s => { const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60); return h > 0 ? `${h}小时${m}分钟` : `${m}分钟`; };
-const fmtTime = s => { const m = Math.floor(s / 60), sec = s % 60; return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`; };
-const fmtVol = v => { if (v === 0) return '0'; if (v >= 10000) return (v / 1000).toFixed(0) + 'k'; if (v >= 1000) return (v / 1000).toFixed(1) + 'k'; return Math.round(v).toString(); };
+function showOnboarding() {
+  const overlay = document.createElement('div');
+  overlay.className = 'onboarding-overlay';
+  overlay.id = 'onboardingOverlay';
+  overlay.innerHTML = `
+    <div class="onboarding-card">
+      <h3>欢迎使用 FitTracker Pro</h3>
+      <p class="onboard-sub">4 步开始你的第一次训练</p>
+      <div class="onboard-steps" id="onboardSteps">
+        <div class="onboard-step">
+          <div class="step-num">1</div>
+          <div class="step-title">选择部位</div>
+          <div class="step-desc">点击胸、背、腿等部位卡片，选择今天要训练的目标肌肉群</div>
+        </div>
+        <div class="onboard-step">
+          <div class="step-num">2</div>
+          <div class="step-title">选择动作</div>
+          <div class="step-desc">从器械或自由训练列表中，挑选 3-5 个动作组成今天的训练计划</div>
+        </div>
+        <div class="onboard-step">
+          <div class="step-num">3</div>
+          <div class="step-title">开始训练</div>
+          <div class="step-desc">记录每组的重量和次数，组间休息可使用计时器功能</div>
+        </div>
+        <div class="onboard-step">
+          <div class="step-num">4</div>
+          <div class="step-title">完成保存</div>
+          <div class="step-desc">训练结束后添加笔记和照片，AI 会自动生成训练总结</div>
+        </div>
+      </div>
+      <div class="onboard-dots" id="onboardDots">
+        <div class="onboard-dot active"></div>
+        <div class="onboard-dot"></div>
+        <div class="onboard-dot"></div>
+        <div class="onboard-dot"></div>
+      </div>
+      <button class="btn btn-primary btn-block" id="btnStart" style="margin-top:8px">开始体验</button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  overlay.querySelector('#btnStart').addEventListener('click', () => {
+    localStorage.setItem('fittracker_welcome_shown', '1');
+    overlay.remove();
+  });
+  overlay.addEventListener('click', e => { if (e.target === overlay) {
+    localStorage.setItem('fittracker_welcome_shown', '1');
+    overlay.remove();
+  }});
+}
