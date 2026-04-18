@@ -1,6 +1,8 @@
 // ===== Achievement System =====
 // 8 achievement badges with SVG icons (replacing emoji)
 
+import { calcVolume } from './helpers.js';
+
 const ALL_BODY_PARTS = ['chest', 'back', 'legs', 'shoulders', 'arms', 'core'];
 
 const ACH_SVG = {
@@ -35,10 +37,6 @@ export function checkConsecutiveDays(records, days) {
     if (diff === 1) consecutive++; else if (diff > 1) break;
   }
   return consecutive >= days;
-}
-
-export function calcVolume(exercises) {
-  return exercises.reduce((t, ex) => t + ex.sets.reduce((st, s) => st + s.weight * s.reps, 0), 0);
 }
 
 export function getUnlockedAchievements(state) {

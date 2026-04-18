@@ -6,7 +6,7 @@ import { getWeeklyNews } from '../news.js';
 import { ACHIEVEMENTS, getUnlockedAchievements } from '../achievements.js';
 import { aiPreWorkout, aiPostWorkout } from '../ai.js';
 import { createTimerManager } from '../timer.js';
-import { genId, today, fmtDate, fmtDuration, fmtTime, fmtVol, calcVolume } from '../helpers.js';
+import { genId, today, fmtDateFull, fmtDuration, fmtTime, fmtVol, calcVolume } from '../helpers.js';
 import { doExport, doImport } from '../data.js';
 
 let timerManager = null;
@@ -124,7 +124,7 @@ function renderRecentTraining(S) {
   return `<div class="mt-16"><div class="section-title" style="font-size:15px">最近训练</div>
     ${recent.map(r => `
       <div class="card" style="padding:12px 14px;display:flex;align-items:center;justify-content:space-between">
-        <div><div class="text-sm fw-700">${getBodyPartName(S, r.bodyPart)}</div><div class="text-xs text-muted">${fmtDate(r.date)} · ${fmtDuration(r.duration || 0)}</div></div>
+        <div><div class="text-sm fw-700">${getBodyPartName(S, r.bodyPart)}</div><div class="text-xs text-muted">${fmtDateFull(r.date)} · ${fmtDuration(r.duration || 0)}</div></div>
         <div class="badge badge-accent">${fmtVol(calcVolume(r.exercises))} kg</div>
       </div>
     `).join('')}</div>`;

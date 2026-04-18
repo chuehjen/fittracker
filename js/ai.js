@@ -2,7 +2,7 @@
 // Rule-based fallback + Claude API interface (placeholder)
 
 import { BODY_PARTS, getExMeta } from './exercises.js';
-import { calcVolume, getUnlockedAchievements } from './achievements.js';
+import { calcVolume } from './helpers.js';
 
 // ===== Claude API Interface (placeholder) =====
 // Users can configure their own API Key to enable real AI

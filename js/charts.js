@@ -2,6 +2,7 @@
 // Chart.js wrapper with fallback for CDN failure
 
 import { BODY_PARTS } from './exercises.js';
+import { fmtDate, fmtVol, calcVolume } from './helpers.js';
 
 // Store chart instances so we can destroy them before recreating
 const chartInstances = {};
@@ -198,17 +199,4 @@ function showChartFallback(container, S) {
       wrap.appendChild(fb);
     }
   });
-}
-
-function fmtDate(d) { const p = d.split('-'); return `${p[1]}月${p[2]}日`; }
-
-function calcVolume(exercises) {
-  return exercises.reduce((t, ex) => t + ex.sets.reduce((st, s) => st + s.weight * s.reps, 0), 0);
-}
-
-function fmtVol(v) {
-  if (v === 0) return '0';
-  if (v >= 10000) return (v / 1000).toFixed(0) + 'k';
-  if (v >= 1000) return (v / 1000).toFixed(1) + 'k';
-  return Math.round(v).toString();
 }
