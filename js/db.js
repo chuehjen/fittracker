@@ -3,9 +3,11 @@
 // Automatic migration from localStorage on first run
 
 const DB_NAME = 'fittracker-db';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 const STORE_STATE = 'state';
 const STORE_PHOTOS = 'photos';
+const STORE_ACHIEVEMENTS = 'achievements';
+const STORE_SYNC_QUEUE = 'sync_queue';
 
 let dbInstance = null;
 
@@ -20,6 +22,13 @@ export function openDB() {
       }
       if (!db.objectStoreNames.contains(STORE_PHOTOS)) {
         db.createObjectStore(STORE_PHOTOS, { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains(STORE_ACHIEVEMENTS)) {
+        db.createObjectStore(STORE_ACHIEVEMENTS, { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains(STORE_SYNC_QUEUE)) {
+        const store = db.createObjectStore(STORE_SYNC_QUEUE, { keyPath: 'id' });
+        store.createIndex('table', 'table', { unique: false });
       }
     };
     request.onsuccess = (e) => {
@@ -86,6 +95,77 @@ export async function deletePhoto(id) {
   });
 }
 
+// ===== Achievement Storage (IndexedDB) =====
+
+export async function saveAchievements(unlockedIds) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_ACHIEVEMENTS, 'readwrite');
+    const store = tx.objectStore(STORE_ACHIEVEMENTS);
+    store.put({ id: 'unlocked', data: unlockedIds });
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+export async function loadAchievements() {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_ACHIEVEMENTS, 'readonly');
+    const store = tx.objectStore(STORE_ACHIEVEMENTS);
+    const req = store.get('unlocked');
+    req.onsuccess = () => resolve(req.result ? req.result.data : []);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+// ===== Sync Queue =====
+
+export async function addToSyncQueue(item) {
+  const db = await openDB();
+  const id = `${item.table}_${item.localId}`;
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_SYNC_QUEUE, 'readwrite');
+    const store = tx.objectStore(STORE_SYNC_QUEUE);
+    store.put({ id, table: item.table, localId: item.localId, data: item.data, operation: item.operation, createdAt: Date.now() });
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+export async function getSyncQueue() {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_SYNC_QUEUE, 'readonly');
+    const store = tx.objectStore(STORE_SYNC_QUEUE);
+    const req = store.getAll();
+    req.onsuccess = () => resolve(req.result || []);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+export async function markSynced(ids) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_SYNC_QUEUE, 'readwrite');
+    const store = tx.objectStore(STORE_SYNC_QUEUE);
+    ids.forEach(id => store.delete(id));
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+export async function clearSyncQueue() {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_SYNC_QUEUE, 'readwrite');
+    const store = tx.objectStore(STORE_SYNC_QUEUE);
+    store.clear();
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
 // Migrate from localStorage to IndexedDB
 export async function migrateFromLocalStorage() {
   const existingState = await getState();
@@ -115,14 +195,33 @@ export async function migrateFromLocalStorage() {
   }
 }
 
+// Migrate achievements from localStorage to IndexedDB
+export async function migrateAchievementsFromLocalStorage() {
+  const existing = await loadAchievements();
+  if (existing.length > 0) return false;
+
+  try {
+    const lsData = localStorage.getItem('fittracker_achievements');
+    if (!lsData) return false;
+    const unlockedIds = JSON.parse(lsData);
+    await saveAchievements(unlockedIds);
+    console.log('[DB] Migrated achievements from localStorage to IndexedDB');
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 // Export all data (for backup)
 export async function exportAllData() {
   const state = await getState();
   if (!state) return null;
+  const achievements = await loadAchievements();
   return {
     version: 2,
     exportedAt: new Date().toISOString(),
-    ...state
+    ...state,
+    achievements,
   };
 }
 
@@ -138,4 +237,7 @@ export async function importAllData(data) {
     trainingTimerStart: null,
   };
   await setState(importData);
+  if (data.achievements) {
+    await saveAchievements(data.achievements);
+  }
 }

@@ -1,7 +1,10 @@
 // ===== Achievement System =====
 // 8 achievement badges with SVG icons (replacing emoji)
 
-import { calcVolume } from './helpers.js';
+import { calcVolume, genId } from './helpers.js';
+
+// Local storage keys for tracking
+const LAST_ACHIEVEMENT_SYNC_KEY = 'fittracker_achievement_last_sync';
 
 const ALL_BODY_PARTS = ['chest', 'back', 'legs', 'shoulders', 'arms', 'core'];
 
@@ -72,17 +75,6 @@ export function getUnlockedAchievements(state) {
     }
   }
   return unlocked;
-}
-
-export function saveAchievements(unlockedIds) {
-  try { localStorage.setItem('fittracker_achievements', JSON.stringify(unlockedIds)); } catch (e) {}
-}
-
-export function loadAchievements() {
-  try {
-    const data = localStorage.getItem('fittracker_achievements');
-    return data ? JSON.parse(data) : [];
-  } catch (e) { return []; }
 }
 
 export { ACH_SVG };

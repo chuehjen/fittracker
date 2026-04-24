@@ -8,19 +8,27 @@
   <meta name="theme-color" content="#000000">
   <link rel="manifest" href="./manifest.json">
   <link rel="stylesheet" href="./css/style.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" onerror="window._chartLoadFailed=true"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 </head>
 <body>
-  <div id="app">
+  <div id="loading">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">FitTracker Pro</p>
+  </div>
+  <div id="app" style="display:none">
     <div class="views" id="views"></div>
     <nav class="tab-bar" id="tabBar"></nav>
   </div>
   <div id="errBox" style="position:fixed;inset:0;z-index:9999;background:#1a0000;color:#ff6666;padding:20px;font-family:monospace;font-size:14px;display:none;overflow:auto;white-space:pre-wrap;word-break:break-all;"></div>
   <script>
-    // Unregister ALL service workers to prevent stale caching
+    // Kill any previously registered service workers and clear their caches
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.getRegistrations().then(regs => {
-        regs.forEach(r => r.unregister());
+        Promise.all(regs.map(r => r.unregister())).then(() => {
+          if ('caches' in window) {
+            caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+          }
+        });
       });
     }
     window.addEventListener('error', function(e) {
@@ -28,7 +36,12 @@
       box.style.display = 'block';
       box.textContent += 'ERROR: ' + (e.message || e) + '\nSource: ' + (e.filename || 'unknown') + ':' + (e.lineno || '?') + '\n---\n';
     });
+    window.addEventListener('unhandledrejection', function(e) {
+      var box = document.getElementById('errBox');
+      box.style.display = 'block';
+      box.textContent += 'PROMISE ERROR: ' + (e.reason && e.reason.message ? e.reason.message : e.reason) + '\n---\n';
+    });
   </script>
-  <script type="module" src="./js/app.js"></script>
+  <script type="module" src="./js/app.js?v=3"></script>
 </body>
 </html>

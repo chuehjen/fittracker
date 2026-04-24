@@ -1,16 +1,44 @@
 // ===== Charts Module =====
-// Chart.js wrapper with fallback for CDN failure
+// Chart.js wrapper — dynamically loads CDN on first render
 
 import { BODY_PARTS } from './exercises.js';
 import { fmtDate, fmtVol, calcVolume } from './helpers.js';
 
-// Store chart instances so we can destroy them before recreating
 const chartInstances = {};
+let chartLoaded = false;
+let chartLoading = false;
 
-export function renderCharts(container, S) {
-  const chartLoadFailed = window._chartLoadFailed;
+async function ensureChart() {
+  if (chartLoaded) return true;
+  if (chartLoading) {
+    // Wait for in-flight load
+    while (chartLoading && typeof Chart === 'undefined') {
+      await new Promise(r => setTimeout(r, 50));
+    }
+    return !!chartLoaded;
+  }
+  chartLoading = true;
+  try {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
+    await new Promise((resolve, reject) => {
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+    chartLoaded = true;
+    return true;
+  } catch (e) {
+    console.warn('[Charts] Failed to load Chart.js:', e);
+    return false;
+  } finally {
+    chartLoading = false;
+  }
+}
 
-  if (chartLoadFailed || typeof Chart === 'undefined') {
+export async function renderCharts(container, S) {
+  const ok = await ensureChart();
+  if (!ok) {
     showChartFallback(container, S);
     return;
   }

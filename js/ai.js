@@ -1,53 +1,72 @@
 // ===== AI Analysis Engine =====
-// Rule-based fallback + Claude API interface (placeholder)
+// OpenRouter-powered AI with automatic free-model failover
 
-import { BODY_PARTS, getExMeta } from './exercises.js';
+import { BODY_PARTS } from './exercises.js';
 import { calcVolume } from './helpers.js';
 
-// ===== Claude API Interface (placeholder) =====
-// Users can configure their own API Key to enable real AI
+// ===== OpenRouter Configuration =====
+const OR_API_KEY = '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';
 
-const API_CONFIG_KEY = 'fittracker_api_config';
+const FREE_MODELS = [
+  'google/gemini-2.0-flash-lite',
+  'qwen/qwen-2.5-72b-instruct',
+  'meta-llama/llama-3.3-70b-instruct',
+];
 
-export function getApiConfig() {
-  try {
-    const data = localStorage.getItem(API_CONFIG_KEY);
-    return data ? JSON.parse(data) : { apiKey: '', enabled: false, model: 'claude-sonnet-4-6-20250514' };
-  } catch { return { apiKey: '', enabled: false, model: 'claude-sonnet-4-6-20250514' }; }
-}
+const SYSTEM_PROMPT = '你是一个专业的健身教练和营养顾问。用简短的中文回答，使用 <strong> 标签强调重点。回答控制在100字以内。';
 
-export function setApiConfig(config) {
-  try { localStorage.setItem(API_CONFIG_KEY, JSON.stringify(config)); } catch (e) {}
-}
+let _currentModel = null;
 
 export async function claudeAnalyze(prompt, systemPrompt) {
-  const config = getApiConfig();
-  if (!config.apiKey || !config.enabled) return null;
+  for (const model of FREE_MODELS) {
+    try {
+      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${OR_API_KEY}`,
+          'HTTP-Referer': 'https://fittracker-pro.surge.sh',
+          'X-Title': 'FitTracker Pro',
+        },
+        body: JSON.stringify({
+          model,
+          max_tokens: 512,
+          system: systemPrompt || SYSTEM_PROMPT,
+          messages: [{ role: 'user', content: prompt }],
+        }),
+      });
 
-  try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': config.apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true',
-      },
-      body: JSON.stringify({
-        model: config.model || 'claude-sonnet-4-6-20250514',
-        max_tokens: 1024,
-        system: systemPrompt || '你是一个专业的健身教练和营养顾问。用简短的中文回答，使用 <strong> 标签强调重点。',
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
+      if (!response.ok) {
+        if (response.status === 429 || response.status >= 500) continue;
+        return null;
+      }
 
-    if (!response.ok) return null;
-    const data = await response.json();
-    return data.content?.[0]?.text || null;
-  } catch {
-    return null;
+      const data = await response.json();
+      const text = data.choices?.[0]?.message?.content;
+      if (text) {
+        if (_currentModel !== model) {
+          _currentModel = model;
+          console.log(`[AI] Model: ${model}`);
+        }
+        return text;
+      }
+    } catch {
+      continue;
+    }
   }
+
+  return null;
 }
+
+export function getApiConfig() {
+  return {
+    enabled: true,
+    model: _currentModel || FREE_MODELS[0],
+  };
+}
+
+// Keep setApiConfig as no-op for backward compat
+export function setApiConfig() {}
 
 // ===== Rule-Based Fallback Engine =====
 

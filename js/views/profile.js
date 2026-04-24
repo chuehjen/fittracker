@@ -1,7 +1,7 @@
 // ===== Profile View =====
-// Stats, charts, AI weekly report, data management, AI config
+// Stats, charts, AI weekly report, data management, cloud sync
 
-import { aiWeeklyReport, getApiConfig, setApiConfig } from '../ai.js';
+import { aiWeeklyReport } from '../ai.js';
 import { renderCharts } from '../charts.js';
 import { calcVolume, fmtVol } from '../helpers.js';
 import { doExport, doImport } from '../data.js';
@@ -11,7 +11,6 @@ export function renderProfile(container, S, stateChanged) {
   const totalVolume = S.trainingRecords.reduce((t, r) => t + calcVolume(r.exercises), 0);
   const totalDuration = S.trainingRecords.reduce((t, r) => t + (r.duration || 0), 0);
   const report = aiWeeklyReport(S);
-  const apiConfig = getApiConfig();
 
   container.innerHTML = `
     <div class="profile-header">
@@ -35,22 +34,10 @@ export function renderProfile(container, S, stateChanged) {
       <div class="ai-body">${report.body}</div>
     </div>
 
-    <!-- AI Config Section -->
-    <div class="ai-config-card">
-      <h4><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg> AI 智能增强</h4>
-      <p>填入 Claude API Key 启用真正的 AI 训练建议和饮食分析（可选）</p>
-      <div class="flex-between mb-8">
-        <span class="ai-status ${apiConfig.enabled ? 'online' : 'offline'}">
-          <span class="ai-status-dot"></span>
-          ${apiConfig.enabled ? 'AI 已启用' : '规则引擎'}
-        </span>
-      </div>
-      <div class="input-group" style="margin-bottom:8px">
-        <input type="password" class="input-field" id="apiKeyInput" placeholder="sk-ant-..." value="${apiConfig.apiKey || ''}" style="font-size:12px">
-      </div>
-      <button class="btn btn-sm ${apiConfig.enabled ? 'btn-primary' : 'btn-outline'}" id="toggleApiBtn" style="width:100%">
-        ${apiConfig.enabled ? '停用 AI' : '启用 AI'}
-      </button>
+    <!-- Cloud Sync Section -->
+    <div class="sync-card">
+      <h4><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z"/></svg> 云端同步</h4>
+      ${renderSyncSection(S)}
     </div>
 
     <!-- Charts -->
@@ -94,16 +81,8 @@ export function renderProfile(container, S, stateChanged) {
     showProfileModal(S, stateChanged);
   });
 
-  // AI config
-  container.querySelector('#toggleApiBtn').addEventListener('click', () => {
-    const apiKey = container.querySelector('#apiKeyInput').value.trim();
-    if (!apiKey || apiKey.length <= 5) {
-      setApiConfig({ apiKey: '', enabled: false, model: 'claude-sonnet-4-6-20250514' });
-    } else {
-      setApiConfig({ apiKey, enabled: !apiConfig.enabled, model: 'claude-sonnet-4-6-20250514' });
-    }
-    stateChanged();
-  });
+  // Sync actions
+  setupSyncHandlers(container, S, stateChanged);
 
   // Charts
   setTimeout(() => renderCharts(container, S), 100);
@@ -111,6 +90,88 @@ export function renderProfile(container, S, stateChanged) {
   // Export/Import
   container.querySelector('#btnExport').addEventListener('click', () => doExport(S));
   container.querySelector('#importFile').addEventListener('change', e => doImport(e.target.files[0], S, stateChanged));
+}
+
+function renderSyncSection(S) {
+  if (!S.user) {
+    return `
+      <p class="sync-desc">登录账号以云端同步你的数据</p>
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <input class="input-field" id="loginEmail" placeholder="邮箱" type="email" style="flex:1">
+        <button class="btn btn-sm btn-outline" id="sendMagicLinkBtn">发送登录链接</button>
+      </div>
+      <div class="sync-link-sent" id="linkSentMsg" style="display:none">
+        <p style="font-size:12px;color:var(--t2)">✅ 已发送，请检查邮箱并点击确认链接完成登录</p>
+        <p style="font-size:12px;color:var(--t3);margin-top:4px">如未自动登录，请刷新此页面</p>
+      </div>
+    `;
+  }
+
+  const syncLabel = S.syncStatus === 'idle' ? '已同步'
+    : S.syncStatus === 'pushing' || S.syncStatus === 'pulling' ? '同步中...'
+    : S.syncStatus === 'error' ? '同步失败'
+    : '未登录';
+  const syncColor = S.syncStatus === 'idle' ? '#32CD32'
+    : S.syncStatus === 'pushing' || S.syncStatus === 'pulling' ? '#FFD700'
+    : S.syncStatus === 'error' ? '#FF4444'
+    : '#888';
+
+  const syncTime = S.lastSyncTime ? new Date(S.lastSyncTime).toLocaleTimeString() : '从未';
+
+  return `
+    <div class="flex-between">
+      <div>
+        <div class="sync-email">${S.user.email}</div>
+        <div class="sync-status" style="color:${syncColor}">
+          <span class="sync-dot" style="background:${syncColor}"></span>
+          ${syncLabel}
+        </div>
+        <div class="sync-time">上次同步: ${syncTime}</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-sm btn-outline" style="flex:1" id="manualSyncBtn">手动同步</button>
+      <button class="btn btn-sm btn-ghost" style="flex:1" id="signOutBtn">登出</button>
+    </div>
+  `;
+}
+
+function setupSyncHandlers(container, S, stateChanged) {
+  const sync = window._syncActions || {};
+
+  const sendBtn = container.querySelector('#sendMagicLinkBtn');
+  if (sendBtn) {
+    sendBtn.addEventListener('click', async () => {
+      const email = container.querySelector('#loginEmail').value.trim();
+      if (!email) return;
+      try {
+        await sync.sendMagicLink(email);
+        const msg = container.querySelector('#linkSentMsg');
+        if (msg) msg.style.display = 'block';
+        sendBtn.textContent = '已发送';
+        sendBtn.disabled = true;
+        if (typeof window._startAuthPolling === 'function') {
+          window._startAuthPolling();
+        }
+      } catch (e) {
+        alert('发送登录链接失败: ' + e.message);
+      }
+    });
+  }
+
+  const syncBtn = container.querySelector('#manualSyncBtn');
+  if (syncBtn) {
+    syncBtn.addEventListener('click', () => {
+      sync.manualSync();
+    });
+  }
+
+  const signOutBtn = container.querySelector('#signOutBtn');
+  if (signOutBtn) {
+    signOutBtn.addEventListener('click', () => {
+      sync.signOut();
+    });
+  }
 }
 
 function showProfileModal(S, stateChanged) {

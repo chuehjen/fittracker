@@ -747,10 +747,13 @@ textarea.input-field { min-height: 80px; resize: vertical; }
 
 /* ===== Responsive ===== */
 @media (min-width: 768px) {
-  .tab-bar { max-width: 500px; }
-  #app { max-width: 500px; }
-  .view { max-width: 500px; left: 50%; transform: translateX(-50%); }
+  .tab-bar { max-width: 768px; }
+  #app { max-width: 768px; }
+  .view { max-width: 768px; left: 50%; transform: translateX(-50%); }
   .view.active { transform: translateX(-50%); }
+  .bp-grid { grid-template-columns: repeat(3, 1fr); }
+  .ex-grid { grid-template-columns: repeat(3, 1fr); }
+  .stat-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
 /* ===== Toast ===== */
@@ -841,4 +844,86 @@ textarea.input-field { min-height: 80px; resize: vertical; }
   background: var(--bd2);
   transition: var(--tr);
 }
+/* ===== Sync Card ===== */
+.sync-card {
+  background: var(--card);
+  border: 1px solid var(--bd);
+  border-radius: var(--r-l);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.sync-card h4 {
+  font-size: 14px;
+  color: var(--t1);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sync-card .sync-desc {
+  font-size: 12px;
+  color: var(--t3);
+  margin-bottom: 12px;
+}
+.sync-card .sync-email {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--t1);
+  margin-bottom: 4px;
+}
+.sync-card .sync-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.sync-card .sync-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.sync-card .sync-time {
+  font-size: 11px;
+  color: var(--t3);
+  margin-top: 2px;
+}
+
 .onboard-dot.active { background: var(--acc); width: 16px; border-radius: 3px; }
+
+/* ===== Loading Screen ===== */
+#loading {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  transition: opacity .4s ease;
+}
+#loading.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+.loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--bd);
+  border-top-color: var(--acc);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+.loading-text {
+  color: var(--t1);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: .5px;
+  margin: 0;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
