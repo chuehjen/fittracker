@@ -66,12 +66,14 @@ export async function signOut() {
 }
 
 export async function getCurrentUser() {
+  if (!supabaseClient) return null;
   const { data: { session }, error } = await supabaseClient.auth.getSession();
   if (error || !session) return null;
   return session.user;
 }
 
 export function onAuthChange(callback) {
+  if (!supabaseClient) return { unsubscribe: () => {} };
   return supabaseClient.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_IN' && session?.user) {
       callback({ email: session.user.email, id: session.user.id });
