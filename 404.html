@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>FitTracker Pro</title>
+  <meta name="description" content="极简健身追踪应用">
+  <meta name="theme-color" content="#000000">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="stylesheet" href="./css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div id="loading">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">FitTracker Pro</p>
+  </div>
+  <div id="app" style="display:none">
+    <div class="views" id="views"></div>
+    <nav class="tab-bar" id="tabBar"></nav>
+  </div>
+  <div id="errBox" style="position:fixed;inset:0;z-index:9999;background:#1a0000;color:#ff6666;padding:20px;font-family:monospace;font-size:14px;display:none;overflow:auto;white-space:pre-wrap;word-break:break-all;"></div>
+  <script>
+    // Kill any previously registered service workers and clear their caches
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(regs => {
+        Promise.all(regs.map(r => r.unregister())).then(() => {
+          if ('caches' in window) {
+            caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+          }
+        });
+      });
+    }
+    window.addEventListener('error', function(e) {
+      var box = document.getElementById('errBox');
+      box.style.display = 'block';
+      box.textContent += 'ERROR: ' + (e.message || e) + '\nSource: ' + (e.filename || 'unknown') + ':' + (e.lineno || '?') + '\n---\n';
+    });
+    window.addEventListener('unhandledrejection', function(e) {
+      var box = document.getElementById('errBox');
+      box.style.display = 'block';
+      box.textContent += 'PROMISE ERROR: ' + (e.reason && e.reason.message ? e.reason.message : e.reason) + '\n---\n';
+    });
+  </script>
+  <script type="module" src="./js/app.js?v=3"></script>
+</body>
+</html>
