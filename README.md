@@ -6,6 +6,22 @@
 
 ---
 
+## Screenshots
+
+<p align="center">
+  <img src="docs/screenshots/home.png" width="28%" alt="Workout home" />
+  &nbsp;&nbsp;
+  <img src="docs/screenshots/body-parts.png" width="28%" alt="Body part selection" />
+  &nbsp;&nbsp;
+  <img src="docs/screenshots/profile.png" width="28%" alt="Profile & sync" />
+</p>
+
+<p align="center">
+  <em>Workout home &nbsp;·&nbsp; Body part selection &nbsp;·&nbsp; Profile & cloud sync</em>
+</p>
+
+---
+
 ## What is it?
 
 FitTracker Pro is a mobile-first PWA for tracking gym workouts. No subscriptions, no bloat — just log your sets, track your progress, and sync across devices with a Magic Link login.
@@ -84,6 +100,22 @@ MIT
 **专注训练，不被功能打扰。**
 
 → **[打开应用](https://chuehjen.github.io/fittracker/)**
+
+---
+
+## 应用截图
+
+<p align="center">
+  <img src="docs/screenshots/home.png" width="28%" alt="训练首页" />
+  &nbsp;&nbsp;
+  <img src="docs/screenshots/body-parts.png" width="28%" alt="部位选择" />
+  &nbsp;&nbsp;
+  <img src="docs/screenshots/profile.png" width="28%" alt="我的页面" />
+</p>
+
+<p align="center">
+  <em>训练首页 &nbsp;·&nbsp; 部位选择 &nbsp;·&nbsp; 我的页面与云端同步</em>
+</p>
 
 ---
 
