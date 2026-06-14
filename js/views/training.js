@@ -636,6 +636,12 @@ function showOnboarding() {
       if (isLast) {
         localStorage.setItem('fittracker_welcome_shown', '1');
         overlay.remove();
+        // 引导用户直接开始第一次训练
+        const startBtn = document.getElementById('btnStartTraining');
+        if (startBtn) {
+          startBtn.style.animation = 'pulse 1s ease 2';
+          startBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
       } else {
         currentStep++;
         renderStep();
