@@ -46,7 +46,7 @@ function setStatus(s) {
 export async function sendMagicLink(email) {
   const { error } = await supabaseClient.auth.signInWithOtp({
     email,
-    options: { emailRedirectTo: window.location.origin },
+    options: { emailRedirectTo: window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '/') },
   });
   if (error) throw error;
 }
