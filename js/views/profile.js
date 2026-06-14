@@ -6,6 +6,25 @@ import { renderCharts } from '../charts.js';
 import { calcVolume, fmtVol } from '../helpers.js';
 import { doExport, doImport } from '../data.js';
 
+// Lightweight toast for profile view
+function showToast(msg, type = 'ok') {
+  const existing = document.getElementById('profileToast');
+  if (existing) existing.remove();
+  const colors = { ok: 'var(--ok)', err: 'var(--err)', warn: 'var(--warn)' };
+  const toast = document.createElement('div');
+  toast.id = 'profileToast';
+  toast.textContent = msg;
+  toast.style.cssText = `
+    position:fixed;bottom:calc(var(--tab-h) + 16px);left:50%;transform:translateX(-50%);
+    background:var(--card);border:1px solid ${colors[type] || 'var(--bd)'};
+    color:${colors[type] || 'var(--t1)'};padding:10px 20px;border-radius:var(--r-f);
+    font-size:13px;font-weight:500;z-index:999;white-space:nowrap;
+    box-shadow:0 4px 20px rgba(0,0,0,.4);animation:fadeIn .2s ease;
+  `;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
 export function renderProfile(container, S, stateChanged) {
   const totalTrainings = S.trainingRecords.length;
   const totalVolume = S.trainingRecords.reduce((t, r) => t + calcVolume(r.exercises), 0);
@@ -143,18 +162,34 @@ function setupSyncHandlers(container, S, stateChanged) {
   if (sendBtn) {
     sendBtn.addEventListener('click', async () => {
       const email = container.querySelector('#loginEmail').value.trim();
-      if (!email) return;
+      if (!email) {
+        showToast('请输入邮箱地址', 'warn');
+        return;
+      }
+
+      // Loading state
+      sendBtn.disabled = true;
+      sendBtn.innerHTML = '<span class="btn-spinner"></span> 发送中...';
+
       try {
         await sync.sendMagicLink(email);
         const msg = container.querySelector('#linkSentMsg');
         if (msg) msg.style.display = 'block';
-        sendBtn.textContent = '已发送';
-        sendBtn.disabled = true;
+        sendBtn.textContent = '✅ 已发送';
+        showToast('登录链接已发送，请检查邮箱', 'ok');
         if (typeof window._startAuthPolling === 'function') {
           window._startAuthPolling();
         }
       } catch (e) {
-        alert('发送登录链接失败: ' + e.message);
+        // Restore button on error
+        sendBtn.disabled = false;
+        sendBtn.textContent = '发送登录链接';
+        const msg = e.message || '';
+        if (msg.includes('rate limit')) {
+          showToast('发送太频繁，请稍后再试', 'err');
+        } else {
+          showToast('发送失败: ' + msg, 'err');
+        }
       }
     });
   }
