@@ -89,7 +89,13 @@ function renderTrainingHistory(container, S, stateChanged) {
     const removed = S.trainingRecords.splice(idx, 1)[0];
     stateChanged();
     showUndoToast('已删除训练记录', () => {
-      S.trainingRecords.splice(idx, 0, removed);
+      // 重新查找位置防止 idx 位移
+      const restoreIdx = S.trainingRecords.findIndex(r => r.id === removed.id);
+      if (restoreIdx === -1) {
+        S.trainingRecords.splice(idx, 0, removed);
+      } else {
+        S.trainingRecords.splice(idx, 0, removed);
+      }
       stateChanged();
     });
   }));
