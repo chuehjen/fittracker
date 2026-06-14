@@ -251,16 +251,16 @@ textarea.input-field { min-height: 80px; resize: vertical; }
   background: var(--card);
   border: 1px solid var(--bd);
   border-radius: var(--r-m);
-  padding: 12px;
+  padding: 32px 10px 10px 34px;
   cursor: pointer;
   transition: var(--tr);
   position: relative;
   border-left: 3px solid var(--ex-color, var(--bd));
 }
 .ex-card:active { background: var(--card-h); transform: scale(.97); }
-.ex-card .ex-name { font-size: 16px; font-weight: 700; line-height: 1.3; color: var(--t1); }
-.ex-card .ex-tip { font-size: 12px; color: var(--t3); margin-top: 4px; line-height: 1.3; }
-.ex-card .ex-badge { position: absolute; top: 6px; right: 6px; }
+.ex-card .ex-name { font-size: 14px; font-weight: 700; line-height: 1.3; color: var(--t1); }
+.ex-card .ex-tip { font-size: 11px; color: var(--t3); margin-top: 4px; line-height: 1.3; }
+.ex-card .ex-badge { position: absolute; top: 6px; right: 6px; font-size: 11px; padding: 2px 7px; }
 .ex-card .ex-add {
   position: absolute;
   top: 6px;
@@ -941,4 +941,10 @@ textarea.input-field { min-height: 80px; resize: vertical; }
 }
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+/* ===== Pulse animation for onboarding guidance ===== */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(50,205,50,.4); }
+  50% { transform: scale(1.03); box-shadow: 0 0 0 8px rgba(50,205,50,0); }
 }
