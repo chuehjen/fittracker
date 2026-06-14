@@ -29,6 +29,7 @@ export function renderProfile(container, S, stateChanged) {
   const totalTrainings = S.trainingRecords.length;
   const totalVolume = S.trainingRecords.reduce((t, r) => t + calcVolume(r.exercises), 0);
   const totalDuration = S.trainingRecords.reduce((t, r) => t + (r.duration || 0), 0);
+  const isEmpty = totalTrainings === 0;
   const report = aiWeeklyReport(S);
 
   container.innerHTML = `
@@ -43,11 +44,17 @@ export function renderProfile(container, S, stateChanged) {
       </div>
       <button class="btn btn-ghost btn-sm" id="editProfileBtn">编辑</button>
     </div>
+    ${isEmpty ? `
+    <div class="card" style="text-align:center;padding:24px 16px;border:1.5px dashed var(--bd2)">
+      <div style="font-size:32px;margin-bottom:8px">🏋️</div>
+      <div style="font-weight:700;margin-bottom:4px">还没有训练记录</div>
+      <div style="font-size:13px;color:var(--t2)">点击「训练」开始你的第一次记录</div>
+    </div>` : `
     <div class="stat-grid">
       <div class="stat-card"><div class="stat-val">${totalTrainings}</div><div class="stat-label">总训练次数</div></div>
       <div class="stat-card"><div class="stat-val">${fmtVol(totalVolume)}</div><div class="stat-label">总训练量 (kg)</div></div>
       <div class="stat-card"><div class="stat-val">${Math.round(totalDuration / 3600)}</div><div class="stat-label">总时长 (h)</div></div>
-    </div>
+    </div>`}
     <div class="ai-card">
       <div class="ai-header"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.5 3.5L13 6l-3.5 1.5L8 11 6.5 7.5 3 6l3.5-1.5L8 1z"/></svg> ${report.title}</div>
       <div class="ai-body">${report.body}</div>
