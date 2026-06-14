@@ -9,11 +9,11 @@
 ## Screenshots
 
 <p align="center">
-  <img src="docs/screenshots/home.png" width="28%" alt="Workout home" />
+  <img src="home.PNG" width="28%" alt="Workout home" />
   &nbsp;&nbsp;
-  <img src="docs/screenshots/body-parts.png" width="28%" alt="Body part selection" />
+  <img src="body-parts.PNG" width="28%" alt="Body part selection" />
   &nbsp;&nbsp;
-  <img src="docs/screenshots/profile.png" width="28%" alt="Profile & sync" />
+  <img src="profile.PNG" width="28%" alt="Profile & sync" />
 </p>
 
 <p align="center">
@@ -106,11 +106,11 @@ MIT
 ## 应用截图
 
 <p align="center">
-  <img src="docs/screenshots/home.png" width="28%" alt="训练首页" />
+  <img src="home.PNG" width="28%" alt="训练首页" />
   &nbsp;&nbsp;
-  <img src="docs/screenshots/body-parts.png" width="28%" alt="部位选择" />
+  <img src="body-parts.PNG" width="28%" alt="部位选择" />
   &nbsp;&nbsp;
-  <img src="docs/screenshots/profile.png" width="28%" alt="我的页面" />
+  <img src="profile.PNG" width="28%" alt="我的页面" />
 </p>
 
 <p align="center">
