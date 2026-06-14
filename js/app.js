@@ -217,10 +217,24 @@ function renderTabs() {
   });
 }
 
+let _lastActiveTab = null;
+
 function renderViews() {
-  viewsContainer.innerHTML = TABS.map(k =>
-    `<div class="view${S.activeTab === k.id ? ' active' : ''}" id="view-${k.id}"></div>`
-  ).join('');
+  const tabChanged = _lastActiveTab !== S.activeTab;
+  _lastActiveTab = S.activeTab;
+
+  // Only rebuild shell DOM on tab switch; reuse existing containers otherwise
+  if (tabChanged) {
+    viewsContainer.innerHTML = TABS.map(k =>
+      `<div class="view${S.activeTab === k.id ? ' active' : ''}" id="view-${k.id}"></div>`
+    ).join('');
+  } else {
+    // Just update active class without rebuilding DOM (no animation replay)
+    TABS.forEach(k => {
+      const el = document.getElementById(`view-${k.id}`);
+      if (el) el.classList.toggle('active', S.activeTab === k.id);
+    });
+  }
 
   const activeContainer = document.getElementById(`view-${S.activeTab}`);
   if (!activeContainer) return;
