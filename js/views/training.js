@@ -590,52 +590,66 @@ function getBodyPartName(S, id) {
 }
 
 function showOnboarding() {
+  const steps = [
+    { num: 1, title: '选择部位', desc: '点击胸、背、腿等部位卡片，选择今天要训练的目标肌肉群', icon: '🏋️' },
+    { num: 2, title: '选择动作', desc: '从器械或自由训练列表中，挑选 3-5 个动作组成今天的训练计划', icon: '📋' },
+    { num: 3, title: '开始训练', desc: '记录每组的重量和次数，组间休息可使用计时器功能', icon: '⏱️' },
+    { num: 4, title: '完成保存', desc: '训练结束后添加笔记，AI 会自动生成训练总结', icon: '✅' }
+  ];
+
+  let currentStep = 0;
+
   const overlay = document.createElement('div');
   overlay.className = 'onboarding-overlay';
   overlay.id = 'onboardingOverlay';
-  overlay.innerHTML = `
-    <div class="onboarding-card">
-      <h3>欢迎使用 FitTracker Pro</h3>
-      <p class="onboard-sub">4 步开始你的第一次训练</p>
-      <div class="onboard-steps" id="onboardSteps">
-        <div class="onboard-step">
-          <div class="step-num">1</div>
-          <div class="step-title">选择部位</div>
-          <div class="step-desc">点击胸、背、腿等部位卡片，选择今天要训练的目标肌肉群</div>
+
+  function renderStep() {
+    const step = steps[currentStep];
+    const isLast = currentStep === steps.length - 1;
+    const dotsHtml = steps.map((_, i) => `<div class="onboard-dot" data-i="${i}"></div>`).join('');
+
+    overlay.innerHTML = `
+      <div class="onboarding-card">
+        <h3>欢迎使用 FitTracker Pro</h3>
+        <p class="onboard-sub">${currentStep + 1} / ${steps.length}</p>
+        <div class="onboard-step" style="min-width:unset;margin-bottom:20px">
+          <div style="font-size:40px;margin-bottom:12px">${step.icon}</div>
+          <div class="step-num" style="margin:0 auto 12px">${step.num}</div>
+          <div class="step-title">${step.title}</div>
+          <div class="step-desc">${step.desc}</div>
         </div>
-        <div class="onboard-step">
-          <div class="step-num">2</div>
-          <div class="step-title">选择动作</div>
-          <div class="step-desc">从器械或自由训练列表中，挑选 3-5 个动作组成今天的训练计划</div>
-        </div>
-        <div class="onboard-step">
-          <div class="step-num">3</div>
-          <div class="step-title">开始训练</div>
-          <div class="step-desc">记录每组的重量和次数，组间休息可使用计时器功能</div>
-        </div>
-        <div class="onboard-step">
-          <div class="step-num">4</div>
-          <div class="step-title">完成保存</div>
-          <div class="step-desc">训练结束后添加笔记和照片，AI 会自动生成训练总结</div>
-        </div>
+        <div class="onboard-dots">${dotsHtml}</div>
+        <button class="btn btn-primary btn-block" id="btnOnboardNext" style="margin-top:16px">
+          ${isLast ? '开始体验 🚀' : '下一步'}
+        </button>
       </div>
-      <div class="onboard-dots" id="onboardDots">
-        <div class="onboard-dot active"></div>
-        <div class="onboard-dot"></div>
-        <div class="onboard-dot"></div>
-        <div class="onboard-dot"></div>
-      </div>
-      <button class="btn btn-primary btn-block" id="btnStart" style="margin-top:8px">开始体验</button>
-    </div>
-  `;
+    `;
+
+    overlay.querySelectorAll('.onboard-dot').forEach((dot, i) => {
+      dot.style.background = i === currentStep ? 'var(--acc)' : 'var(--bd2)';
+      dot.style.width = i === currentStep ? '18px' : '6px';
+      dot.style.borderRadius = '3px';
+      dot.style.transition = 'all .25s ease';
+    });
+
+    overlay.querySelector('#btnOnboardNext').addEventListener('click', () => {
+      if (isLast) {
+        localStorage.setItem('fittracker_welcome_shown', '1');
+        overlay.remove();
+      } else {
+        currentStep++;
+        renderStep();
+      }
+    });
+  }
+
+  renderStep();
   document.body.appendChild(overlay);
 
-  overlay.querySelector('#btnStart').addEventListener('click', () => {
-    localStorage.setItem('fittracker_welcome_shown', '1');
-    overlay.remove();
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) {
+      localStorage.setItem('fittracker_welcome_shown', '1');
+      overlay.remove();
+    }
   });
-  overlay.addEventListener('click', e => { if (e.target === overlay) {
-    localStorage.setItem('fittracker_welcome_shown', '1');
-    overlay.remove();
-  }});
 }
