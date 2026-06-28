@@ -15,13 +15,11 @@ let currentRender = null;
 let currentContainer = null;
 
 export function renderTraining(container, S, stateChanged) {
-  // Clear timer interval when re-rendering (tab switch or state change)
   if (S._timerInterval && currentContainer !== container) {
     clearInterval(S._timerInterval);
     S._timerInterval = null;
   }
   currentContainer = container;
-
   onStateChange = stateChanged;
   currentRender = () => renderTraining(container, S, stateChanged);
   timerManager = createTimerManager(S);
@@ -34,8 +32,6 @@ export function renderTraining(container, S, stateChanged) {
   };
   const fn = screens[S.trainingScreen] || screens.home;
   fn(container, S);
-
-  // Show onboarding for first-time users
   if (!localStorage.getItem('fittracker_welcome_shown')) {
     showOnboarding();
   }
@@ -45,7 +41,6 @@ function renderTrainingHome(container, S) {
   const ai = aiPreWorkout(S);
   const news = getWeeklyNews();
   const unlocked = getUnlockedAchievements(S);
-
   container.innerHTML = `
     <div class="app-header">
       <div class="title">FITTRACKER PRO</div>
@@ -87,13 +82,10 @@ function renderTrainingHome(container, S) {
     ${renderRecentTraining(S)}
     ${renderQuickActions()}
   `;
-
   container.querySelector('#btnStartTraining').addEventListener('click', () => {
     S.trainingScreen = 'selectPart';
     onStateChange();
   });
-
-  // Quick actions
   const backupBtn = container.querySelector('#btnBackup');
   const restoreBtn = container.querySelector('#btnRestore');
   if (backupBtn) backupBtn.addEventListener('click', () => doExport(S));
@@ -143,12 +135,10 @@ function renderSelectPart(container, S) {
       </div>
     `).join('')}</div>
   `;
-
   container.querySelector('#btnBackHome').addEventListener('click', () => {
     S.trainingScreen = 'home';
     onStateChange();
   });
-
   container.querySelectorAll('.bp-card').forEach(el => el.addEventListener('click', () => {
     S.selectedBodyPart = el.dataset.part;
     S.trainingScreen = 'selectExercise';
@@ -189,15 +179,12 @@ function renderSelectExercise(container, S) {
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg> 自定义动作
     </button>
   `;
-
   container.querySelector('#btnBackPart').addEventListener('click', () => {
     S.trainingScreen = 'selectPart';
     onStateChange();
   });
-
   container.querySelector('#btnAddCustom').addEventListener('click', () => showAddExerciseModal(S, onStateChange));
-
-  container.querySelectorAll('.ex-card').forEach(el => el.addEventListener('click', (e) => {
+  container.querySelectorAll('.ex-card').forEach(el => el.addEventListener('click', () => {
     addExerciseToTraining(el.dataset.name, el.dataset.type, S);
   }));
 }
@@ -249,7 +236,7 @@ function renderActiveTraining(container, S) {
         <div style="display:flex;gap:4px" id="restPicker">
           ${[30, 60, 90, 120, 180].map(s => `<button class="rest-pick${S.restSeconds === s ? ' active' : ''}" data-sec="${s}">${s >= 60 && s % 60 === 0 ? s / 60 + 'min' : s + 's'}</button>`).join('')}
         </div>
-        <button class="rest-start-btn" onclick="window._startRestTimer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5,3 19,12 5,21"/></svg>开始</button>
+        <button class="rest-start-btn" id="btnStartRest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5,3 19,12 5,21"/></svg>开始</button>
       </div>
     </div>
     ${ct.exercises.map((ex, ei) => {
@@ -294,28 +281,30 @@ function renderActiveTraining(container, S) {
     S.trainingScreen = 'selectExercise';
     onStateChange();
   });
-
   container.querySelector('#btnFinish').addEventListener('click', () => finishTraining(S));
-
   container.querySelectorAll('#restPicker .rest-pick').forEach(btn => btn.addEventListener('click', () => {
     S.restSeconds = parseInt(btn.dataset.sec);
     container.querySelectorAll('#restPicker .rest-pick').forEach(b => b.classList.toggle('active', b === btn));
     onStateChange();
   }));
 
-  window._startRestTimer = () => showRestTimerOverlay(S.restSeconds || 90);
+  // FIX Bug1: 用 addEventListener 替代 onclick 内联 + 删除 window._startRestTimer 全局污染
+  // iOS Safari/WKWebView 对 innerHTML 内嵌 onclick 字符串解析受限，导致按钮无效
+  container.querySelector('#btnStartRest').addEventListener('click', () => {
+    // FIX Bug3: 在用户手势回调内 resume AudioContext，解决 iOS 音频策略静音问题
+    if (window._audioCtx) window._audioCtx.resume().catch(() => {});
+    showRestTimerOverlay(S.restSeconds || 90);
+  });
 
   container.querySelectorAll('.s-check-btn').forEach(btn => {
     btn.addEventListener('click', () => addSet(parseInt(btn.dataset.ei), S));
   });
-
   ct.exercises.forEach((ex, ei) => {
     const wI = container.querySelector(`#w-${ei}`);
     const rI = container.querySelector(`#r-${ei}`);
     if (wI) wI.addEventListener('keydown', e => { if (e.key === 'Enter') addSet(ei, S); });
     if (rI) rI.addEventListener('keydown', e => { if (e.key === 'Enter') addSet(ei, S); });
   });
-
   container.querySelectorAll('.swipe-wrap').forEach(wrap => {
     const content = wrap.querySelector('.swipe-content');
     let startX = 0, currentX = 0, swiping = false;
@@ -337,7 +326,6 @@ function renderActiveTraining(container, S) {
       }
     });
   });
-
   if (S.trainingTimerActive && !S._timerInterval) {
     S._timerInterval = setInterval(() => {
       const el = container.querySelector('#trainingTime');
@@ -353,7 +341,6 @@ function renderTrainingSummary(container, S) {
   const ct = S.currentTraining;
   if (!ct) { S.trainingScreen = 'home'; onStateChange(); return; }
   const summary = aiPostWorkout(ct, S);
-
   container.innerHTML = `
     <div class="text-center mb-16">
       <div style="font-size:48px;margin-bottom:8px">
@@ -391,7 +378,6 @@ function renderTrainingSummary(container, S) {
     <button class="btn btn-primary btn-block mt-16" id="btnSaveTraining">保存训练记录</button>
     <button class="btn btn-ghost btn-block mt-8" id="btnDiscardTraining" style="color:var(--err)">放弃本次记录</button>
   `;
-
   container.querySelector('#trainingPhoto').addEventListener('change', e => {
     const file = e.target.files[0];
     if (!file) return;
@@ -399,7 +385,6 @@ function renderTrainingSummary(container, S) {
     reader.onload = ev => { ct.photo = ev.target.result; currentRender && currentRender(); };
     reader.readAsDataURL(file);
   });
-
   container.querySelector('#btnSaveTraining').addEventListener('click', () => {
     ct.notes = container.querySelector('#trainingNotes').value;
     S.trainingRecords.push(ct);
@@ -410,7 +395,6 @@ function renderTrainingSummary(container, S) {
     if (S._timerInterval) { clearInterval(S._timerInterval); S._timerInterval = null; }
     onStateChange();
   });
-
   container.querySelector('#btnDiscardTraining').addEventListener('click', () => {
     if (confirm('确定放弃本次训练记录？')) {
       S.currentTraining = null;
@@ -491,22 +475,30 @@ function showRestTimerOverlay(seconds) {
     countdownEl.textContent = remaining;
   }
 
+  // FIX Bug2: 立即调用 update() 确保首帧进度圈正确显示 100%
+  update();
+
   skipBtn.addEventListener('click', () => {
     clearInterval(interval);
     overlay.remove();
   });
 
+  document.body.appendChild(overlay);
+
   const interval = setInterval(() => {
     remaining--;
     if (remaining <= 0) {
       clearInterval(interval);
+      // FIX Bug3: resume() 后再播放，兼容 iOS Safari AudioContext 限制
       try {
         if (!window._audioCtx) window._audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         const ctx = window._audioCtx;
-        const o = ctx.createOscillator(), g = ctx.createGain();
-        o.connect(g); g.connect(ctx.destination);
-        o.frequency.value = 880; g.gain.value = 0.3;
-        o.start(); o.stop(ctx.currentTime + 0.15);
+        ctx.resume().then(() => {
+          const o = ctx.createOscillator(), g = ctx.createGain();
+          o.connect(g); g.connect(ctx.destination);
+          o.frequency.value = 880; g.gain.value = 0.3;
+          o.start(); o.stop(ctx.currentTime + 0.15);
+        }).catch(() => {});
       } catch (e) {}
       setTimeout(() => overlay.remove(), 500);
       return;
@@ -535,7 +527,6 @@ function showAddExerciseModal(S, stateChanged) {
     </div>
   </div>`;
   document.body.appendChild(overlay);
-
   let selType = 'free';
   const typeM = overlay.querySelector('#typeM');
   const typeF = overlay.querySelector('#typeF');
@@ -549,7 +540,6 @@ function showAddExerciseModal(S, stateChanged) {
   typeM.addEventListener('click', () => selectType('machine'));
   typeF.addEventListener('click', () => selectType('free'));
   selectType('free');
-
   overlay.querySelector('#cancelCustom').addEventListener('click', () => overlay.remove());
   overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
   overlay.querySelector('#saveCustom').addEventListener('click', () => {
@@ -596,18 +586,14 @@ function showOnboarding() {
     { num: 3, title: '开始训练', desc: '记录每组的重量和次数，组间休息可使用计时器功能', icon: '⏱️' },
     { num: 4, title: '完成保存', desc: '训练结束后添加笔记，AI 会自动生成训练总结', icon: '✅' }
   ];
-
   let currentStep = 0;
-
   const overlay = document.createElement('div');
   overlay.className = 'onboarding-overlay';
   overlay.id = 'onboardingOverlay';
-
   function renderStep() {
     const step = steps[currentStep];
     const isLast = currentStep === steps.length - 1;
     const dotsHtml = steps.map((_, i) => `<div class="onboard-dot" data-i="${i}"></div>`).join('');
-
     overlay.innerHTML = `
       <div class="onboarding-card">
         <h3>欢迎使用 FitTracker Pro</h3>
@@ -624,19 +610,16 @@ function showOnboarding() {
         </button>
       </div>
     `;
-
     overlay.querySelectorAll('.onboard-dot').forEach((dot, i) => {
       dot.style.background = i === currentStep ? 'var(--acc)' : 'var(--bd2)';
       dot.style.width = i === currentStep ? '18px' : '6px';
       dot.style.borderRadius = '3px';
       dot.style.transition = 'all .25s ease';
     });
-
     overlay.querySelector('#btnOnboardNext').addEventListener('click', () => {
       if (isLast) {
         localStorage.setItem('fittracker_welcome_shown', '1');
         overlay.remove();
-        // 引导用户直接开始第一次训练
         const startBtn = document.getElementById('btnStartTraining');
         if (startBtn) {
           startBtn.style.animation = 'pulse 1s ease 2';
@@ -648,10 +631,8 @@ function showOnboarding() {
       }
     });
   }
-
   renderStep();
   document.body.appendChild(overlay);
-
   overlay.addEventListener('click', e => {
     if (e.target === overlay) {
       localStorage.setItem('fittracker_welcome_shown', '1');
