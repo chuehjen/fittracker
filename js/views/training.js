@@ -219,16 +219,11 @@ function renderActiveTraining(container, S) {
     ? Math.floor((Date.now() - S.trainingTimerStart) / 1000) + (S.trainingTimerElapsed || 0)
     : (S.trainingTimerElapsed || 0);
 
+  // 顶部不再放"加动作"和"完成"按钮，改为底部悬浮栏
   container.innerHTML = `
     <div style="margin-bottom:14px">
       <div class="flex-between">
         <div class="text-sm text-muted">${getBodyPartName(S, ct.bodyPart)}训练中</div>
-        <div style="display:flex;gap:6px">
-          <button class="btn btn-outline btn-sm" id="btnAddMore" style="padding:5px 10px;font-size:12px">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg> 动作
-          </button>
-          <button class="btn btn-primary btn-sm" id="btnFinish" style="padding:5px 12px;font-size:12px">完成</button>
-        </div>
       </div>
       <div class="training-timer" id="trainingTime" style="font-size:32px;margin-top:2px">${fmtTime(elapsed)}</div>
       <div class="rest-bar">
@@ -257,7 +252,13 @@ function renderActiveTraining(container, S) {
         </div>
         <div class="set-tbl">
           <div class="set-tbl-hd"><span>组别</span><span>KG</span><span>次数</span><span></span></div>
-          ${ex.sets.map((s, si) => `<div class="swipe-wrap" data-ei="${ei}" data-si="${si}">
+          <div class="set-tbl-row">
+            <div class="s-num">${nextNum}</div>
+            <input type="number" placeholder="kg" id="w-${ei}" inputmode="decimal" step="0.5" value="${lastW}">
+            <input type="number" placeholder="次数" id="r-${ei}" inputmode="numeric" value="${lastR}">
+            <button class="s-check-btn" data-ei="${ei}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></button>
+          </div>
+          ${ex.sets.slice().reverse().map((s, revIdx) => { const si = ex.sets.length - 1 - revIdx; return `<div class="swipe-wrap" data-ei="${ei}" data-si="${si}">
             <div class="swipe-del">删除</div>
             <div class="set-tbl-row swipe-content">
               <div class="s-num">${si + 1}</div>
@@ -265,33 +266,45 @@ function renderActiveTraining(container, S) {
               <div class="s-val">${s.reps}</div>
               <div style="text-align:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ok)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
             </div>
-          </div>`).join('')}
-          <div class="set-tbl-row">
-            <div class="s-num">${nextNum}</div>
-            <input type="number" placeholder="kg" id="w-${ei}" inputmode="decimal" step="0.5" value="${lastW}">
-            <input type="number" placeholder="次数" id="r-${ei}" inputmode="numeric" value="${lastR}">
-            <button class="s-check-btn" data-ei="${ei}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></button>
-          </div>
+          </div>`; }).join('')}
         </div>
       </div>`;
     }).join('')}
+    <div style="height:72px"></div>
   `;
 
-  container.querySelector('#btnAddMore').addEventListener('click', () => {
+  // 底部悬浮操作栏（固定在页面底部，始终可见）
+  const fab = document.createElement('div');
+  fab.id = 'activeTrainingFab';
+  fab.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;gap:10px;padding:12px 16px 20px;background:var(--bg);border-top:1px solid var(--bd);box-shadow:0 -4px 16px rgba(0,0,0,.12);';
+  fab.innerHTML = `
+    <button class="btn btn-outline" id="btnAddMore" style="flex:1;padding:12px;font-size:14px;border-radius:var(--r-m)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg> 加动作
+    </button>
+    <button class="btn btn-primary" id="btnFinish" style="flex:2;padding:12px;font-size:14px;border-radius:var(--r-m)">完成训练</button>
+  `;
+  document.body.appendChild(fab);
+
+  // 离开此页面时清除悬浮栏
+  const removeFab = () => { const el = document.getElementById('activeTrainingFab'); if (el) el.remove(); };
+
+  fab.querySelector('#btnAddMore').addEventListener('click', () => {
+    removeFab();
     S.trainingScreen = 'selectExercise';
     onStateChange();
   });
-  container.querySelector('#btnFinish').addEventListener('click', () => finishTraining(S));
+  fab.querySelector('#btnFinish').addEventListener('click', () => {
+    removeFab();
+    finishTraining(S);
+  });
+
   container.querySelectorAll('#restPicker .rest-pick').forEach(btn => btn.addEventListener('click', () => {
     S.restSeconds = parseInt(btn.dataset.sec);
     container.querySelectorAll('#restPicker .rest-pick').forEach(b => b.classList.toggle('active', b === btn));
     onStateChange();
   }));
 
-  // FIX Bug1: 用 addEventListener 替代 onclick 内联 + 删除 window._startRestTimer 全局污染
-  // iOS Safari/WKWebView 对 innerHTML 内嵌 onclick 字符串解析受限，导致按钮无效
   container.querySelector('#btnStartRest').addEventListener('click', () => {
-    // FIX Bug3: 在用户手势回调内 resume AudioContext，解决 iOS 音频策略静音问题
     if (window._audioCtx) window._audioCtx.resume().catch(() => {});
     showRestTimerOverlay(S.restSeconds || 90);
   });
@@ -338,6 +351,10 @@ function renderActiveTraining(container, S) {
 }
 
 function renderTrainingSummary(container, S) {
+  // 确保切换到 summary 时清除悬浮栏（finishTraining 已 removeFab，这里兜底）
+  const fab = document.getElementById('activeTrainingFab');
+  if (fab) fab.remove();
+
   const ct = S.currentTraining;
   if (!ct) { S.trainingScreen = 'home'; onStateChange(); return; }
   const summary = aiPostWorkout(ct, S);
@@ -475,7 +492,6 @@ function showRestTimerOverlay(seconds) {
     countdownEl.textContent = remaining;
   }
 
-  // FIX Bug2: 立即调用 update() 确保首帧进度圈正确显示 100%
   update();
 
   skipBtn.addEventListener('click', () => {
@@ -489,7 +505,6 @@ function showRestTimerOverlay(seconds) {
     remaining--;
     if (remaining <= 0) {
       clearInterval(interval);
-      // FIX Bug3: resume() 后再播放，兼容 iOS Safari AudioContext 限制
       try {
         if (!window._audioCtx) window._audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         const ctx = window._audioCtx;
