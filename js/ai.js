@@ -1,5 +1,4 @@
 // ===== AI Analysis Engine =====
-// OpenRouter-powered AI with automatic free-model failover
 
 import { BODY_PARTS } from './exercises.js';
 import { calcVolume } from './helpers.js';
@@ -13,7 +12,7 @@ const FREE_MODELS = [
   'meta-llama/llama-3.3-70b-instruct',
 ];
 
-const SYSTEM_PROMPT = '你是一个专业的健身教练和营养顾问。用简短的中文回答，使用 <strong> 标签强调重点。回答控制在100字以内。';
+const SYSTEM_PROMPT = '你是一个专业的健身教练。用简短的中文回答，使用 <strong> 标签强调重点。回答控制在100字以内。';
 
 let _currentModel = null;
 
@@ -54,18 +53,13 @@ export async function claudeAnalyze(prompt, systemPrompt) {
       continue;
     }
   }
-
   return null;
 }
 
 export function getApiConfig() {
-  return {
-    enabled: true,
-    model: _currentModel || FREE_MODELS[0],
-  };
+  return { enabled: true, model: _currentModel || FREE_MODELS[0] };
 }
 
-// Keep setApiConfig as no-op for backward compat
 export function setApiConfig() {}
 
 // ===== Rule-Based Fallback Engine =====
@@ -155,22 +149,6 @@ export function getPRBeforeLocal(name, excludeId, state) {
     });
   });
   return max;
-}
-
-export function aiDietFeedback(bodyRec, state) {
-  const diet = (bodyRec.diet || '').toLowerCase();
-  const todayTraining = (state.trainingRecords || []).filter(r => r.date === bodyRec.date);
-  if (!diet) return null;
-  let tips = [];
-  const hasProtein = /(蛋白|鸡胸|牛肉|鱼|虾|蛋|奶)/.test(diet);
-  const hasCarb = /(碳水|米饭|面|香蕉|红薯|燕麦)/.test(diet);
-  if (todayTraining.length > 0) {
-    if (!hasProtein) tips.push('今天有训练但蛋白质摄入不足，建议补充。');
-    if (!hasCarb) tips.push('训练后适当补充碳水化合物。');
-  } else {
-    tips.push('休息日可以适当控制碳水摄入量。');
-  }
-  return tips.join(' ');
 }
 
 export function aiWeeklyReport(state) {
