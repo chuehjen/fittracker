@@ -1,11 +1,9 @@
 // ===== FitTracker Pro - Main App Entry =====
-// ESM version: modular architecture with IndexedDB + Supabase sync
 
 import { getState, setState, migrateFromLocalStorage, migrateAchievementsFromLocalStorage, loadAchievements, saveAchievements } from './db.js';
 import { getUnlockedAchievements } from './achievements.js';
 import { initSync, getCurrentUser, onAuthChange, syncAll, getSyncStatus, setupNetworkSync, onStatusChange } from './sync.js';
 import { renderTraining } from './views/training.js';
-import { renderRecord } from './views/record.js';
 import { renderHistory } from './views/history.js';
 import { renderProfile } from './views/profile.js';
 
@@ -13,7 +11,6 @@ import { renderProfile } from './views/profile.js';
 const DEFAULT_STATE = {
   profile: { name: '', avatar: '' },
   trainingRecords: [],
-  bodyRecords: [],
   customExercises: [],
   activeTab: 'training',
   trainingScreen: 'home',
@@ -21,7 +18,6 @@ const DEFAULT_STATE = {
   selectedBodyPart: null,
   historySubTab: 'training',
   historyFilter: 'all',
-  lastDietFeedback: '',
   trainingTimerActive: false,
   trainingTimerStart: null,
   trainingTimerElapsed: 0,
@@ -42,7 +38,6 @@ const tabBar = document.getElementById('tabBar');
 // Tab definitions
 const TABS = [
   { id: 'training', icon: tabIcon('training'), label: '训练' },
-  { id: 'record', icon: tabIcon('record'), label: '记录' },
   { id: 'history', icon: tabIcon('history'), label: '历史' },
   { id: 'profile', icon: tabIcon('profile'), label: '我的' },
 ];
@@ -51,7 +46,6 @@ const TABS = [
 function tabIcon(name) {
   const icons = {
     training: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="6" height="8" rx="1"/><rect x="15" y="8" width="6" height="8" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/></svg>',
-    record: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M6 20v-4"/><path d="M18 20v-6"/><circle cx="12" cy="6" r="2"/></svg>',
     history: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>',
     profile: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/></svg>'
   };
@@ -99,7 +93,6 @@ async function init() {
     console.warn('[App] Auth check failed:', e);
   }
 
-  // Listen for auth state changes (Magic Link redirect back)
   onAuthChange((user) => {
     if (user) {
       S.user = user;
@@ -111,14 +104,10 @@ async function init() {
     render();
   });
 
-  // BroadcastChannel: cross-tab auth sync
-
-  // BroadcastChannel: cross-tab auth sync
   setupBroadcastChannel();
 
   window._appState = S;
 
-  // Hide loading screen, show app
   const loadingEl = document.getElementById('loading');
   const appEl = document.getElementById('app');
   render();
@@ -130,7 +119,6 @@ async function init() {
 }
 
 // ===== Auth Polling =====
-// Polls Supabase session every 2s when user has initiated magic link login
 let authPollTimer = null;
 let authPollActive = false;
 
@@ -141,15 +129,12 @@ export function startAuthPolling() {
     try {
       const user = await getCurrentUser();
       if (user && !S.user) {
-        // User logged in from another tab or magic link
         S.user = { email: user.email, id: user.id };
         syncAll();
         render();
         stopAuthPolling();
       }
-    } catch (e) {
-      // silently ignore polling errors
-    }
+    } catch (e) {}
   }, 2000);
 }
 
@@ -162,7 +147,6 @@ export function stopAuthPolling() {
 }
 
 // ===== BroadcastChannel =====
-// Cross-tab communication for instant auth sync
 let authChannel = null;
 
 function setupBroadcastChannel() {
@@ -223,13 +207,11 @@ function renderViews() {
   const tabChanged = _lastActiveTab !== S.activeTab;
   _lastActiveTab = S.activeTab;
 
-  // Only rebuild shell DOM on tab switch; reuse existing containers otherwise
   if (tabChanged) {
     viewsContainer.innerHTML = TABS.map(k =>
       `<div class="view${S.activeTab === k.id ? ' active' : ''}" id="view-${k.id}"></div>`
     ).join('');
   } else {
-    // Just update active class without rebuilding DOM (no animation replay)
     TABS.forEach(k => {
       const el = document.getElementById(`view-${k.id}`);
       if (el) el.classList.toggle('active', S.activeTab === k.id);
@@ -242,9 +224,6 @@ function renderViews() {
   switch (S.activeTab) {
     case 'training':
       renderTraining(activeContainer, S, stateChanged);
-      break;
-    case 'record':
-      renderRecord(activeContainer, S, stateChanged);
       break;
     case 'history':
       renderHistory(activeContainer, S, stateChanged);
@@ -264,7 +243,6 @@ function saveState() {
   const data = {
     profile: S.profile,
     trainingRecords: S.trainingRecords,
-    bodyRecords: S.bodyRecords,
     customExercises: S.customExercises,
     restSeconds: S.restSeconds,
     trainingTimerElapsed: S.trainingTimerActive && S.trainingTimerStart
@@ -318,7 +296,6 @@ window._syncActions = {
   },
 };
 
-// Expose auth polling for profile view
 window._startAuthPolling = startAuthPolling;
 window._stopAuthPolling = stopAuthPolling;
 
