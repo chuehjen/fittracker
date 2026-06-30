@@ -6,7 +6,6 @@ import { renderCharts } from '../charts.js';
 import { calcVolume, fmtVol } from '../helpers.js';
 import { doExport, doImport } from '../data.js';
 
-// Lightweight toast for profile view
 function showToast(msg, type = 'ok') {
   const existing = document.getElementById('profileToast');
   if (existing) existing.remove();
@@ -60,15 +59,12 @@ export function renderProfile(container, S, stateChanged) {
       <div class="ai-body">${report.body}</div>
     </div>
 
-    <!-- Cloud Sync Section -->
     <div class="sync-card">
       <h4><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z"/></svg> 云端同步</h4>
       ${renderSyncSection(S)}
     </div>
 
-    <!-- Charts -->
     <div id="charts">
-      <div class="chart-container"><h3>体重/体脂趋势</h3><div class="chart-wrap"><canvas id="weightChart"></canvas></div><div class="chart-fallback" id="weightFallback" style="display:none">数据不足以显示图表</div></div>
       <div class="chart-container"><h3>训练频次</h3><div class="chart-wrap"><canvas id="freqChart"></canvas></div></div>
       <div class="chart-container"><h3>部位训练分布</h3><div class="chart-wrap" style="height:240px"><canvas id="distChart"></canvas></div></div>
       <div class="chart-container">
@@ -92,7 +88,6 @@ export function renderProfile(container, S, stateChanged) {
     </div>
   `;
 
-  // Avatar
   container.querySelector('#avatarBtn').addEventListener('click', () => container.querySelector('#avatarInput').click());
   container.querySelector('#avatarInput').addEventListener('change', e => {
     const file = e.target.files[0];
@@ -102,18 +97,12 @@ export function renderProfile(container, S, stateChanged) {
     reader.readAsDataURL(file);
   });
 
-  // Edit profile
-  container.querySelector('#editProfileBtn').addEventListener('click', () => {
-    showProfileModal(S, stateChanged);
-  });
+  container.querySelector('#editProfileBtn').addEventListener('click', () => showProfileModal(S, stateChanged));
 
-  // Sync actions
   setupSyncHandlers(container, S, stateChanged);
 
-  // Charts
   setTimeout(() => renderCharts(container, S), 100);
 
-  // Export/Import
   container.querySelector('#btnExport').addEventListener('click', () => doExport(S));
   container.querySelector('#importFile').addEventListener('change', e => doImport(e.target.files[0], S, stateChanged));
 }
@@ -141,7 +130,6 @@ function renderSyncSection(S) {
     : S.syncStatus === 'pushing' || S.syncStatus === 'pulling' ? '#FFD700'
     : S.syncStatus === 'error' ? '#FF4444'
     : '#888';
-
   const syncTime = S.lastSyncTime ? new Date(S.lastSyncTime).toLocaleTimeString() : '从未';
 
   return `
@@ -169,51 +157,30 @@ function setupSyncHandlers(container, S, stateChanged) {
   if (sendBtn) {
     sendBtn.addEventListener('click', async () => {
       const email = container.querySelector('#loginEmail').value.trim();
-      if (!email) {
-        showToast('请输入邮箱地址', 'warn');
-        return;
-      }
-
-      // Loading state
+      if (!email) { showToast('请输入邮箱地址', 'warn'); return; }
       sendBtn.disabled = true;
       sendBtn.innerHTML = '<span class="btn-spinner"></span> 发送中...';
-
       try {
         await sync.sendMagicLink(email);
         const msg = container.querySelector('#linkSentMsg');
         if (msg) msg.style.display = 'block';
         sendBtn.textContent = '✅ 已发送';
         showToast('登录链接已发送，请检查邮箱', 'ok');
-        if (typeof window._startAuthPolling === 'function') {
-          window._startAuthPolling();
-        }
+        if (typeof window._startAuthPolling === 'function') window._startAuthPolling();
       } catch (e) {
-        // Restore button on error
         sendBtn.disabled = false;
         sendBtn.textContent = '发送登录链接';
         const msg = e.message || '';
-        if (msg.includes('rate limit')) {
-          showToast('发送太频繁，请稍后再试', 'err');
-        } else {
-          showToast('发送失败: ' + msg, 'err');
-        }
+        showToast(msg.includes('rate limit') ? '发送太频繁，请稍后再试' : '发送失败: ' + msg, 'err');
       }
     });
   }
 
   const syncBtn = container.querySelector('#manualSyncBtn');
-  if (syncBtn) {
-    syncBtn.addEventListener('click', () => {
-      sync.manualSync();
-    });
-  }
+  if (syncBtn) syncBtn.addEventListener('click', () => sync.manualSync());
 
   const signOutBtn = container.querySelector('#signOutBtn');
-  if (signOutBtn) {
-    signOutBtn.addEventListener('click', () => {
-      sync.signOut();
-    });
-  }
+  if (signOutBtn) signOutBtn.addEventListener('click', () => sync.signOut());
 }
 
 function showProfileModal(S, stateChanged) {
