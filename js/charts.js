@@ -1,8 +1,8 @@
 // ===== Charts Module =====
 // Chart.js wrapper — dynamically loads CDN on first render
+// Renders: training frequency (bar) + body part distribution (doughnut)
 
 import { BODY_PARTS } from './exercises.js';
-import { fmtDate } from './helpers.js';
 
 const chartInstances = {};
 let chartLoaded = false;
@@ -38,10 +38,8 @@ async function ensureChart() {
 export async function renderCharts(container, S) {
   const ok = await ensureChart();
   if (!ok) return;
-
   renderFreqChart(container, S);
   renderDistChart(container, S);
-  renderProgressChart(container, S);
 }
 
 function destroyChart(id) {
@@ -112,61 +110,4 @@ function renderDistChart(container, S) {
     }
   });
   storeChart('dist', chart);
-}
-
-function renderProgressChart(container, S) {
-  const canvas = container.querySelector('#progressChart');
-  if (!canvas) return;
-  destroyChart('progress');
-
-  const select = container.querySelector('#progressSelect');
-  if (!select) return;
-
-  const selectedEx = select.value;
-  const fallback = container.querySelector('#progressFallback');
-
-  if (!selectedEx) {
-    canvas.style.display = 'none';
-    if (fallback) fallback.style.display = 'block';
-    return;
-  }
-
-  if (fallback) fallback.style.display = 'none';
-  canvas.style.display = 'block';
-
-  const exRecords = (S.trainingRecords || [])
-    .filter(r => r.exercises.some(ex => ex.name === selectedEx))
-    .sort((a, b) => a.date.localeCompare(b.date));
-
-  const progressData = exRecords.map(r => {
-    const ex = r.exercises.find(e => e.name === selectedEx);
-    return ex ? Math.max(...ex.sets.map(s => s.weight)) : 0;
-  });
-
-  const chart = new Chart(canvas.getContext('2d'), {
-    type: 'line',
-    data: {
-      labels: exRecords.map(d => fmtDate(d.date)),
-      datasets: [{
-        label: selectedEx + ' PR',
-        data: progressData,
-        borderColor: '#32CD32',
-        backgroundColor: 'rgba(50,205,50,.1)',
-        tension: .4,
-        fill: true
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
-      scales: {
-        x: { grid: { color: 'rgba(42,42,42,.6)' }, ticks: { color: '#888' } },
-        y: { grid: { color: 'rgba(42,42,42,.6)' }, ticks: { color: '#888' } }
-      }
-    }
-  });
-  storeChart('progress', chart);
-
-  select.addEventListener('change', () => {
-    setTimeout(() => renderCharts(container, S), 50);
-  });
 }
