@@ -1,9 +1,8 @@
 // ===== Profile View =====
-// Stats, charts, AI weekly report, data management, cloud sync
+// Stats, AI weekly report, data management, cloud sync
 
 import { aiWeeklyReport } from '../ai.js';
 import { renderCharts } from '../charts.js';
-import { calcVolume, fmtVol } from '../helpers.js';
 import { doExport, doImport } from '../data.js';
 
 function showToast(msg, type = 'ok') {
@@ -26,7 +25,6 @@ function showToast(msg, type = 'ok') {
 
 export function renderProfile(container, S, stateChanged) {
   const totalTrainings = S.trainingRecords.length;
-  const totalVolume = S.trainingRecords.reduce((t, r) => t + calcVolume(r.exercises), 0);
   const totalDuration = S.trainingRecords.reduce((t, r) => t + (r.duration || 0), 0);
   const isEmpty = totalTrainings === 0;
   const report = aiWeeklyReport(S);
@@ -49,9 +47,8 @@ export function renderProfile(container, S, stateChanged) {
       <div style="font-weight:700;margin-bottom:4px">还没有训练记录</div>
       <div style="font-size:13px;color:var(--t2)">点击「训练」开始你的第一次记录</div>
     </div>` : `
-    <div class="stat-grid">
+    <div class="stat-grid" style="grid-template-columns:1fr 1fr">
       <div class="stat-card"><div class="stat-val">${totalTrainings}</div><div class="stat-label">总训练次数</div></div>
-      <div class="stat-card"><div class="stat-val">${fmtVol(totalVolume)}</div><div class="stat-label">总训练量 (kg)</div></div>
       <div class="stat-card"><div class="stat-val">${Math.round(totalDuration / 3600)}</div><div class="stat-label">总时长 (h)</div></div>
     </div>`}
     <div class="ai-card">
@@ -67,13 +64,6 @@ export function renderProfile(container, S, stateChanged) {
     <div id="charts">
       <div class="chart-container"><h3>训练频次</h3><div class="chart-wrap"><canvas id="freqChart"></canvas></div></div>
       <div class="chart-container"><h3>部位训练分布</h3><div class="chart-wrap" style="height:240px"><canvas id="distChart"></canvas></div></div>
-      <div class="chart-container">
-        <div class="flex-between mb-8"><h3 style="margin:0">动作进步曲线</h3>
-          <select class="input-field" id="progressSelect" style="width:auto;padding:6px 10px;font-size:13px">${getExerciseOptions(S)}</select>
-        </div>
-        <div class="chart-wrap"><canvas id="progressChart"></canvas></div>
-        <div class="chart-fallback" id="progressFallback" style="display:none">选择动作查看进步曲线</div>
-      </div>
     </div>
     <div class="divider"></div>
     <div class="section-title" style="font-size:15px">数据管理</div>
@@ -203,11 +193,4 @@ function showProfileModal(S, stateChanged) {
     overlay.remove();
     stateChanged();
   });
-}
-
-function getExerciseOptions(S) {
-  const allEx = new Set();
-  S.trainingRecords.forEach(r => r.exercises.forEach(ex => allEx.add(ex.name)));
-  if (allEx.size === 0) return '<option value="">无数据</option>';
-  return [...allEx].map(e => `<option value="${e}">${e}</option>`).join('');
 }
