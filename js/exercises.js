@@ -90,3 +90,97 @@ export const EX_META = {
 export function getExMeta(name) {
   return EX_META[name] || { tip: '' };
 }
+
+// ===== Exercise Detail Metadata (for selection screen) =====
+// equipment: machine | dumbbell | barbell | cable | bodyweight | smith | other
+// level: beginner | intermediate | advanced
+// tags: 中文标签数组
+// reason: 默认推荐理由（用于无历史记录时的展示）
+export const EXERCISE_DETAILS = {
+  // --- 胸 ---
+  '器械推胸':       { equipment: 'machine',    target: '胸部主项', level: 'beginner',     tags: ['主项', '推', '稳定'],   reason: '固定轨迹，新手容易上手' },
+  '蝴蝶机夹胸':     { equipment: 'machine',    target: '胸部内侧', level: 'beginner',     tags: ['孤立', '夹胸'],         reason: '安全孤立训练，适合补充胸部内侧' },
+  '史密斯卧推':     { equipment: 'smith',      target: '胸部主项', level: 'beginner',     tags: ['推', '稳定'],           reason: '固定轨迹卧推，新手友好' },
+  '龙门架夹胸':     { equipment: 'cable',      target: '胸部内侧', level: 'intermediate', tags: ['孤立', '夹胸'],         reason: '恒定张力，适合顶峰收缩训练' },
+  '器械下斜推胸':   { equipment: 'machine',    target: '下胸',     level: 'beginner',     tags: ['推', '下胸'],           reason: '下胸孤立训练，动作稳定' },
+  '平板杠铃卧推':   { equipment: 'barbell',    target: '胸部主项', level: 'intermediate', tags: ['主项', '推'],           reason: '适合作为胸部训练的第一个主项' },
+  '上斜哑铃卧推':   { equipment: 'dumbbell',   target: '上胸',     level: 'intermediate', tags: ['推', '上胸'],           reason: '主练上胸，弥补平板卧推不足' },
+  '平板哑铃飞鸟':   { equipment: 'dumbbell',   target: '胸部外侧', level: 'intermediate', tags: ['孤立', '拉伸'],         reason: '增加胸肌拉伸幅度，互补卧推动作' },
+  '双杠臂屈伸':     { equipment: 'bodyweight', target: '下胸',     level: 'advanced',     tags: ['推', '自重'],           reason: '前倾练胸效果好，进阶自重动作' },
+  '俯卧撑':         { equipment: 'bodyweight', target: '胸部主项', level: 'beginner',     tags: ['自重', '入门'],         reason: '零器械，随时可做的新手起点' },
+  // --- 背 ---
+  '高位下拉':       { equipment: 'cable',      target: '背阔肌',   level: 'beginner',     tags: ['主项', '拉', '稳定'],   reason: '新手友好，背阔肌主项首选' },
+  '坐姿划船':       { equipment: 'cable',      target: '中背部',   level: 'beginner',     tags: ['拉', '稳定'],           reason: '动作稳定，适合学习背部发力' },
+  'T 杆划船器':     { equipment: 'machine',    target: '中背部',   level: 'intermediate', tags: ['拉', '厚度'],           reason: '增加背部厚度，俯身角度易控' },
+  '器械反向飞鸟':   { equipment: 'machine',    target: '背部后束', level: 'beginner',     tags: ['孤立', '后束'],         reason: '孤立后束，动作安全易上手' },
+  '助力引体向上':   { equipment: 'machine',    target: '背阔肌',   level: 'beginner',     tags: ['拉', '入门'],           reason: '借助配重降低难度，适合过渡到自重引体' },
+  '杠铃划船':       { equipment: 'barbell',    target: '背部主项', level: 'intermediate', tags: ['主项', '拉'],           reason: '适合作为背部训练的第一个主项' },
+  '哑铃单臂划船':   { equipment: 'dumbbell',   target: '背阔肌',   level: 'beginner',     tags: ['拉', '单侧'],           reason: '单侧集中刺激，动作容易掌握' },
+  '引体向上':       { equipment: 'bodyweight', target: '背阔肌',   level: 'advanced',     tags: ['主项', '自重'],         reason: '最佳背部自重训练，适合有一定基础后挑战' },
+  '硬拉':           { equipment: 'barbell',    target: '背部主项', level: 'advanced',     tags: ['主项', '全身'],         reason: '全身力量之王，适合有经验后加入' },
+  '哑铃俯身飞鸟':   { equipment: 'dumbbell',   target: '背部后束', level: 'intermediate', tags: ['孤立', '后束'],         reason: '俯身后束孤立训练，补充划船动作' },
+  // --- 腿 ---
+  '腿举机':         { equipment: 'machine',    target: '股四头肌', level: 'beginner',     tags: ['主项', '推', '稳定'],   reason: '固定轨迹，新手安全练腿首选' },
+  '腿屈伸':         { equipment: 'machine',    target: '股四头肌', level: 'beginner',     tags: ['孤立'],                 reason: '股四头肌孤立训练，动作简单' },
+  '腿弯举':         { equipment: 'machine',    target: '腘绳肌',   level: 'beginner',     tags: ['孤立'],                 reason: '腘绳肌孤立训练，平衡腿部前后发力' },
+  '史密斯深蹲':     { equipment: 'smith',      target: '腿部主项', level: 'beginner',     tags: ['推', '稳定'],           reason: '固定轨迹深蹲，新手更易掌握平衡' },
+  '小腿提踵机':     { equipment: 'machine',    target: '小腿',     level: 'beginner',     tags: ['孤立'],                 reason: '全程控制，强化小腿肌群' },
+  '杠铃深蹲':       { equipment: 'barbell',    target: '腿部主项', level: 'intermediate', tags: ['主项', '推'],           reason: '适合作为腿部训练的第一个主项' },
+  '哑铃箭步蹲':     { equipment: 'dumbbell',   target: '股四头肌', level: 'intermediate', tags: ['推', '单侧'],           reason: '单腿训练，改善左右力量不平衡' },
+  '罗马尼亚硬拉':   { equipment: 'barbell',    target: '腘绳肌',   level: 'intermediate', tags: ['拉', '后链'],           reason: '感受腘绳拉伸，互补深蹲动作' },
+  '保加利亚分腿蹲': { equipment: 'dumbbell',   target: '股四头肌', level: 'advanced',     tags: ['推', '单侧'],           reason: '后脚抬高单腿深蹲，适合进阶挑战' },
+  '壶铃摆壶':       { equipment: 'other',      target: '腿部主项', level: 'intermediate', tags: ['髋铰链', '爆发力'],     reason: '髋关节铰链发力，强化臀腿爆发力' },
+  // --- 肩 ---
+  '器械肩推':       { equipment: 'machine',    target: '肩部主项', level: 'beginner',     tags: ['主项', '推', '稳定'],   reason: '固定轨迹，安全肩推首选' },
+  '器械侧平举':     { equipment: 'machine',    target: '三角肌侧束', level: 'beginner',   tags: ['孤立'],                 reason: '肩部外展孤立训练，动作易控' },
+  '史密斯肩推':     { equipment: 'smith',      target: '肩部主项', level: 'beginner',     tags: ['推', '稳定'],           reason: '固定轨迹肩推，新手友好' },
+  '龙门架面拉':     { equipment: 'cable',      target: '肩袖肌群', level: 'beginner',     tags: ['孤立', '后束'],         reason: '强化肩袖外旋，预防肩部损伤' },
+  '哑铃肩推':       { equipment: 'dumbbell',   target: '肩部主项', level: 'intermediate', tags: ['主项', '推'],           reason: '适合作为肩部训练的第一个主项' },
+  '哑铃侧平举':     { equipment: 'dumbbell',   target: '三角肌侧束', level: 'beginner',   tags: ['孤立'],                 reason: '微屈肘控制下落，肩宽塑形动作' },
+  '哑铃前平举':     { equipment: 'dumbbell',   target: '三角肌前束', level: 'beginner',   tags: ['孤立'],                 reason: '前束孤立训练，动作简单易学' },
+  '杠铃提拉':       { equipment: 'barbell',    target: '三角肌前束', level: 'intermediate', tags: ['拉'],                 reason: '拉至锁骨高度，强化肩部上提力量' },
+  '阿诺德推举':     { equipment: 'dumbbell',   target: '肩部主项', level: 'intermediate', tags: ['推', '旋转'],           reason: '旋转推举全面刺激三角肌各束' },
+  // --- 臂 ---
+  '绳索弯举':       { equipment: 'cable',      target: '二头肌',   level: 'beginner',     tags: ['孤立'],                 reason: '恒定张力弯举，适合二头肌主项' },
+  '绳索下压':       { equipment: 'cable',      target: '三头肌',   level: 'beginner',     tags: ['孤立'],                 reason: '三头肌孤立训练，新手容易掌握' },
+  '牧师凳弯举机':   { equipment: 'machine',    target: '二头肌',   level: 'beginner',     tags: ['孤立', '稳定'],         reason: '固定支撑孤立二头肌，避免借力' },
+  '器械臂屈伸':     { equipment: 'machine',    target: '三头肌',   level: 'beginner',     tags: ['孤立', '稳定'],         reason: '三头肌器械训练，动作安全稳定' },
+  '龙门架锤式弯举': { equipment: 'cable',      target: '肱桡肌',   level: 'intermediate', tags: ['孤立'],                 reason: '锤式弯举刺激前臂与肱桡肌' },
+  '杠铃弯举':       { equipment: 'barbell',    target: '二头肌',   level: 'intermediate', tags: ['主项'],                 reason: '适合作为手臂训练的第一个主项' },
+  '哑铃锤式弯举':   { equipment: 'dumbbell',   target: '肱桡肌',   level: 'beginner',     tags: ['孤立'],                 reason: '前臂与二头同时刺激，动作简单' },
+  '窄距卧推':       { equipment: 'barbell',    target: '三头肌',   level: 'intermediate', tags: ['推', '复合'],           reason: '三头肌为主发力，兼顾胸部刺激' },
+  '颅骨粉碎者':     { equipment: 'barbell',    target: '三头肌',   level: 'advanced',     tags: ['孤立'],                 reason: '仰卧臂屈伸，三头肌进阶孤立动作' },
+  '哑铃集中弯举':   { equipment: 'dumbbell',   target: '二头肌',   level: 'beginner',     tags: ['孤立'],                 reason: '坐姿集中刺激二头肌峰值' },
+  // --- 核心 ---
+  '器械卷腹':       { equipment: 'machine',    target: '腹直肌',   level: 'beginner',     tags: ['孤立', '稳定'],         reason: '腹肌器械孤立训练，动作易控' },
+  '绳索卷腹':       { equipment: 'cable',      target: '腹直肌',   level: 'intermediate', tags: ['孤立'],                 reason: '恒定张力核心训练，强度可调' },
+  '罗马椅背伸展':   { equipment: 'machine',    target: '下背部',   level: 'intermediate', tags: ['后链'],                 reason: '下背部强化，平衡核心前后发力' },
+  '器械转体':       { equipment: 'machine',    target: '腹斜肌',   level: 'beginner',     tags: ['孤立', '旋转'],         reason: '腹斜肌旋转训练，动作稳定安全' },
+  '悬垂举腿架':     { equipment: 'machine',    target: '下腹',     level: 'intermediate', tags: ['孤立', '下腹'],         reason: '下腹发力举腿，借助支撑减少代偿' },
+  '平板支撑':       { equipment: 'bodyweight', target: '核心主项', level: 'beginner',     tags: ['主项', '自重', '稳定'], reason: '零器械核心稳定训练，新手首选' },
+  '卷腹':           { equipment: 'bodyweight', target: '腹直肌',   level: 'beginner',     tags: ['自重', '入门'],         reason: '基础核心训练，随时可做' },
+  '俄罗斯转体':     { equipment: 'bodyweight', target: '腹斜肌',   level: 'intermediate', tags: ['旋转'],                 reason: '腹斜肌旋转训练，可负重增加强度' },
+  '死虫式':         { equipment: 'bodyweight', target: '核心稳定', level: 'beginner',     tags: ['稳定', '自重'],         reason: '核心稳定训练，适合新手建立控制力' },
+  '悬垂举腿':       { equipment: 'bodyweight', target: '下腹',     level: 'advanced',     tags: ['自重', '下腹'],         reason: '高级下腹训练，适合有一定基础后挑战' },
+};
+
+export const EQUIPMENT_LABELS = {
+  machine: '固定器械',
+  dumbbell: '哑铃',
+  barbell: '杠铃',
+  cable: '龙门架',
+  bodyweight: '自重',
+  smith: '史密斯',
+  other: '其他',
+};
+
+export function getExerciseDetail(name, fallbackType) {
+  return {
+    equipment: fallbackType === 'machine' ? 'machine' : 'other',
+    target: '',
+    level: 'intermediate',
+    tags: [],
+    reason: '',
+    ...(EXERCISE_DETAILS[name] || {}),
+  };
+}
