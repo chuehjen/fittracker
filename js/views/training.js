@@ -1,7 +1,7 @@
 // ===== Training View =====
 // Home → Select Body Part → Select Exercise → Active Training → Summary
 
-import { BODY_PARTS, EXERCISES, getExMeta } from '../exercises.js';
+import { BODY_PARTS, EXERCISES, getExMeta, getExerciseDetail, EQUIPMENT_LABELS } from '../exercises.js';
 import { getWeeklyNews } from '../news.js';
 import { ACHIEVEMENTS, getUnlockedAchievements } from '../achievements.js';
 import { aiPreWorkout, aiPostWorkout } from '../ai.js';
@@ -146,50 +146,390 @@ function renderSelectPart(container, S) {
   }));
 }
 
-function renderSelectExercise(container, S) {
-  const bp = S.selectedBodyPart;
+// ===================================================================
+// ===== Select Exercise Screen (rebuilt per exercise-selection docs) =====
+// ===================================================================
+
+// Full-length body part names for the selection screen title only.
+// BODY_PARTS[].name stays as a short single-character label used elsewhere
+// (body-part picker cards, active-training header) — changing it would
+// affect unrelated screens, which is out of scope per the technical design doc.
+const BODY_PART_FULL_NAME = {
+  chest: '胸部',
+  back: '背部',
+  legs: '腿部',
+  shoulders: '肩部',
+  arms: '手臂',
+  core: '核心',
+};
+function getBodyPartFullName(id) {
+  return BODY_PART_FULL_NAME[id] || getBodyPartName({ trainingRecords: [] }, id);
+}
+
+// ----- 1. Build exercise option view models for a body part -----
+function getExerciseOptionsForBodyPart(S, bp) {
   const base = EXERCISES[bp] || { machine: [], free: [] };
   const custom = (S.customExercises || []).filter(e => e.bodyPart === bp);
-  const machine = [...base.machine.map(n => ({ name: n, type: 'machine' })), ...custom.filter(e => e.type === 'machine')];
-  const free = [...base.free.map(n => ({ name: n, type: 'free' })), ...custom.filter(e => e.type === 'free')];
 
-  function exCard(e, type) {
-    const m = getExMeta(e.name);
-    const badgeCls = type === 'machine' ? 'badge-machine' : 'badge-free';
-    const badgeTxt = type === 'machine' ? '器械' : '自由';
-    const barColor = type === 'machine' ? '#a78bfa' : '#fbbf24';
-    return `<div class="ex-card" data-name="${e.name}" data-type="${type}" style="--ex-color:${barColor}">
-      <div class="ex-add"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></div>
-      <span class="ex-badge badge ${badgeCls} text-xs">${badgeTxt}</span>
-      <div class="ex-name">${e.name}</div>
-      ${m.tip ? `<div class="ex-tip">${m.tip}</div>` : ''}
+  const machineNames = base.machine.map(name => ({ name, type: 'machine', isCustom: false }));
+  const freeNames = base.free.map(name => ({ name, type: 'free', isCustom: false }));
+  const customNames = custom.map(e => ({ name: e.name, type: e.type, isCustom: true }));
+
+  const all = [...machineNames, ...freeNames, ...customNames];
+
+  return all.map(item => {
+    const detail = getExerciseDetail(item.name, item.type);
+    const meta = getExMeta(item.name);
+    return {
+      name: item.name,
+      type: item.type,
+      isCustom: item.isCustom,
+      equipment: detail.equipment,
+      target: detail.target,
+      level: detail.level,
+      tags: detail.tags,
+      defaultReason: detail.reason,
+      tip: meta.tip || '',
+    };
+  });
+}
+
+// ----- 2. Last performance text -----
+function getLastPerformanceText(S, exerciseName) {
+  const records = [...(S.trainingRecords || [])].reverse();
+  for (const record of records) {
+    const exercise = record.exercises.find(e => e.name === exerciseName);
+    if (!exercise || !exercise.sets.length) continue;
+    const best = exercise.sets.reduce((max, set) =>
+      set.weight > max.weight ? set : max, exercise.sets[0]);
+    return `上次 ${best.weight}kg x ${best.reps}`;
+  }
+  return '';
+}
+
+// ----- 3. Recommendation logic (lightweight, deterministic, no network) -----
+function getRecommendedExercises(options, S, bp) {
+  const recs = S.trainingRecords || [];
+  const hasAnyHistory = recs.length > 0;
+
+  // exercises used for this body part in the most recent matching workout
+  const sameBodyPartRecords = recs
+    .filter(r => r.bodyPart === bp)
+    .sort((a, b) => b.date.localeCompare(a.date));
+  const recentNamesForBodyPart = new Set();
+  if (sameBodyPartRecords.length > 0) {
+    sameBodyPartRecords[0].exercises.forEach(ex => recentNamesForBodyPart.add(ex.name));
+  }
+
+  // has this body part been trained recently (within last 14 days, last 14 records)?
+  const recent14 = recs.slice(-14);
+  const trainedRecently = recent14.some(r => r.bodyPart === bp);
+
+  const scored = options.map(opt => {
+    let score = 0;
+    let reason = opt.defaultReason || '';
+
+    if (recentNamesForBodyPart.has(opt.name)) {
+      score += 30;
+      reason = '最近练过，延续训练节奏';
+    }
+    if (opt.tags.includes('主项')) {
+      score += 20;
+      if (!reason) reason = opt.defaultReason || '适合作为本次训练的主项';
+    }
+    if (opt.level === 'beginner' && recs.length < 5) {
+      score += 15;
+      if (!hasAnyHistory && !reason) reason = '新手容易上手';
+    }
+    if (!hasAnyHistory && opt.level === 'beginner') {
+      score += 10;
+    }
+    if (!trainedRecently && opt.tags.includes('主项')) {
+      score += 8;
+      reason = '这个部位最近训练较少，适合今天补上';
+    }
+    if (opt.isCustom) score -= 5;
+
+    return { ...opt, score, reason: reason || opt.defaultReason || '适合加入本次训练' };
+  });
+
+  scored.sort((a, b) => b.score - a.score);
+
+  // Diversify equipment among top picks where possible
+  const top = [];
+  const usedEquipment = new Set();
+  for (const item of scored) {
+    if (top.length >= 3) break;
+    if (usedEquipment.has(item.equipment) && top.length < 2) continue;
+    top.push(item);
+    usedEquipment.add(item.equipment);
+  }
+  // fill up to 3 if diversification left gaps
+  for (const item of scored) {
+    if (top.length >= 3) break;
+    if (!top.find(t => t.name === item.name)) top.push(item);
+  }
+
+  return top.map(t => t.name);
+}
+
+// ----- 4. Search matching -----
+function exerciseMatchesQuery(opt, query) {
+  if (!query) return true;
+  const q = query.trim().toLowerCase();
+  if (!q) return true;
+  const haystacks = [
+    opt.name,
+    EQUIPMENT_LABELS[opt.equipment] || '',
+    opt.target,
+    opt.type === 'machine' ? '器械' : '自由',
+    ...(opt.tags || []),
+  ].map(s => (s || '').toLowerCase());
+  return haystacks.some(h => h.includes(q));
+}
+
+// ----- 5. Main render function -----
+function renderSelectExercise(container, S) {
+  const bp = S.selectedBodyPart;
+  const isAddMore = !!S.currentTraining; // user came from active training "加动作"
+
+  S.exerciseSearch = S.exerciseSearch || '';
+  S.exerciseFilter = S.exerciseFilter || 'recommended';
+  S.pendingExercises = S.pendingExercises || [];
+
+  const lockedNames = new Set(
+    isAddMore ? S.currentTraining.exercises.map(e => e.name) : []
+  );
+
+  const allOptions = getExerciseOptionsForBodyPart(S, bp);
+  const recommendedNames = new Set(getRecommendedExercises(allOptions, S, bp));
+
+  // enrich options with selection/lock/recommend/context info
+  const enriched = allOptions.map(opt => {
+    const isLocked = lockedNames.has(opt.name);
+    const isSelected = isLocked || S.pendingExercises.some(p => p.name === opt.name);
+    const isRecommended = recommendedNames.has(opt.name);
+    const lastPerf = getLastPerformanceText(S, opt.name);
+    let contextLine = '';
+    if (lastPerf) {
+      contextLine = lastPerf;
+    } else if (isRecommended) {
+      const recScored = allOptions.find(o => o.name === opt.name);
+      contextLine = recScored ? (recScored.defaultReason || '') : '';
+    } else if (opt.defaultReason) {
+      contextLine = opt.defaultReason;
+    }
+    return { ...opt, isLocked, isSelected, isRecommended, lastPerf, contextLine };
+  });
+
+  // available equipment chips (only show if matching exercises exist)
+  const availableEquipment = [...new Set(enriched.map(o => o.equipment))]
+    .filter(eq => EQUIPMENT_LABELS[eq]);
+
+  // apply filter
+  let filtered = enriched;
+  if (S.exerciseFilter === 'recommended') {
+    filtered = enriched.filter(o => o.isRecommended || o.isSelected);
+  } else if (S.exerciseFilter === 'all') {
+    filtered = enriched;
+  } else {
+    // equipment filter value
+    filtered = enriched.filter(o => o.equipment === S.exerciseFilter);
+  }
+
+  // apply search (search overrides filter result set, searches across all options)
+  const query = S.exerciseSearch.trim();
+  const searchActive = query.length > 0;
+  const finalList = searchActive
+    ? enriched.filter(o => exerciseMatchesQuery(o, query))
+    : filtered;
+
+  const selectedCount = S.pendingExercises.length + (isAddMore ? S.currentTraining.exercises.length : 0);
+  const selectedCountForCTA = isAddMore ? S.pendingExercises.length + S.currentTraining.exercises.length : S.pendingExercises.length;
+
+  const headerHelper = isAddMore
+    ? `已选 ${S.currentTraining.exercises.length + S.pendingExercises.length} 个动作，可继续补充`
+    : (S.pendingExercises.length > 0
+        ? `已选 ${S.pendingExercises.length} 个动作，可继续补充`
+        : '建议选择 3-5 个动作，可训练中继续添加');
+
+  function renderRow(opt) {
+    const equipLabel = EQUIPMENT_LABELS[opt.equipment] || '';
+    const levelLabel = opt.level === 'beginner' ? '新手友好' : opt.level === 'advanced' ? '进阶' : '';
+    return `<div class="exercise-row${opt.isSelected ? ' selected' : ''}${opt.isLocked ? ' locked' : ''}" data-name="${escapeAttr(opt.name)}" data-type="${opt.type}">
+      <div class="exercise-row-main">
+        <div class="exercise-row-name">${escapeHtml(opt.name)}</div>
+        <div class="exercise-row-meta">
+          ${opt.target ? `<span class="exercise-chip-tag">${escapeHtml(opt.target)}</span>` : ''}
+          ${equipLabel ? `<span class="exercise-chip-tag">${escapeHtml(equipLabel)}</span>` : ''}
+          ${levelLabel ? `<span class="exercise-chip-tag">${escapeHtml(levelLabel)}</span>` : ''}
+          ${opt.isCustom ? `<span class="exercise-chip-tag">自定义</span>` : ''}
+        </div>
+        ${opt.contextLine ? `<div class="exercise-row-context">${escapeHtml(opt.contextLine)}</div>` : ''}
+      </div>
+      <button class="exercise-row-action${opt.isSelected ? ' is-selected' : ''}${opt.isLocked ? ' is-locked' : ''}" data-name="${escapeAttr(opt.name)}" ${opt.isLocked ? 'disabled' : ''}>
+        ${opt.isLocked
+          ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>`
+          : opt.isSelected
+            ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>`
+            : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>`
+        }
+      </button>
     </div>`;
   }
 
+  const recommendationStripHtml = (!searchActive && S.exerciseFilter === 'recommended' && finalList.length > 0)
+    ? '' // recommended filter already shows the strip content inline as the list itself
+    : '';
+
+  // Build a dedicated recommendation strip (shown above filters, always reflects top picks)
+  const topRecommended = enriched.filter(o => recommendedNames.has(o.name)).slice(0, 3);
+
+  const filterChips = [
+    { key: 'recommended', label: '推荐' },
+    { key: 'all', label: '全部' },
+    ...availableEquipment.map(eq => ({ key: eq, label: EQUIPMENT_LABELS[eq] })),
+  ];
+
+  const isEmpty = finalList.length === 0;
+
   container.innerHTML = `
-    <div class="flex-between mb-16">
-      <div class="section-title" style="margin:0">${getBodyPartName(S, bp)} - 选择动作</div>
-      <button class="btn btn-ghost btn-sm" id="btnBackPart">返回</button>
+    <div class="exercise-select-header">
+      <div class="flex-between mb-8">
+        <div class="section-title" style="margin:0">添加${getBodyPartFullName(bp)}动作</div>
+        <button class="btn btn-ghost btn-sm" id="btnBackPart">${isAddMore ? '取消' : '返回'}</button>
+      </div>
+      <div class="text-xs text-muted" id="exerciseHelperCopy">${headerHelper}</div>
     </div>
-    <div class="text-sm text-muted mb-8" style="display:flex;align-items:center;gap:4px"><span class="badge badge-machine">器械</span> 器械训练</div>
-    <div class="ex-grid">${machine.map(e => exCard(e, 'machine')).join('')}</div>
-    <div class="text-sm text-muted mb-8 mt-16" style="display:flex;align-items:center;gap:4px"><span class="badge badge-free">自由</span> 自由训练</div>
-    <div class="ex-grid">${free.map(e => exCard(e, 'free')).join('')}</div>
-    <button class="btn btn-outline btn-block btn-sm mt-16" id="btnAddCustom">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg> 自定义动作
+
+    <div class="exercise-search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="text" id="exerciseSearchInput" placeholder="搜索动作、器械或训练重点" value="${escapeAttr(S.exerciseSearch)}">
+    </div>
+
+    ${(!searchActive && topRecommended.length > 0) ? `
+    <div class="exercise-recommend-strip">
+      ${topRecommended.map(opt => `
+        <div class="exercise-recommend-card${opt.isSelected ? ' selected' : ''}" data-name="${escapeAttr(opt.name)}" data-type="${opt.type}">
+          <div class="exercise-recommend-name">${escapeHtml(opt.name)}</div>
+          <div class="exercise-recommend-reason">${escapeHtml(opt.contextLine || opt.defaultReason || '')}</div>
+        </div>
+      `).join('')}
+    </div>` : ''}
+
+    <div class="exercise-filter-bar" id="exerciseFilterBar">
+      ${filterChips.map(c => `<button class="exercise-chip${S.exerciseFilter === c.key ? ' active' : ''}" data-filter="${c.key}">${escapeHtml(c.label)}</button>`).join('')}
+    </div>
+
+    <div class="exercise-list" id="exerciseList">
+      ${isEmpty ? `
+        <div class="exercise-empty-state">
+          <div class="text-sm text-muted mb-8">没找到这个动作？</div>
+          <button class="btn btn-outline btn-sm" id="btnAddCustomEmpty">创建自定义动作</button>
+        </div>
+      ` : finalList.map(renderRow).join('')}
+    </div>
+
+    ${!isEmpty ? `
+    <button class="btn btn-outline btn-block btn-sm mt-16" id="btnAddCustom" style="margin-bottom:88px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg> 创建自定义动作
+    </button>` : '<div style="height:24px"></div>'}
+  `;
+
+  // ----- Sticky bottom CTA -----
+  // Remove any stale fab left over from a previous render before inserting the new one,
+  // otherwise duplicate-id elements accumulate in the DOM and getElementById always
+  // returns the first (stale) node, breaking the CTA click handler after re-renders.
+  const staleSelectFab = document.getElementById('exerciseSelectFab');
+  if (staleSelectFab) staleSelectFab.remove();
+
+  const fab = document.createElement('div');
+  fab.id = 'exerciseSelectFab';
+  fab.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:100;padding:12px 16px 20px;background:var(--bg);border-top:1px solid var(--bd);box-shadow:0 -4px 16px rgba(0,0,0,.12);max-width:430px;margin:0 auto;';
+  const ctaDisabled = selectedCountForCTA === 0;
+  const ctaLabel = ctaDisabled
+    ? '请选择动作'
+    : (isAddMore ? `已选 ${selectedCountForCTA} 个 · 返回训练` : `已选 ${selectedCountForCTA} 个 · 开始训练`);
+  fab.innerHTML = `
+    <button class="btn btn-primary btn-block" id="btnStartWithSelected" style="padding:14px;font-size:15px;border-radius:var(--r-m)" ${ctaDisabled ? 'disabled' : ''}>
+      ${escapeHtml(ctaLabel)}
     </button>
   `;
+  document.body.appendChild(fab);
+  if (ctaDisabled) fab.querySelector('#btnStartWithSelected').classList.add('btn-disabled');
+
+  const removeFab = () => { const el = document.getElementById('exerciseSelectFab'); if (el) el.remove(); };
+
+  // ----- Event handlers -----
   container.querySelector('#btnBackPart').addEventListener('click', () => {
-    S.trainingScreen = 'selectPart';
+    removeFab();
+    S.pendingExercises = [];
+    S.exerciseSearch = '';
+    S.exerciseFilter = 'recommended';
+    S.trainingScreen = isAddMore ? 'active' : 'selectPart';
     onStateChange();
   });
-  container.querySelector('#btnAddCustom').addEventListener('click', () => showAddExerciseModal(S, onStateChange));
-  container.querySelectorAll('.ex-card').forEach(el => el.addEventListener('click', () => {
-    addExerciseToTraining(el.dataset.name, el.dataset.type, S);
-  }));
+
+  const searchInput = container.querySelector('#exerciseSearchInput');
+  searchInput.addEventListener('input', e => {
+    S.exerciseSearch = e.target.value;
+    onStateChange();
+  });
+  // keep focus & cursor position after re-render
+  if (document.activeElement !== searchInput && S.exerciseSearch) {
+    // no-op: re-render will reset focus; acceptable per MVP scope
+  }
+
+  container.querySelectorAll('#exerciseFilterBar .exercise-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      S.exerciseFilter = chip.dataset.filter;
+      onStateChange();
+    });
+  });
+
+  function toggleSelection(name, type) {
+    if (lockedNames.has(name)) return; // cannot deselect locked (already logged) exercises
+    const idx = S.pendingExercises.findIndex(p => p.name === name);
+    if (idx >= 0) {
+      S.pendingExercises.splice(idx, 1);
+    } else {
+      S.pendingExercises.push({ name, type });
+    }
+    onStateChange();
+  }
+
+  container.querySelectorAll('.exercise-row').forEach(row => {
+    row.addEventListener('click', (e) => {
+      if (e.target.closest('.exercise-row-action[disabled]')) return;
+      toggleSelection(row.dataset.name, row.dataset.type);
+    });
+  });
+
+  container.querySelectorAll('.exercise-recommend-card').forEach(card => {
+    card.addEventListener('click', () => {
+      toggleSelection(card.dataset.name, card.dataset.type);
+    });
+  });
+
+  const addCustomBtn = container.querySelector('#btnAddCustom') || container.querySelector('#btnAddCustomEmpty');
+  if (addCustomBtn) {
+    addCustomBtn.addEventListener('click', () => {
+      removeFab();
+      showAddExerciseModal(S, onStateChange);
+    });
+  }
+
+  const startBtn = fab.querySelector('#btnStartWithSelected');
+  if (!ctaDisabled) {
+    startBtn.addEventListener('click', () => {
+      removeFab();
+      startTrainingWithSelectedExercises(S);
+    });
+  }
 }
 
-function addExerciseToTraining(name, type, S) {
+// ----- 6. Start training with selected exercises -----
+function startTrainingWithSelectedExercises(S) {
   if (!S.currentTraining) {
     S.currentTraining = {
       id: genId(),
@@ -205,12 +545,38 @@ function addExerciseToTraining(name, type, S) {
     S.trainingTimerStart = Date.now();
     S.trainingTimerElapsed = 0;
   }
-  if (!S.currentTraining.exercises.find(e => e.name === name)) {
-    S.currentTraining.exercises.push({ name, type, sets: [] });
+
+  for (const item of S.pendingExercises || []) {
+    if (!S.currentTraining.exercises.find(e => e.name === item.name)) {
+      S.currentTraining.exercises.push({ name: item.name, type: item.type, sets: [] });
+    }
   }
+
+  S.pendingExercises = [];
+  S.exerciseSearch = '';
+  S.exerciseFilter = 'recommended';
   S.trainingScreen = 'active';
   onStateChange();
 }
+
+// ----- small escape helpers (selection screen renders user-controlled custom exercise names) -----
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+function escapeAttr(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+// ===================================================================
+// ===== End Select Exercise Screen =====
+// ===================================================================
 
 function renderActiveTraining(container, S) {
   if (!S.currentTraining) { S.trainingScreen = 'home'; onStateChange(); return; }
@@ -274,6 +640,10 @@ function renderActiveTraining(container, S) {
   `;
 
   // 底部悬浮操作栏（固定在页面底部，始终可见）
+  // 渲染前先移除上一次遗留的 fab，避免重复 id 元素堆积导致 getElementById 拿到失效节点
+  const staleActiveFab = document.getElementById('activeTrainingFab');
+  if (staleActiveFab) staleActiveFab.remove();
+
   const fab = document.createElement('div');
   fab.id = 'activeTrainingFab';
   fab.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;gap:10px;padding:12px 16px 20px;background:var(--bg);border-top:1px solid var(--bd);box-shadow:0 -4px 16px rgba(0,0,0,.12);';
@@ -290,6 +660,9 @@ function renderActiveTraining(container, S) {
 
   fab.querySelector('#btnAddMore').addEventListener('click', () => {
     removeFab();
+    S.pendingExercises = [];
+    S.exerciseSearch = '';
+    S.exerciseFilter = 'recommended';
     S.trainingScreen = 'selectExercise';
     onStateChange();
   });
@@ -354,6 +727,8 @@ function renderTrainingSummary(container, S) {
   // 确保切换到 summary 时清除悬浮栏（finishTraining 已 removeFab，这里兜底）
   const fab = document.getElementById('activeTrainingFab');
   if (fab) fab.remove();
+  const selFab = document.getElementById('exerciseSelectFab');
+  if (selFab) selFab.remove();
 
   const ct = S.currentTraining;
   if (!ct) { S.trainingScreen = 'home'; onStateChange(); return; }
