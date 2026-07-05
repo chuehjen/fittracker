@@ -38,7 +38,6 @@ async function ensureChart() {
 export async function renderCharts(container, S) {
   const ok = await ensureChart();
   if (!ok) return;
-  renderFreqChart(container, S);
   renderDistChart(container, S);
 }
 
@@ -51,38 +50,6 @@ function destroyChart(id) {
 
 function storeChart(id, chart) {
   chartInstances[id] = chart;
-}
-
-function renderFreqChart(container, S) {
-  const canvas = container.querySelector('#freqChart');
-  if (!canvas) return;
-  destroyChart('freq');
-
-  const last7Days = [...Array(7)].map((_, i) => {
-    const d = new Date(); d.setDate(d.getDate() - i); return d.toISOString().slice(0, 10);
-  }).reverse();
-  const freqData = last7Days.map(date => (S.trainingRecords || []).filter(r => r.date === date).length);
-
-  const chart = new Chart(canvas.getContext('2d'), {
-    type: 'bar',
-    data: {
-      labels: last7Days.map(d => { const p = d.split('-'); return `${p[1]}/${p[2]}`; }),
-      datasets: [{
-        label: '训练次数',
-        data: freqData,
-        backgroundColor: 'rgba(50,205,50,.5)',
-        borderRadius: 4
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
-      scales: {
-        x: { grid: { display: false }, ticks: { color: '#888' } },
-        y: { grid: { color: 'rgba(42,42,42,.6)' }, ticks: { color: '#888' }, beginAtZero: true }
-      }
-    }
-  });
-  storeChart('freq', chart);
 }
 
 function renderDistChart(container, S) {
