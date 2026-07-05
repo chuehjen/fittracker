@@ -3,65 +3,6 @@
 import { BODY_PARTS } from './exercises.js';
 import { calcVolume } from './helpers.js';
 
-// ===== OpenRouter Configuration =====
-const OR_API_KEY = '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';
-
-const FREE_MODELS = [
-  'google/gemini-2.0-flash-lite',
-  'qwen/qwen-2.5-72b-instruct',
-  'meta-llama/llama-3.3-70b-instruct',
-];
-
-const SYSTEM_PROMPT = '你是一个专业的健身教练。用简短的中文回答，使用 <strong> 标签强调重点。回答控制在100字以内。';
-
-let _currentModel = null;
-
-export async function claudeAnalyze(prompt, systemPrompt) {
-  for (const model of FREE_MODELS) {
-    try {
-      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${OR_API_KEY}`,
-          'HTTP-Referer': 'https://fittracker-pro.surge.sh',
-          'X-Title': 'FitTracker Pro',
-        },
-        body: JSON.stringify({
-          model,
-          max_tokens: 512,
-          system: systemPrompt || SYSTEM_PROMPT,
-          messages: [{ role: 'user', content: prompt }],
-        }),
-      });
-
-      if (!response.ok) {
-        if (response.status === 429 || response.status >= 500) continue;
-        return null;
-      }
-
-      const data = await response.json();
-      const text = data.choices?.[0]?.message?.content;
-      if (text) {
-        if (_currentModel !== model) {
-          _currentModel = model;
-          console.log(`[AI] Model: ${model}`);
-        }
-        return text;
-      }
-    } catch {
-      continue;
-    }
-  }
-  return null;
-}
-
-export function getApiConfig() {
-  return { enabled: true, model: _currentModel || FREE_MODELS[0] };
-}
-
-export function setApiConfig() {}
-
 // ===== Rule-Based Fallback Engine =====
 
 export function aiPreWorkout(state) {
@@ -122,26 +63,6 @@ export function aiPostWorkout(record, state) {
 }
 
 function getPRBefore(name, excludeId, state) {
-  let max = 0;
-  (state.trainingRecords || []).forEach(r => {
-    if (r.id !== excludeId) r.exercises.forEach(ex => {
-      if (ex.name === name) ex.sets.forEach(s => { if (s.weight > max) max = s.weight; });
-    });
-  });
-  return max;
-}
-
-export function getPR(exerciseName, state) {
-  let max = 0;
-  (state.trainingRecords || []).forEach(r => {
-    r.exercises.forEach(ex => {
-      if (ex.name === exerciseName) ex.sets.forEach(s => { if (s.weight > max) max = s.weight; });
-    });
-  });
-  return max;
-}
-
-export function getPRBeforeLocal(name, excludeId, state) {
   let max = 0;
   (state.trainingRecords || []).forEach(r => {
     if (r.id !== excludeId) r.exercises.forEach(ex => {
