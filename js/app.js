@@ -2,7 +2,7 @@
 
 import { getState, setState, migrateFromLocalStorage, migrateAchievementsFromLocalStorage, loadAchievements, saveAchievements } from './db.js';
 import { getUnlockedAchievements } from './achievements.js';
-import { initSync, getCurrentUser, onAuthChange, syncAll, getSyncStatus, setupNetworkSync, onStatusChange } from './sync.js';
+import { initSync, getCurrentUser, onAuthChange, syncAll, getSyncStatus, setupNetworkSync, onStatusChange, onDataPulled } from './sync.js';
 import { renderTraining } from './views/training.js';
 import { renderHistory } from './views/history.js';
 import { renderProfile } from './views/profile.js';
@@ -57,6 +57,11 @@ async function init() {
   initSync();
   setupNetworkSync();
   onStatusChange(() => render());
+  onDataPulled((data) => {
+    if (data.trainingRecords) S.trainingRecords = data.trainingRecords;
+    if (data.customExercises) S.customExercises = data.customExercises;
+    render();
+  });
 
   await migrateFromLocalStorage();
   await migrateAchievementsFromLocalStorage();
@@ -240,14 +245,17 @@ function stateChanged() {
 
 // ===== State Persistence =====
 function saveState() {
+  // If timer is active, snapshot elapsed time and reset start to avoid double-counting
+  if (S.trainingTimerActive && S.trainingTimerStart) {
+    S.trainingTimerElapsed = (S.trainingTimerElapsed || 0) + Math.floor((Date.now() - S.trainingTimerStart) / 1000);
+    S.trainingTimerStart = Date.now();
+  }
   const data = {
     profile: S.profile,
     trainingRecords: S.trainingRecords,
     customExercises: S.customExercises,
     restSeconds: S.restSeconds,
-    trainingTimerElapsed: S.trainingTimerActive && S.trainingTimerStart
-      ? (S.trainingTimerElapsed || 0) + Math.floor((Date.now() - S.trainingTimerStart) / 1000)
-      : S.trainingTimerElapsed,
+    trainingTimerElapsed: S.trainingTimerElapsed,
     trainingTimerStart: S.trainingTimerActive ? S.trainingTimerStart : null,
     currentTraining: S.currentTraining,
   };
