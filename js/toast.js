@@ -47,3 +47,34 @@ export function dismissToast() {
     currentToast = null;
   }
 }
+
+// ===== Custom Confirm Modal =====
+// Promise-based replacement for native confirm() dialogs
+
+export function showConfirm(message, opts = {}) {
+  const confirmLabel = opts.confirm || '确定';
+  const cancelLabel = opts.cancel || '取消';
+  const danger = opts.danger || false;
+
+  return new Promise((resolve) => {
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.innerHTML = `<div class="modal" style="text-align:center;padding:24px 20px">
+      <p style="font-size:15px;line-height:1.5;margin:0 0 20px;color:var(--t1)">${message}</p>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost" style="flex:1" id="confirmCancel">${cancelLabel}</button>
+        <button class="btn ${danger ? 'btn-danger' : 'btn-primary'}" style="flex:1" id="confirmOk">${confirmLabel}</button>
+      </div>
+    </div>`;
+    document.body.appendChild(overlay);
+
+    function close(result) {
+      overlay.remove();
+      resolve(result);
+    }
+
+    overlay.querySelector('#confirmOk').addEventListener('click', () => close(true));
+    overlay.querySelector('#confirmCancel').addEventListener('click', () => close(false));
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) close(false); });
+  });
+}
