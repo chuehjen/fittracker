@@ -61,40 +61,6 @@ export async function setState(data) {
   });
 }
 
-// Photo storage in IndexedDB (avoids localStorage 5MB limit)
-export async function savePhoto(id, dataUrl) {
-  const db = await openDB();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_PHOTOS, 'readwrite');
-    const store = tx.objectStore(STORE_PHOTOS);
-    store.put({ id, data: dataUrl, timestamp: Date.now() });
-    tx.oncomplete = () => resolve();
-    tx.onerror = () => reject(tx.error);
-  });
-}
-
-export async function getPhoto(id) {
-  const db = await openDB();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_PHOTOS, 'readonly');
-    const store = tx.objectStore(STORE_PHOTOS);
-    const req = store.get(id);
-    req.onsuccess = () => resolve(req.result ? req.result.data : null);
-    req.onerror = () => reject(req.error);
-  });
-}
-
-export async function deletePhoto(id) {
-  const db = await openDB();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_PHOTOS, 'readwrite');
-    const store = tx.objectStore(STORE_PHOTOS);
-    store.delete(id);
-    tx.oncomplete = () => resolve();
-    tx.onerror = () => reject(tx.error);
-  });
-}
-
 // ===== Achievement Storage (IndexedDB) =====
 
 export async function saveAchievements(unlockedIds) {
