@@ -5,11 +5,10 @@ import { BODY_PARTS, EXERCISES, getExMeta, getExerciseDetail, EQUIPMENT_LABELS }
 import { getWeeklyNews } from '../news.js';
 import { ACHIEVEMENTS, getUnlockedAchievements } from '../achievements.js';
 import { aiPreWorkout, aiPostWorkout } from '../ai.js';
-import { createTimerManager } from '../timer.js';
 import { genId, today, fmtDateFull, fmtDuration, fmtTime, fmtVol, calcVolume } from '../helpers.js';
 import { doExport, doImport } from '../data.js';
+import { showConfirm } from '../toast.js';
 
-let timerManager = null;
 let onStateChange = null;
 let currentRender = null;
 let currentContainer = null;
@@ -22,7 +21,6 @@ export function renderTraining(container, S, stateChanged) {
   currentContainer = container;
   onStateChange = stateChanged;
   currentRender = () => renderTraining(container, S, stateChanged);
-  timerManager = createTimerManager(S);
   const screens = {
     home: renderTrainingHome,
     selectPart: renderSelectPart,
@@ -91,7 +89,7 @@ function renderTrainingHome(container, S) {
   if (backupBtn) backupBtn.addEventListener('click', () => doExport(S));
   if (restoreBtn) restoreBtn.addEventListener('click', () => {
     const input = container.querySelector('#restoreInput');
-    input.addEventListener('change', e => doImport(e.target.files[0], S, onStateChange));
+    input.onchange = e => { doImport(e.target.files[0], S, onStateChange); input.value = ''; };
     input.click();
   });
 }
@@ -475,9 +473,11 @@ function renderSelectExercise(container, S) {
     S.exerciseSearch = e.target.value;
     onStateChange();
   });
-  // keep focus & cursor position after re-render
-  if (document.activeElement !== searchInput && S.exerciseSearch) {
-    // no-op: re-render will reset focus; acceptable per MVP scope
+  // Restore focus & cursor position after re-render so mobile keyboard stays open
+  if (S.exerciseSearch) {
+    searchInput.focus();
+    const len = searchInput.value.length;
+    searchInput.setSelectionRange(len, len);
   }
 
   container.querySelectorAll('#exerciseFilterBar .exercise-chip').forEach(chip => {
@@ -548,7 +548,8 @@ function startTrainingWithSelectedExercises(S) {
 
   for (const item of S.pendingExercises || []) {
     if (!S.currentTraining.exercises.find(e => e.name === item.name)) {
-      S.currentTraining.exercises.push({ name: item.name, type: item.type, sets: [] });
+      // Insert at the top so the newest exercise is immediately visible without scrolling
+      S.currentTraining.exercises.unshift({ name: item.name, type: item.type, sets: [] });
     }
   }
 
@@ -757,26 +758,9 @@ function renderTrainingSummary(container, S) {
       <label>训练笔记</label>
       <textarea class="input-field" id="trainingNotes" placeholder="记录今天的训练感受...">${ct.notes || ''}</textarea>
     </div>
-    <div class="input-group">
-      <label>训练拍照</label>
-      <div style="display:flex;gap:8px;align-items:center">
-        <label class="btn btn-outline btn-sm" style="cursor:pointer">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg> 拍照/选择
-          <input type="file" accept="image/*" capture="environment" id="trainingPhoto" style="display:none">
-        </label>
-        ${ct.photo ? `<img src="${ct.photo}" style="width:48px;height:48px;border-radius:var(--r-s);object-fit:cover">` : '<span class="text-sm text-muted">未添加照片</span>'}
-      </div>
-    </div>
     <button class="btn btn-primary btn-block mt-16" id="btnSaveTraining">保存训练记录</button>
     <button class="btn btn-ghost btn-block mt-8" id="btnDiscardTraining" style="color:var(--err)">放弃本次记录</button>
   `;
-  container.querySelector('#trainingPhoto').addEventListener('change', e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = ev => { ct.photo = ev.target.result; currentRender && currentRender(); };
-    reader.readAsDataURL(file);
-  });
   container.querySelector('#btnSaveTraining').addEventListener('click', () => {
     ct.notes = container.querySelector('#trainingNotes').value;
     S.trainingRecords.push(ct);
@@ -787,8 +771,9 @@ function renderTrainingSummary(container, S) {
     if (S._timerInterval) { clearInterval(S._timerInterval); S._timerInterval = null; }
     onStateChange();
   });
-  container.querySelector('#btnDiscardTraining').addEventListener('click', () => {
-    if (confirm('确定放弃本次训练记录？')) {
+  container.querySelector('#btnDiscardTraining').addEventListener('click', async () => {
+    const ok = await showConfirm('确定放弃本次训练记录？', { confirm: '放弃', danger: true });
+    if (ok) {
       S.currentTraining = null;
       S.trainingTimerActive = false;
       S.trainingTimerElapsed = 0;
@@ -814,12 +799,13 @@ function deleteSet(ei, si, S) {
   onStateChange();
 }
 
-function finishTraining(S) {
+async function finishTraining(S) {
   const ct = S.currentTraining;
   if (!ct) return;
   const totalSets = ct.exercises.reduce((t, ex) => t + ex.sets.length, 0);
   if (totalSets === 0) {
-    if (!confirm('你还没有记录任何组数据，确定要完成训练吗？')) return;
+    const ok = await showConfirm('你还没有记录任何组数据，确定要完成训练吗？');
+    if (!ok) return;
   }
   S.trainingTimerActive = false;
   if (S._timerInterval) { clearInterval(S._timerInterval); S._timerInterval = null; }
@@ -936,6 +922,12 @@ function showAddExerciseModal(S, stateChanged) {
     const name = overlay.querySelector('#customExName').value.trim();
     if (!name) return;
     S.customExercises.push({ bodyPart: S.selectedBodyPart, name, type: selType });
+    // Auto-select the newly created exercise and switch to "全部" tab so it's immediately visible
+    if (!S.pendingExercises) S.pendingExercises = [];
+    if (!S.pendingExercises.find(p => p.name === name)) {
+      S.pendingExercises.push({ name, type: selType });
+    }
+    S.exerciseFilter = 'all';
     overlay.remove();
     stateChanged();
   });
