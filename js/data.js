@@ -3,6 +3,7 @@
 
 import { getState, setState } from './db.js';
 import { today } from './helpers.js';
+import { showConfirm } from './toast.js';
 
 export function doExport(S) {
   const data = {
@@ -26,20 +27,20 @@ export function doExport(S) {
 export function doImport(file, S, stateChanged) {
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = ev => {
+  reader.onload = async (ev) => {
     try {
       const data = JSON.parse(ev.target.result);
-      if (confirm('导入数据将覆盖当前所有记录，确定继续？')) {
+      const ok = await showConfirm('导入数据将覆盖当前所有记录，确定继续？', { confirm: '导入', danger: true });
+      if (ok) {
         S.profile = data.profile || {};
         S.trainingRecords = data.trainingRecords || [];
         S.bodyRecords = data.bodyRecords || [];
         S.customExercises = data.customExercises || [];
         S.restSeconds = data.restSeconds || 90;
         stateChanged();
-        alert('导入成功！');
       }
     } catch (err) {
-      alert('文件格式错误');
+      await showConfirm('文件格式错误，请检查后重试', { confirm: '知道了', cancel: '关闭' });
     }
   };
   reader.readAsText(file);
