@@ -36,6 +36,11 @@ export function onStatusChange(callback) {
 }
 let _onStatusChange = null;
 
+export function onDataPulled(callback) {
+  _onDataPulled = callback;
+}
+let _onDataPulled = null;
+
 function setStatus(s) {
   syncStatus = s;
   if (_onStatusChange) _onStatusChange(s);
@@ -120,6 +125,8 @@ export async function syncPull() {
       bodyRecords: mergedBody,
       customExercises: mergedCustom,
     });
+
+    if (_onDataPulled) _onDataPulled({ trainingRecords: merged, bodyRecords: mergedBody, customExercises: mergedCustom });
 
     lastSyncTime = now;
     setStatus('idle');
