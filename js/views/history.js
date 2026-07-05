@@ -4,6 +4,13 @@ import { BODY_PARTS } from '../exercises.js';
 import { fmtDateFull, fmtDuration, fmtVol, calcVolume } from '../helpers.js';
 import { showUndoToast } from '../toast.js';
 
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
 export function renderHistory(container, S, stateChanged) {
   container.innerHTML = `
     <div class="section-title" style="font-size:22px;margin-bottom:4px">历史</div>
@@ -36,12 +43,11 @@ function renderTrainingHistory(container, S, stateChanged) {
         <div class="hc-detail">
           ${r.exercises.map(ex => `
             <div style="margin-bottom:10px">
-              <div class="flex-between"><span class="text-sm fw-700">${ex.name}</span><span class="badge ${ex.type === 'machine' ? 'badge-machine' : 'badge-free'} text-xs">${ex.type === 'machine' ? '器械' : '自由'}</span></div>
+              <div class="flex-between"><span class="text-sm fw-700">${escapeHtml(ex.name)}</span><span class="badge ${ex.type === 'machine' ? 'badge-machine' : 'badge-free'} text-xs">${ex.type === 'machine' ? '器械' : '自由'}</span></div>
               ${ex.sets.map((s, i) => `<div class="set-row"><div class="set-num">${i + 1}</div><div class="set-info"><strong>${s.weight}kg</strong> <span>× ${s.reps}次</span></div></div>`).join('')}
             </div>
           `).join('')}
-          ${r.photo ? `<img class="hc-photo" src="${r.photo}" onclick="event.stopPropagation();window.viewPhoto('${r.id}')">` : ''}
-          ${r.notes ? `<div class="hc-notes">${r.notes}</div>` : ''}
+          ${r.notes ? `<div class="hc-notes">${escapeHtml(r.notes)}</div>` : ''}
           <button class="btn btn-danger btn-sm mt-8" data-del-training="${r.id}">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg> 删除记录
           </button>
@@ -73,18 +79,6 @@ function renderTrainingHistory(container, S, stateChanged) {
     });
   }));
 }
-
-window.viewPhoto = function(id) {
-  const rec = (window._appState || {}).trainingRecords || [];
-  const found = rec.find(r => r.id === id);
-  if (!found || !found.photo) return;
-  const overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
-  overlay.style.alignItems = 'center';
-  overlay.innerHTML = `<img src="${found.photo}" style="max-width:90%;max-height:80vh;border-radius:var(--r-l);object-fit:contain">`;
-  overlay.addEventListener('click', () => overlay.remove());
-  document.body.appendChild(overlay);
-};
 
 function emptyState() {
   return `<div class="empty">
