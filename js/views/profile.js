@@ -5,6 +5,14 @@ import { aiWeeklyReport } from '../ai.js';
 import { renderCharts } from '../charts.js';
 import { doExport, doImport } from '../data.js';
 
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 function showToast(msg, type = 'ok') {
   const existing = document.getElementById('profileToast');
   if (existing) existing.remove();
@@ -36,7 +44,7 @@ export function renderProfile(container, S, stateChanged) {
         <input type="file" accept="image/*" id="avatarInput" style="display:none">
       </div>
       <div class="profile-info">
-        <h2 id="profileNameDisplay">${S.profile.name || '点击设置昵称'}</h2>
+        <h2 id="profileNameDisplay">${escapeHtml(S.profile.name || '点击设置昵称')}</h2>
         <p>坚持训练，超越自我</p>
       </div>
       <button class="btn btn-ghost btn-sm" id="editProfileBtn">编辑</button>
@@ -62,7 +70,6 @@ export function renderProfile(container, S, stateChanged) {
     </div>
 
     <div id="charts">
-      <div class="chart-container"><h3>训练频次</h3><div class="chart-wrap"><canvas id="freqChart"></canvas></div></div>
       <div class="chart-container"><h3>部位训练分布</h3><div class="chart-wrap" style="height:240px"><canvas id="distChart"></canvas></div></div>
     </div>
     <div class="divider"></div>
@@ -179,7 +186,7 @@ function showProfileModal(S, stateChanged) {
   overlay.innerHTML = `<div class="modal">
     <div class="modal-handle"></div>
     <h3>编辑个人信息</h3>
-    <div class="input-group"><label>昵称</label><input class="input-field" id="editName" value="${S.profile.name || ''}" placeholder="输入你的昵称"></div>
+    <div class="input-group"><label>昵称</label><input class="input-field" id="editName" value="${escapeHtml(S.profile.name || '')}" placeholder="输入你的昵称"></div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-ghost" style="flex:1" id="cancelEdit">取消</button>
       <button class="btn btn-primary" style="flex:1" id="saveEdit">保存</button>
