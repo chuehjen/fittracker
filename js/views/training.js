@@ -469,7 +469,18 @@ function renderSelectExercise(container, S) {
   });
 
   const searchInput = container.querySelector('#exerciseSearchInput');
+  let isComposing = false;
+  searchInput.addEventListener('compositionstart', () => {
+    isComposing = true;
+  });
+  searchInput.addEventListener('compositionend', e => {
+    isComposing = false;
+    S.exerciseSearch = e.target.value;
+    onStateChange();
+  });
   searchInput.addEventListener('input', e => {
+    // During IME composition, do NOT trigger re-render or the composition will break
+    if (isComposing) return;
     S.exerciseSearch = e.target.value;
     onStateChange();
   });
