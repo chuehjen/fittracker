@@ -2,6 +2,8 @@
 // Home → Select Body Part → Select Exercise → Active Training → Summary
 
 import { BODY_PARTS, EXERCISES, getExMeta, getExerciseDetail, EQUIPMENT_LABELS } from '../exercises.js';
+import { hasExerciseDetail } from '../exercise_db.js';
+import { showExerciseDetailDrawer } from '../exercise_detail.js';
 import { getWeeklyNews } from '../news.js';
 import { ACHIEVEMENTS, getUnlockedAchievements } from '../achievements.js';
 import { aiPreWorkout, aiPostWorkout } from '../ai.js';
@@ -354,9 +356,15 @@ function renderSelectExercise(container, S) {
   function renderRow(opt) {
     const equipLabel = EQUIPMENT_LABELS[opt.equipment] || '';
     const levelLabel = opt.level === 'beginner' ? '新手友好' : opt.level === 'advanced' ? '进阶' : '';
+    const hasDetail = hasExerciseDetail(opt.name);
     return `<div class="exercise-row${opt.isSelected ? ' selected' : ''}${opt.isLocked ? ' locked' : ''}" data-name="${escapeAttr(opt.name)}" data-type="${opt.type}">
       <div class="exercise-row-main">
-        <div class="exercise-row-name">${escapeHtml(opt.name)}</div>
+        <div class="exercise-row-name">
+          <span>${escapeHtml(opt.name)}</span>
+          ${hasDetail ? `<button class="exercise-row-info" data-info-name="${escapeAttr(opt.name)}" aria-label="查看动作详情">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          </button>` : ''}
+        </div>
         <div class="exercise-row-meta">
           ${opt.target ? `<span class="exercise-chip-tag">${escapeHtml(opt.target)}</span>` : ''}
           ${equipLabel ? `<span class="exercise-chip-tag">${escapeHtml(equipLabel)}</span>` : ''}
@@ -409,7 +417,12 @@ function renderSelectExercise(container, S) {
     <div class="exercise-recommend-strip">
       ${topRecommended.map(opt => `
         <div class="exercise-recommend-card${opt.isSelected ? ' selected' : ''}" data-name="${escapeAttr(opt.name)}" data-type="${opt.type}">
-          <div class="exercise-recommend-name">${escapeHtml(opt.name)}</div>
+          <div class="exercise-recommend-name">
+            <span>${escapeHtml(opt.name)}</span>
+            ${hasExerciseDetail(opt.name) ? `<button class="exercise-row-info" data-info-name="${escapeAttr(opt.name)}" aria-label="查看动作详情">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            </button>` : ''}
+          </div>
           <div class="exercise-recommend-reason">${escapeHtml(opt.contextLine || opt.defaultReason || '')}</div>
         </div>
       `).join('')}
@@ -511,13 +524,26 @@ function renderSelectExercise(container, S) {
 
   container.querySelectorAll('.exercise-row').forEach(row => {
     row.addEventListener('click', (e) => {
+      // Info icon: open detail drawer, do not toggle selection
+      const infoBtn = e.target.closest('.exercise-row-info');
+      if (infoBtn) {
+        e.stopPropagation();
+        showExerciseDetailDrawer(infoBtn.dataset.infoName);
+        return;
+      }
       if (e.target.closest('.exercise-row-action[disabled]')) return;
       toggleSelection(row.dataset.name, row.dataset.type);
     });
   });
 
   container.querySelectorAll('.exercise-recommend-card').forEach(card => {
-    card.addEventListener('click', () => {
+    card.addEventListener('click', (e) => {
+      const infoBtn = e.target.closest('.exercise-row-info');
+      if (infoBtn) {
+        e.stopPropagation();
+        showExerciseDetailDrawer(infoBtn.dataset.infoName);
+        return;
+      }
       toggleSelection(card.dataset.name, card.dataset.type);
     });
   });
