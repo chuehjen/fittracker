@@ -47,6 +47,8 @@ CREATE TABLE custom_exercises (
   user_id UUID REFERENCES auth.users(id) NOT NULL,
   local_id TEXT NOT NULL,
   name TEXT NOT NULL,
+  body_part TEXT,
+  type TEXT,
   default_sets INTEGER,
   default_reps INTEGER,
   created_at TIMESTAMPTZ DEFAULT now(),
@@ -61,6 +63,10 @@ CREATE TABLE custom_exercises (
 ALTER TABLE training_records ENABLE ROW LEVEL SECURITY;
 ALTER TABLE body_records ENABLE ROW LEVEL SECURITY;
 ALTER TABLE custom_exercises ENABLE ROW LEVEL SECURITY;
+
+-- Existing projects created before custom exercise body-part sync can run these safely.
+ALTER TABLE custom_exercises ADD COLUMN IF NOT EXISTS body_part TEXT;
+ALTER TABLE custom_exercises ADD COLUMN IF NOT EXISTS type TEXT;
 
 -- Training records policies
 CREATE POLICY "Users can view own training records"

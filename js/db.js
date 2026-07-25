@@ -144,10 +144,13 @@ export async function migrateFromLocalStorage() {
     const data = JSON.parse(ls);
     // Migrate photos to IndexedDB
     const migratedRecords = (data.trainingRecords || []).map(r => ({ ...r }));
+    const weightRecords = (data.weightRecords || data.bodyRecords || [])
+      .filter(r => r.weight)
+      .map(r => ({ id: r.id, date: r.date, weight: r.weight }));
     await setState({
       profile: data.profile || {},
       trainingRecords: migratedRecords,
-      bodyRecords: data.bodyRecords || [],
+      weightRecords,
       customExercises: data.customExercises || [],
       restSeconds: data.restSeconds || 90,
       trainingTimerElapsed: data.trainingTimerElapsed || 0,
@@ -187,6 +190,7 @@ export async function exportAllData() {
     version: 2,
     exportedAt: new Date().toISOString(),
     ...state,
+    weightRecords: state.weightRecords || state.bodyRecords || [],
     achievements,
   };
 }
@@ -196,7 +200,7 @@ export async function importAllData(data) {
   const importData = {
     profile: data.profile || {},
     trainingRecords: data.trainingRecords || [],
-    bodyRecords: data.bodyRecords || [],
+    weightRecords: data.weightRecords || (data.bodyRecords || []).filter(r => r.weight),
     customExercises: data.customExercises || [],
     restSeconds: data.restSeconds || 90,
     trainingTimerElapsed: 0,

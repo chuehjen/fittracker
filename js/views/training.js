@@ -8,8 +8,10 @@ import { getWeeklyNews } from '../news.js';
 import { ACHIEVEMENTS, getUnlockedAchievements } from '../achievements.js';
 import { aiPreWorkout, aiPostWorkout } from '../ai.js';
 import { genId, today, fmtDateFull, fmtDuration, fmtTime, fmtVol, calcVolume } from '../helpers.js';
+import { escapeAttr, escapeHtml } from '../html.js';
 import { doExport, doImport } from '../data.js';
 import { showConfirm } from '../toast.js';
+import { queueUpsert } from '../sync.js';
 
 let onStateChange = null;
 let currentRender = null;
@@ -597,21 +599,6 @@ function startTrainingWithSelectedExercises(S) {
   onStateChange();
 }
 
-// ----- small escape helpers (selection screen renders user-controlled custom exercise names) -----
-function escapeHtml(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-}
-function escapeAttr(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/"/g, '&quot;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-}
-
 // ===================================================================
 // ===== End Select Exercise Screen =====
 // ===================================================================
@@ -648,7 +635,7 @@ function renderActiveTraining(container, S) {
       return `<div class="card" style="padding:12px">
         <div class="flex-between mb-8">
           <div>
-            <span class="fw-700">${ex.name}</span>
+            <span class="fw-700">${escapeHtml(ex.name)}</span>
             <span class="badge ${ex.type === 'machine' ? 'badge-machine' : 'badge-free'} text-xs" style="margin-left:6px">${ex.type === 'machine' ? '器械' : '自由'}</span>
             ${isPR ? '<span class="badge badge-success text-xs" style="margin-left:4px">PR!</span>' : ''}
           </div>
@@ -793,14 +780,16 @@ function renderTrainingSummary(container, S) {
     </div>
     <div class="input-group">
       <label>训练笔记</label>
-      <textarea class="input-field" id="trainingNotes" placeholder="记录今天的训练感受...">${ct.notes || ''}</textarea>
+      <textarea class="input-field" id="trainingNotes" placeholder="记录今天的训练感受...">${escapeHtml(ct.notes || '')}</textarea>
     </div>
     <button class="btn btn-primary btn-block mt-16" id="btnSaveTraining">保存训练记录</button>
     <button class="btn btn-ghost btn-block mt-8" id="btnDiscardTraining" style="color:var(--err)">放弃本次记录</button>
   `;
   container.querySelector('#btnSaveTraining').addEventListener('click', () => {
     ct.notes = container.querySelector('#trainingNotes').value;
+    ct._updatedAt = new Date().toISOString();
     S.trainingRecords.push(ct);
+    queueUpsert('training_records', ct.id, ct).catch(e => console.warn('[Sync] Queue training failed:', e));
     S.currentTraining = null;
     S.trainingTimerActive = false;
     S.trainingTimerElapsed = 0;
@@ -846,7 +835,9 @@ async function finishTraining(S) {
   }
   S.trainingTimerActive = false;
   if (S._timerInterval) { clearInterval(S._timerInterval); S._timerInterval = null; }
-  ct.duration = S.trainingTimerElapsed || 0;
+  ct.duration = S.trainingTimerStart
+    ? (S.trainingTimerElapsed || 0) + Math.floor((Date.now() - S.trainingTimerStart) / 1000)
+    : (S.trainingTimerElapsed || 0);
   ct.totalVolume = calcVolume(ct.exercises);
   S.trainingScreen = 'summary';
   onStateChange();
@@ -958,7 +949,9 @@ function showAddExerciseModal(S, stateChanged) {
   overlay.querySelector('#saveCustom').addEventListener('click', () => {
     const name = overlay.querySelector('#customExName').value.trim();
     if (!name) return;
-    S.customExercises.push({ bodyPart: S.selectedBodyPart, name, type: selType });
+    const custom = { id: genId(), bodyPart: S.selectedBodyPart, name, type: selType, _updatedAt: new Date().toISOString() };
+    S.customExercises.push(custom);
+    queueUpsert('custom_exercises', custom.id, custom).catch(e => console.warn('[Sync] Queue custom exercise failed:', e));
     // Auto-select the newly created exercise and switch to "全部" tab so it's immediately visible
     if (!S.pendingExercises) S.pendingExercises = [];
     if (!S.pendingExercises.find(p => p.name === name)) {

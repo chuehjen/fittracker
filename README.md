@@ -33,11 +33,13 @@ FitTracker Pro is a mobile-first PWA for tracking gym workouts. No subscriptions
 **Workout logging**
 Choose from 6 muscle groups (chest, back, legs, shoulders, arms, core), pick exercises from a built-in library of 60+ movements across machine and free weight categories, and log sets with weight and reps. Custom exercises supported.
 
+The repo also includes a curated non-media exercise catalog generated from `hasaneyldrm/exercises-dataset` for future action-library expansion.
+
 **Progress tracking**
 Personal records (PR) are detected automatically mid-workout. History view shows past sessions by date, with volume and duration stats.
 
-**Body metrics**
-Log weight, body fat percentage, and diet notes over time, with trend charts.
+**Body weight**
+Optionally log body weight from the profile page without turning the app into a full diet or health journal.
 
 **AI workout summary**
 After each session, an AI-generated summary highlights volume, PRs hit, and a motivational note.
@@ -67,7 +69,7 @@ Installable on iOS and Android as a standalone app. Works offline for core loggi
 Three tables with Row Level Security (RLS) — users can only access their own data:
 
 - `training_records` — workout sessions with exercises and sets (JSONB)
-- `body_records` — weight, body fat, diet notes
+- `body_records` — lightweight body weight records
 - `custom_exercises` — user-defined movements
 
 All tables support soft delete and last-write-wins sync. See [`supabase-schema.sql`](./supabase-schema.sql) for the full schema.
@@ -130,11 +132,13 @@ FitTracker Pro 是一款移动端优先的 PWA 健身追踪应用。无需订阅
 **训练记录**
 支持 6 大肌群（胸、背、腿、肩、手臂、核心），内置 60+ 动作库，涵盖器械与自由训练，按组记录重量和次数，支持自定义动作。
 
+仓库内另有一份基于 `hasaneyldrm/exercises-dataset` 生成的非媒体精选动作数据，为后续动作库扩展做准备。
+
 **进步追踪**
 训练过程中自动识别个人记录（PR）。历史页面按日期展示过往训练，包含训练量和时长统计。
 
-**身体数据**
-记录体重、体脂率和饮食笔记，带趋势图表。
+**体重记录**
+可在「我的」页面轻量记录体重，不扩展成复杂饮食或健康日志。
 
 **AI 训练总结**
 每次训练结束后，AI 自动生成总结，包括训练量分析、PR 提示和激励语。
@@ -164,7 +168,7 @@ FitTracker Pro 是一款移动端优先的 PWA 健身追踪应用。无需订阅
 三张表，均启用行级安全策略（RLS），用户只能访问自己的数据：
 
 - `training_records` — 训练记录，动作和组数以 JSONB 存储
-- `body_records` — 体重、体脂、饮食笔记
+- `body_records` — 轻量体重记录
 - `custom_exercises` — 用户自定义动作
 
 所有表支持软删除和最后写入胜出的同步策略，完整 Schema 见 [`supabase-schema.sql`](./supabase-schema.sql)。

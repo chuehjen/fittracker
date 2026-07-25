@@ -11,7 +11,7 @@ export function doExport(S) {
     exportedAt: new Date().toISOString(),
     profile: S.profile,
     trainingRecords: S.trainingRecords,
-    bodyRecords: S.bodyRecords,
+    weightRecords: S.weightRecords || [],
     customExercises: S.customExercises,
     restSeconds: S.restSeconds,
   };
@@ -34,7 +34,7 @@ export function doImport(file, S, stateChanged) {
       if (ok) {
         S.profile = data.profile || {};
         S.trainingRecords = data.trainingRecords || [];
-        S.bodyRecords = data.bodyRecords || [];
+        S.weightRecords = data.weightRecords || (data.bodyRecords || []).filter(r => r.weight);
         S.customExercises = data.customExercises || [];
         S.restSeconds = data.restSeconds || 90;
         stateChanged();

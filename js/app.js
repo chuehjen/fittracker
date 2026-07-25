@@ -11,6 +11,7 @@ import { renderProfile } from './views/profile.js';
 const DEFAULT_STATE = {
   profile: { name: '', avatar: '' },
   trainingRecords: [],
+  weightRecords: [],
   customExercises: [],
   activeTab: 'training',
   trainingScreen: 'home',
@@ -59,6 +60,7 @@ async function init() {
   onStatusChange(() => render());
   onDataPulled((data) => {
     if (data.trainingRecords) S.trainingRecords = data.trainingRecords;
+    if (data.weightRecords) S.weightRecords = data.weightRecords;
     if (data.customExercises) S.customExercises = data.customExercises;
     render();
   });
@@ -70,6 +72,9 @@ async function init() {
     const savedState = await getState();
     if (savedState) {
       S = { ...DEFAULT_STATE, ...savedState };
+      S.weightRecords = savedState.weightRecords || (savedState.bodyRecords || [])
+        .filter(r => r.weight)
+        .map(r => ({ id: r.id, date: r.date, weight: r.weight, _cloudId: r._cloudId, _updatedAt: r._updatedAt }));
       if (S.trainingTimerStart) {
         S.trainingTimerActive = true;
         S.trainingTimerElapsed = S.trainingTimerElapsed || 0;
@@ -121,6 +126,7 @@ async function init() {
     setTimeout(() => loadingEl.remove(), 400);
   }
   if (appEl) appEl.style.display = '';
+  registerServiceWorker();
 }
 
 // ===== Auth Polling =====
@@ -253,6 +259,7 @@ function saveState() {
   const data = {
     profile: S.profile,
     trainingRecords: S.trainingRecords,
+    weightRecords: S.weightRecords,
     customExercises: S.customExercises,
     restSeconds: S.restSeconds,
     trainingTimerElapsed: S.trainingTimerElapsed,
@@ -306,6 +313,12 @@ window._syncActions = {
 
 window._startAuthPolling = startAuthPolling;
 window._stopAuthPolling = stopAuthPolling;
+
+function registerServiceWorker() {
+  if (!('serviceWorker' in navigator)) return;
+  navigator.serviceWorker.register('./service-worker.js')
+    .catch(e => console.warn('[PWA] Service worker registration failed:', e));
+}
 
 // ===== Start =====
 init();

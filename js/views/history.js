@@ -2,14 +2,9 @@
 
 import { BODY_PARTS } from '../exercises.js';
 import { fmtDateFull, fmtDuration, fmtVol, calcVolume } from '../helpers.js';
+import { escapeHtml } from '../html.js';
 import { showUndoToast } from '../toast.js';
-
-function escapeHtml(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-}
+import { queueDelete, queueUpsert } from '../sync.js';
 
 export function renderHistory(container, S, stateChanged) {
   container.innerHTML = `
@@ -72,9 +67,12 @@ function renderTrainingHistory(container, S, stateChanged) {
     const idx = S.trainingRecords.findIndex(r => r.id === id);
     if (idx === -1) return;
     const removed = S.trainingRecords.splice(idx, 1)[0];
+    queueDelete('training_records', id).catch(err => console.warn('[Sync] Queue training delete failed:', err));
     stateChanged();
     showUndoToast('已删除训练记录', () => {
+      removed._updatedAt = new Date().toISOString();
       S.trainingRecords.splice(idx, 0, removed);
+      queueUpsert('training_records', id, removed).catch(err => console.warn('[Sync] Queue training restore failed:', err));
       stateChanged();
     });
   }));

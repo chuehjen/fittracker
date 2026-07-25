@@ -1,0 +1,3139 @@
+{
+  "version": 1,
+  "generatedAt": "2026-03-18T12:31:32.906631+00:00",
+  "source": {
+    "repository": "https://github.com/hasaneyldrm/exercises-dataset",
+    "license": "MIT for non-media data and instruction text",
+    "mediaExcluded": true
+  },
+  "exercises": [
+    {
+      "id": "ext-0025",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0025",
+      "nameEn": "barbell bench press",
+      "bodyPart": "chest",
+      "equipment": "barbell",
+      "target": "pectorals",
+      "secondaryMuscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "stepsZh": [
+        "平躺在长凳上，双脚平放在地上，背部紧贴长凳。",
+        "掌心向前握住杠铃，握距略宽于肩宽。",
+        "将杠铃从架子上提起，并将其直接放在胸部上方，双臂完全伸展。",
+        "将杠铃慢慢降低到胸部，保持肘部内收。",
+        "当杠铃触及胸部时暂停片刻。",
+        "伸展双臂，将杠铃推回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0033",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0033",
+      "nameEn": "barbell decline bench press",
+      "bodyPart": "chest",
+      "equipment": "barbell",
+      "target": "pectorals",
+      "secondaryMuscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "stepsZh": [
+        "躺在倾斜的长凳上，双脚固定，头部低于臀部。",
+        "掌心向前握住杠铃，握距略宽于肩宽。",
+        "松开杠铃，慢慢将其降低到胸部，保持肘部内收。",
+        "在底部停顿片刻，然后将杠铃推回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0040",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0040",
+      "nameEn": "barbell front raise and pullover",
+      "bodyPart": "chest",
+      "equipment": "barbell",
+      "target": "pectorals",
+      "secondaryMuscles": [
+        "deltoids",
+        "triceps"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，掌心向前握住杠铃，手掌朝下。",
+        "保持双臂伸直，将杠铃举至身前，直至达到肩膀高度。",
+        "在顶部停顿片刻，然后慢慢将杠铃放回起始位置。",
+        "接下来，将杠铃放低到头后，保持手臂伸直。",
+        "在底部停顿片刻，然后将杠铃举回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0045",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0045",
+      "nameEn": "barbell guillotine bench press",
+      "bodyPart": "chest",
+      "equipment": "barbell",
+      "target": "pectorals",
+      "secondaryMuscles": [
+        "shoulders",
+        "triceps"
+      ],
+      "stepsZh": [
+        "平躺在长凳上，双脚平放在地上，背部紧贴长凳。",
+        "掌心向前握住杠铃，握距略宽于肩宽。",
+        "慢慢地将杠铃降低到颈部，保持肘部朝外。",
+        "当杠铃位于颈部上方时，暂停片刻。",
+        "将杠铃推回到起始位置，完全伸展双臂。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0047",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0047",
+      "nameEn": "barbell incline bench press",
+      "bodyPart": "chest",
+      "equipment": "barbell",
+      "target": "pectorals",
+      "secondaryMuscles": [
+        "shoulders",
+        "triceps"
+      ],
+      "stepsZh": [
+        "设置一个 45 度角的上斜凳。",
+        "躺在长凳上，双脚平放在地上。",
+        "掌心向前握住杠铃，握距略宽于肩宽。",
+        "松开杠铃并将其缓慢降低至胸部，保持肘部呈 45 度角。",
+        "在底部停顿片刻，然后将杠铃推回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0050",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0050",
+      "nameEn": "barbell incline shoulder raise",
+      "bodyPart": "chest",
+      "equipment": "barbell",
+      "target": "serratus anterior",
+      "secondaryMuscles": [
+        "deltoids",
+        "trapezius"
+      ],
+      "stepsZh": [
+        "设置一个 45 度角的上斜凳。",
+        "坐在长凳上，背部靠在垫子上，双脚平放在地面上。",
+        "掌心向前握住杠铃，杠铃间距略宽于肩宽。",
+        "将杠铃举至肩膀高度，保持肘部稍微弯曲。",
+        "慢慢地将杠铃举过头顶，充分伸展双臂。",
+        "在顶部停顿片刻，然后慢慢将杠铃放回肩部高度。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0122",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0122",
+      "nameEn": "barbell wide bench press",
+      "bodyPart": "chest",
+      "equipment": "barbell",
+      "target": "pectorals",
+      "secondaryMuscles": [
+        "shoulders",
+        "triceps"
+      ],
+      "stepsZh": [
+        "平躺在长凳上，双脚平放在地上，背部紧贴长凳。",
+        "宽握距抓住杠铃，握距略宽于肩宽。",
+        "将杠铃从架子上提起，并将其直接放在胸部上方，双臂完全伸展。",
+        "慢慢地将杠铃向胸部降低，保持肘部稍微张开。",
+        "当杠铃接触胸部时暂停片刻，然后将其推回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0151",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0151",
+      "nameEn": "cable bench press",
+      "bodyPart": "chest",
+      "equipment": "cable",
+      "target": "pectorals",
+      "secondaryMuscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "stepsZh": [
+        "将绳索机调整至胸部高度并安装手柄。",
+        "背对机器站立，双脚与肩同宽。",
+        "掌心向前握住手柄并向前迈一步，以在电缆中产生张力。",
+        "将双脚牢牢放在地面上并启动核心。",
+        "弯曲肘部，将双手置于肩部水平，保持肘部呈 90 度角。",
+        "向前推动手柄，将双臂完全伸展到身前。",
+        "暂停片刻，然后慢慢扭转动作，将双手放回肩部水平。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0169",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0169",
+      "nameEn": "cable incline bench press",
+      "bodyPart": "chest",
+      "equipment": "cable",
+      "target": "pectorals",
+      "secondaryMuscles": [
+        "deltoids",
+        "triceps"
+      ],
+      "stepsZh": [
+        "将长凳调整至 45 度倾斜。",
+        "将电缆手柄连接到高滑轮上。",
+        "坐在长凳上，面向电缆机，双脚平放在地面上。",
+        "掌心向前握住手柄，并将其拉至肩部高度。",
+        "向前和向上推动手柄，直到手臂完全伸展。",
+        "暂停片刻，然后慢慢将手柄放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0258",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0258",
+      "nameEn": "clock push-up",
+      "bodyPart": "chest",
+      "equipment": "bodyweight",
+      "target": "pectorals",
+      "secondaryMuscles": [
+        "triceps",
+        "shoulders",
+        "core"
+      ],
+      "stepsZh": [
+        "从高平板支撑位置开始，双手直接放在肩膀下方，身体呈一条直线。",
+        "弯曲肘部，使肘部靠近身体两侧，将身体降低到地面。",
+        "当你下降时，将你的身体向左旋转，将你的左臂伸直到侧面。",
+        "向上推回到起始位置，同时将身体旋转到中心。",
+        "重复俯卧撑，这次将身体向右旋转，并将右臂向侧面伸出。",
+        "每次重复时继续交替进行。"
+      ]
+    },
+    {
+      "id": "ext-0279",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0279",
+      "nameEn": "decline push-up",
+      "bodyPart": "chest",
+      "equipment": "bodyweight",
+      "target": "pectorals",
+      "secondaryMuscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "stepsZh": [
+        "将双手放在地面上，距离略宽于肩宽，双脚放在稳定的表面上。",
+        "保持身体从头到脚呈一条直线，锻炼核心肌肉。",
+        "弯曲肘部，使胸部靠近地面，使胸部靠近地面。",
+        "推动手掌以伸展手臂并返回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0289",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0289",
+      "nameEn": "dumbbell bench press",
+      "bodyPart": "chest",
+      "equipment": "dumbbell",
+      "target": "pectorals",
+      "secondaryMuscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "stepsZh": [
+        "平躺在长凳上，双脚平放在地上，背部紧贴长凳。",
+        "双手各握一个哑铃，手掌朝前，双臂伸至胸部上方。",
+        "慢慢地将哑铃降低到胸部两侧，保持肘部呈 90 度角。",
+        "暂停片刻，然后将哑铃推回起始位置，完全伸展双臂。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0301",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0301",
+      "nameEn": "dumbbell decline bench press",
+      "bodyPart": "chest",
+      "equipment": "dumbbell",
+      "target": "pectorals",
+      "secondaryMuscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "stepsZh": [
+        "躺在倾斜的长凳上，双脚固定，头部低于臀部。",
+        "双手各握一个哑铃，双臂伸直至胸部上方，手掌朝前。",
+        "慢慢地将哑铃降低到胸部两侧，保持肘部呈 90 度角。",
+        "将哑铃推回起始位置，充分伸展手臂。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0314",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0314",
+      "nameEn": "dumbbell incline bench press",
+      "bodyPart": "chest",
+      "equipment": "dumbbell",
+      "target": "pectorals",
+      "secondaryMuscles": [
+        "shoulders",
+        "triceps"
+      ],
+      "stepsZh": [
+        "设置一个 45 度角的上斜凳。",
+        "坐在长凳上，双脚平放在地上，背部紧贴长凳。",
+        "双手各握一个哑铃，掌心向前，将哑铃举至肩高。",
+        "慢慢地将哑铃降低到胸部两侧，保持肘部呈 90 度角。",
+        "将哑铃推回起始位置，充分伸展手臂。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0328",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0328",
+      "nameEn": "dumbbell incline shoulder raise",
+      "bodyPart": "chest",
+      "equipment": "dumbbell",
+      "target": "serratus anterior",
+      "secondaryMuscles": [
+        "deltoids",
+        "trapezius"
+      ],
+      "stepsZh": [
+        "将上斜凳摆成 45 度角，坐在上面，双手各握一个哑铃，掌心朝下。",
+        "将哑铃放在大腿上，然后靠在长凳上。",
+        "用大腿帮助将哑铃举至肩膀高度，然后旋转手腕，使手掌朝前。",
+        "呼气，慢慢将哑铃举过头顶，保持肘部轻微弯曲。",
+        "在顶部停顿片刻，然后吸气，慢慢将哑铃放回肩部高度。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-1294",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "1294",
+      "nameEn": "dumbbell pullover hip extension on exercise ball",
+      "bodyPart": "chest",
+      "equipment": "dumbbell",
+      "target": "pectorals",
+      "secondaryMuscles": [
+        "triceps",
+        "shoulders",
+        "core"
+      ],
+      "stepsZh": [
+        "坐在健身球上，双脚平放在地面上，哑铃放在大腿上。",
+        "慢慢地向前移动你的脚，将健身球沿着你的背部滚动，直到你的头部、颈部和上背部得到球的支撑。",
+        "双手握住哑铃，将手臂伸直至胸部上方，肘部保持轻微弯曲。",
+        "将哑铃放在脑后，保持手臂伸直并保持控制。",
+        "暂停片刻，然后将哑铃举回到起始位置。",
+        "在保持双臂伸展的同时，将臀部抬离地面，挤压臀肌并启动核心肌群。",
+        "将臀部放低至起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-3327",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "3327",
+      "nameEn": "full planche push-up",
+      "bodyPart": "chest",
+      "equipment": "bodyweight",
+      "target": "pectorals",
+      "secondaryMuscles": [
+        "shoulders",
+        "triceps",
+        "core"
+      ],
+      "stepsZh": [
+        "从俯卧撑位置开始，双手分开略宽于肩宽。",
+        "收紧核心肌群，将身体放低至地面，保持肘部靠近身体两侧。",
+        "当你降低身体高度时，身体向前倾斜，双脚离开地面，用双手保持平衡。",
+        "继续降低身体，直到胸部略高于地面。",
+        "用手推动并伸展双臂，将身体抬回到起始位置。",
+        "在整个运动过程中，从头部到脚后跟保持一条直线。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0493",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0493",
+      "nameEn": "incline push-up",
+      "bodyPart": "chest",
+      "equipment": "bodyweight",
+      "target": "pectorals",
+      "secondaryMuscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "stepsZh": [
+        "将双手放在较高的表面上，例如长凳或台阶上，双手之间的距离略宽于肩宽。",
+        "将双腿伸到身后，放在脚掌上，从头到脚跟形成一条直线。",
+        "弯曲肘部，将胸部向升高的表面降低，保持身体呈一条直线。",
+        "在底部暂停片刻，然后伸直手臂将自己推回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0662",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0662",
+      "nameEn": "push-up",
+      "bodyPart": "chest",
+      "equipment": "bodyweight",
+      "target": "pectorals",
+      "secondaryMuscles": [
+        "triceps",
+        "deltoids",
+        "core"
+      ],
+      "stepsZh": [
+        "从高位平板支撑开始，双手分开略宽于肩宽，双脚并拢。",
+        "弯曲肘部，调动核心力量，将身体压向地面，保持身体呈一条直线。",
+        "当你的胸部刚好高于地面时，暂停片刻，然后伸直手臂，将自己推回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-3145",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "3145",
+      "nameEn": "push-up plus",
+      "bodyPart": "chest",
+      "equipment": "bodyweight",
+      "target": "pectorals",
+      "secondaryMuscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "stepsZh": [
+        "从高位平板支撑开始，双手分开略宽于肩宽，身体从头到脚跟呈一条直线。",
+        "弯曲肘部，使肘部靠近身体两侧，将身体降低到地面。",
+        "一旦你的胸部刚好高于地面，用力推动你的手臂，伸展你的手臂并抬起你的上半身。",
+        "在动作的最高点，将上背部推向天花板，从而伸展肩胛骨。",
+        "暂停片刻，然后通过缩回肩胛骨并将身体放回起始位置来反转动作。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0666",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0666",
+      "nameEn": "raise single arm push-up",
+      "bodyPart": "chest",
+      "equipment": "bodyweight",
+      "target": "pectorals",
+      "secondaryMuscles": [
+        "triceps",
+        "shoulders",
+        "core"
+      ],
+      "stepsZh": [
+        "从俯卧撑位置开始，双手分开略宽于肩宽，双脚并拢。",
+        "将一只手臂伸直至一侧，与地面平行。",
+        "弯曲肘部，将身体降低到地面，保持背部挺直，核心参与。",
+        "推回起始位置，使用胸部肌肉抬起身体。",
+        "另一只手臂伸出，重复上述动作。"
+      ]
+    },
+    {
+      "id": "ext-3021",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "3021",
+      "nameEn": "scapula push-up",
+      "bodyPart": "chest",
+      "equipment": "bodyweight",
+      "target": "serratus anterior",
+      "secondaryMuscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "stepsZh": [
+        "从高平板支撑位置开始，双手直接放在肩膀下方，身体呈一条直线。",
+        "将胸部压向地面，保持肘部靠近身体。",
+        "当你下降时，将肩胛骨挤压在一起并将胸部向前推。",
+        "在底部停顿片刻，然后推回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0699",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0699",
+      "nameEn": "shoulder tap push-up",
+      "bodyPart": "chest",
+      "equipment": "bodyweight",
+      "target": "pectorals",
+      "secondaryMuscles": [
+        "triceps",
+        "core"
+      ],
+      "stepsZh": [
+        "从高位平板支撑开始，双手分开略宽于肩宽，身体从头到脚跟呈一条直线。",
+        "弯曲肘部，使肘部靠近身体两侧，将身体降低到地面。",
+        "当你向后推时，将右手抬离地面并轻拍左肩。",
+        "将右手放回地面并重复俯卧撑，这次抬起左手并拍打右肩。",
+        "每次重复俯卧撑时，继续交替拍肩。",
+        "在整个练习过程中保持核心稳定并避免臀部过度旋转。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0725",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0725",
+      "nameEn": "single arm push-up",
+      "bodyPart": "chest",
+      "equipment": "bodyweight",
+      "target": "pectorals",
+      "secondaryMuscles": [
+        "triceps",
+        "shoulders",
+        "core"
+      ],
+      "stepsZh": [
+        "从俯卧撑位置开始，双手分开与肩同宽，一只手比另一只手稍宽。",
+        "弯曲肘部，保持背部挺直，调动核心力量，将身体降低至地面。",
+        "当你降低身体时，将你的重心转移到一侧，并将另一只手臂抬离地面，将其笔直延伸到一侧。",
+        "推动胸部和三头肌，将身体抬回到起始位置，同时将伸出的手臂放回地面。",
+        "重复该动作，每次重复时交替伸展手臂。"
+      ]
+    },
+    {
+      "id": "ext-0748",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0748",
+      "nameEn": "smith bench press",
+      "bodyPart": "chest",
+      "equipment": "smith",
+      "target": "pectorals",
+      "secondaryMuscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "stepsZh": [
+        "将史密斯机杆的高度调整至胸部水平。",
+        "平躺在长凳上，双脚牢牢踩在地上。",
+        "掌心向前握住杠铃，握距略宽于肩宽。",
+        "松开杠铃并将其向胸部降低，保持肘部内收。",
+        "当杠铃接触到你的胸部时暂停片刻。",
+        "将杠铃推回到起始位置，完全伸展双臂。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0015",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0015",
+      "nameEn": "assisted parallel close grip pull-up",
+      "bodyPart": "back",
+      "equipment": "machine",
+      "target": "lats",
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "stepsZh": [
+        "将机器调整到您想要的重量和高度。",
+        "将双手紧紧握在双杠上，手掌相对。",
+        "悬挂在杠上，双臂完全伸展，双脚离开地面。",
+        "收紧背部肌肉，将身体拉向杠铃，保持肘部靠近身体。",
+        "继续拉，直到下巴高于杠铃。",
+        "在顶部停顿片刻，然后慢慢将身体放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0017",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0017",
+      "nameEn": "assisted pull-up",
+      "bodyPart": "back",
+      "equipment": "machine",
+      "target": "lats",
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "stepsZh": [
+        "将机器调整至您所需的体重和高度设置。",
+        "掌心向前握住手柄，握距略宽于肩宽。",
+        "双臂完全伸展，双脚离开地面。",
+        "收紧背部肌肉，将身体拉向手柄，保持肘部靠近身体。",
+        "继续拉，直到下巴位于手柄上方。",
+        "在顶部停顿片刻，然后慢慢将身体放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-1432",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "1432",
+      "nameEn": "assisted standing pull-up",
+      "bodyPart": "back",
+      "equipment": "machine",
+      "target": "lats",
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "stepsZh": [
+        "将机器调整至您所需的体重和高度设置。",
+        "面向机器站立，双脚分开与肩同宽。",
+        "掌心向前握住手柄，握距略宽于肩宽。",
+        "启动你的背阔肌和二头肌，并将自己拉向手柄。",
+        "在顶部暂停片刻，挤压背部肌肉。",
+        "慢慢地将自己放回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0027",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0027",
+      "nameEn": "barbell bent over row",
+      "bodyPart": "back",
+      "equipment": "barbell",
+      "target": "upper back",
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "stepsZh": [
+        "站立，双脚分开与肩同宽，膝盖稍微弯曲。",
+        "臀部向前弯曲，同时保持背部挺直、挺胸。",
+        "掌心向前握住杠铃，双手间距略宽于肩宽。",
+        "通过收缩肩胛骨并挤压背部肌肉，将杠铃拉向下胸部。",
+        "在顶部停顿片刻，然后慢慢将杠铃放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0049",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0049",
+      "nameEn": "barbell incline row",
+      "bodyPart": "back",
+      "equipment": "barbell",
+      "target": "upper back",
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "stepsZh": [
+        "设置一个 45 度角的上斜凳。",
+        "脸朝下躺在长凳上，胸部靠在垫子上，双脚平放在地上。",
+        "掌心向前握住杠铃，握距略宽于肩宽。",
+        "保持背部挺直，核心肌群参与。",
+        "将杠铃拉向胸部，将肩胛骨挤压在一起。",
+        "在顶部停顿片刻，然后慢慢将杠铃放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-3017",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "3017",
+      "nameEn": "barbell pendlay row",
+      "bodyPart": "back",
+      "equipment": "barbell",
+      "target": "upper back",
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，膝盖稍微弯曲。",
+        "臀部向前弯曲，保持背部挺直，挺胸。",
+        "掌心向前握住杠铃，握距略宽于肩宽。",
+        "将杠铃拉向上腹部，将肩胛骨挤压在一起。",
+        "将杠铃降低回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-3019",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "3019",
+      "nameEn": "bench pull-ups",
+      "bodyPart": "back",
+      "equipment": "bodyweight",
+      "target": "lats",
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "stepsZh": [
+        "将自己置于与胸部同高的横杆或坚固的水平表面下方。",
+        "掌心向前握住杠铃或杠铃表面，握距略宽于肩宽。",
+        "双臂完全伸展，身体伸直。",
+        "将肩胛骨挤压在一起并弯曲肘部，将胸部拉向杠铃或地面。",
+        "继续拉，直到下巴位于杆或表面上方。",
+        "有控制地降低自己回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-3168",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "3168",
+      "nameEn": "bodyweight squatting row",
+      "bodyPart": "back",
+      "equipment": "bodyweight",
+      "target": "upper back",
+      "secondaryMuscles": [
+        "biceps",
+        "shoulders"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，伸直手臂抓住坚固的物体或悬挂训练器。",
+        "将身体降低至蹲姿，保持背部挺直，膝盖位于脚趾后面。",
+        "从蹲姿开始，将身体向上拉向物体或悬挂训练器，将肩胛骨挤压在一起。",
+        "在顶部停顿片刻，然后慢慢将身体放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-3158",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "3158",
+      "nameEn": "bodyweight standing close-grip row",
+      "bodyPart": "back",
+      "equipment": "bodyweight",
+      "target": "upper back",
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "stepsZh": [
+        "站立，双脚分开与肩同宽，膝盖稍微弯曲。",
+        "腰部向前弯曲，保持背部挺直，核心肌群参与。",
+        "将双臂伸直在身前，紧紧抓住杆或手柄。",
+        "将杠铃或手柄拉向身体，将肩胛骨挤压在一起。",
+        "在动作的最高点停顿片刻，然后慢慢松开并回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-3166",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "3166",
+      "nameEn": "bodyweight standing row",
+      "bodyPart": "back",
+      "equipment": "bodyweight",
+      "target": "upper back",
+      "secondaryMuscles": [
+        "biceps",
+        "shoulders"
+      ],
+      "stepsZh": [
+        "站立，双脚分开与肩同宽，膝盖稍微弯曲。",
+        "掌心向前握住杆或手柄，手掌朝下。",
+        "保持背部挺直，核心参与。",
+        "将杠铃或手柄拉向身体，将肩胛骨挤压在一起。",
+        "在动作的最高点停顿片刻。",
+        "慢慢释放并伸展双臂回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0150",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0150",
+      "nameEn": "cable bar lateral pulldown",
+      "bodyPart": "back",
+      "equipment": "cable",
+      "target": "lats",
+      "secondaryMuscles": [
+        "biceps",
+        "rhomboids",
+        "rear deltoids"
+      ],
+      "stepsZh": [
+        "将电缆滑轮调整至较高位置并安装直杆。",
+        "面向缆绳机坐着，双脚平放在地面上，膝盖稍微弯曲。",
+        "掌心向前握住杠铃，握距略宽于肩宽。",
+        "稍微向后倾斜，挺胸，保持下背部轻微的拱形。",
+        "将杠铃向下拉向胸部，用肘部引导并将肩胛骨挤压在一起。",
+        "在动作底部暂停片刻，然后慢慢地将杠铃返回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0153",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0153",
+      "nameEn": "cable cross-over lateral pulldown",
+      "bodyPart": "back",
+      "equipment": "cable",
+      "target": "lats",
+      "secondaryMuscles": [
+        "biceps",
+        "rhomboids",
+        "rear deltoids"
+      ],
+      "stepsZh": [
+        "将电缆手柄连接到电缆机器两侧与肩同高的位置。",
+        "站在机器中间，双脚分开与肩同宽。",
+        "掌心向前握住手柄并后退以在电缆中产生张力。",
+        "从臀部开始稍微向前倾，保持背部挺直，挺胸。",
+        "将手柄向下拉并穿过身体，将肩胛骨挤压在一起。",
+        "在动作底部暂停片刻，然后慢慢回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0159",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0159",
+      "nameEn": "cable decline seated wide-grip row",
+      "bodyPart": "back",
+      "equipment": "cable",
+      "target": "upper back",
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "stepsZh": [
+        "坐在面向缆绳机的下斜长凳上，双脚牢固地放在脚踏板上。",
+        "用宽的正手握法抓住电缆附件，手掌朝下。",
+        "稍微向后倾斜，保持背部挺直，核心肌群参与。",
+        "将电缆拉向下胸部，将肩胛骨挤压在一起。",
+        "在收缩的峰值处暂停片刻，然后慢慢地将电缆释放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0160",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0160",
+      "nameEn": "cable floor seated wide-grip row",
+      "bodyPart": "back",
+      "equipment": "cable",
+      "target": "upper back",
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "stepsZh": [
+        "坐在地板上，双腿伸直，背部挺直。",
+        "将缆绳手柄连接到低滑轮上，并将缆绳机放在您身后。",
+        "正手宽握握住手柄，手掌朝下。",
+        "稍微向后倾斜，保持背部挺直，挺胸。",
+        "将手柄拉向腰部，将肩胛骨挤压在一起。",
+        "在动作的最高点暂停片刻，然后慢慢松开手柄回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-1318",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "1318",
+      "nameEn": "cable incline bench row",
+      "bodyPart": "back",
+      "equipment": "cable",
+      "target": "upper back",
+      "secondaryMuscles": [
+        "biceps",
+        "rear deltoids"
+      ],
+      "stepsZh": [
+        "以 45 度角设置一个上斜凳，并将绳索手柄连接到低滑轮上。",
+        "坐在长凳上，面向电缆机，双脚平放在地板上，膝盖稍微弯曲。",
+        "掌心向前握住电缆手柄，并将双臂完全伸展到身前。",
+        "从臀部开始向前倾，同时保持背部挺直，核心肌群参与。",
+        "缩回肩胛骨并弯曲肘部，将电缆手柄拉向胸部。",
+        "在动作的最高点挤压背部肌肉，然后慢慢伸展手臂回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-2330",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "2330",
+      "nameEn": "cable lat pulldown full range of motion",
+      "bodyPart": "back",
+      "equipment": "cable",
+      "target": "lats",
+      "secondaryMuscles": [
+        "biceps",
+        "rhomboids",
+        "rear deltoids"
+      ],
+      "stepsZh": [
+        "坐在高位下拉机上，膝盖位于护垫下方。",
+        "掌心向前握住电缆杆，握距略宽于肩宽。",
+        "稍微向后倾斜，挺胸，保持下背部轻微的拱形。",
+        "将杠铃向下拉至上胸部，将肩胛骨挤压在一起。",
+        "在动作底部暂停片刻，然后慢慢松开杠铃回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-2616",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "2616",
+      "nameEn": "cable lateral pulldown with v-bar",
+      "bodyPart": "back",
+      "equipment": "cable",
+      "target": "lats",
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "stepsZh": [
+        "坐在电缆下拉机上，用正手抓住 V 形杆附件。",
+        "调整护膝，使大腿固定在其下方。",
+        "保持背部挺直并稍微向后倾斜。",
+        "将 V 形杆向下拉至上胸部，同时保持肘部靠近身体。",
+        "在动作底部挤压背部肌肉。",
+        "慢慢地将 v 形杆返回到起始位置，然后按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0180",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0180",
+      "nameEn": "cable low seated row",
+      "bodyPart": "back",
+      "equipment": "cable",
+      "target": "upper back",
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "stepsZh": [
+        "坐在机器上，双脚平放在脚踏板上，膝盖稍微弯曲。",
+        "掌心向前握住手柄，手掌朝下。",
+        "保持背部挺直，稍微向前倾斜，肘部保持轻微弯曲。",
+        "将手柄拉向身体，将肩胛骨挤压在一起。",
+        "在动作的最高点暂停片刻，然后慢慢松开手柄回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-1319",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "1319",
+      "nameEn": "cable palm rotational row",
+      "bodyPart": "back",
+      "equipment": "cable",
+      "target": "upper back",
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "stepsZh": [
+        "将手柄连接到腰部高度的缆绳机上。",
+        "面向机器站立，双脚分开与肩同宽。",
+        "掌心向前握住手柄，手掌朝下。",
+        "向后退一步，在绳索上产生张力，保持背部挺直，膝盖稍微弯曲。",
+        "将手柄拉向身体，同时将手掌旋转至向上。",
+        "在动作结束时将肩胛骨挤压在一起。",
+        "慢慢松开手柄回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0198",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0198",
+      "nameEn": "cable pulldown",
+      "bodyPart": "back",
+      "equipment": "cable",
+      "target": "lats",
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "stepsZh": [
+        "调整拉索下拉机，使座椅处于舒适的高度并固定护膝。",
+        "坐在座位上，背部挺直，双脚平放在地面上。",
+        "掌心向前握住电缆杆，握距略宽于肩宽。",
+        "稍微向后倾斜并启动你的核心。",
+        "将电缆杆向下拉向胸部，将肩胛骨挤压在一起。",
+        "在动作底部暂停片刻，然后慢慢松开杠铃回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0205",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0205",
+      "nameEn": "cable rear pulldown",
+      "bodyPart": "back",
+      "equipment": "cable",
+      "target": "lats",
+      "secondaryMuscles": [
+        "biceps",
+        "rhomboids",
+        "rear deltoids"
+      ],
+      "stepsZh": [
+        "调整拉索机，使滑轮处于最高位置。",
+        "面向机器坐着，双脚平放在地面上，膝盖稍微弯曲。",
+        "掌心向前握住电缆附件，双手之间的距离略大于肩宽。",
+        "稍微向后倾斜，保持背部挺直，挺胸。",
+        "将电缆附件向下拉向胸部，将肩胛骨挤压在一起。",
+        "在动作底部停顿片刻，然后慢慢松开绳索回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-1320",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "1320",
+      "nameEn": "cable rope crossover seated row",
+      "bodyPart": "back",
+      "equipment": "cable",
+      "target": "upper back",
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "stepsZh": [
+        "坐在划船机上，双脚平放在脚踏板上，膝盖稍微弯曲。",
+        "掌心向前握住缆绳，手掌相对。",
+        "稍微向后倾斜，保持背部挺直，核心肌群参与。",
+        "将缆绳拉向胸部，将肩胛骨挤压在一起。",
+        "在动作的最高点停顿片刻，然后慢慢释放张力，回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-1321",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "1321",
+      "nameEn": "cable rope elevated seated row",
+      "bodyPart": "back",
+      "equipment": "cable",
+      "target": "upper back",
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "stepsZh": [
+        "坐在面向电缆机的高架座椅上。",
+        "掌心向前握住缆绳手柄，手掌相对。",
+        "保持背部挺直并稍微向后倾斜，保持膝盖轻微弯曲。",
+        "通过缩回肩胛骨并挤压背部肌肉，将电缆拉向您的身体。",
+        "在完全收缩的位置暂停片刻。",
+        "慢慢释放压力并将手臂伸回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-1322",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "1322",
+      "nameEn": "cable rope extension incline bench row",
+      "bodyPart": "back",
+      "equipment": "cable",
+      "target": "upper back",
+      "secondaryMuscles": [
+        "biceps",
+        "shoulders"
+      ],
+      "stepsZh": [
+        "以 45 度角设置上斜凳，并将绳索机连接到低滑轮上。",
+        "将绳索手柄连接到缆绳机上，然后坐在面向机器的倾斜长凳上。",
+        "正手抓住绳索把手，身体前倾，保持背部挺直。",
+        "充分伸展双臂，将绳子拉向上胸部，同时保持肘部靠近身体。",
+        "在动作结束时将肩胛骨挤压在一起。",
+        "慢慢释放张力并回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-1323",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "1323",
+      "nameEn": "cable rope seated row",
+      "bodyPart": "back",
+      "equipment": "cable",
+      "target": "upper back",
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "stepsZh": [
+        "坐在划船机上，双脚平放在脚踏板上，膝盖稍微弯曲。",
+        "掌心向前握住缆绳，手掌相对。",
+        "保持背部挺直，稍微向前倾斜，肘部保持轻微弯曲。",
+        "将缆绳拉向身体，将肩胛骨挤压在一起。",
+        "在动作的最高点停顿片刻，然后慢慢释放张力，回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0024",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0024",
+      "nameEn": "barbell bench front squat",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "quads",
+      "secondaryMuscles": [
+        "hamstrings",
+        "glutes",
+        "calves"
+      ],
+      "stepsZh": [
+        "首先站立，双脚分开与肩同宽，将杠铃放在上胸部，锁骨下方。",
+        "掌心向前握住杠铃，保持肘部向上，上臂与地面平行。",
+        "弯曲膝盖和臀部，将身体降低到蹲姿，保持背部挺直，挺胸。",
+        "在深蹲底部暂停片刻，然后用脚后跟恢复到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0026",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0026",
+      "nameEn": "barbell bench squat",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "quads",
+      "secondaryMuscles": [
+        "glutes",
+        "hamstrings",
+        "calves"
+      ],
+      "stepsZh": [
+        "将杠铃放在深蹲架上，与胸部同高。",
+        "背对架子站立，双脚与肩同宽。",
+        "弯曲膝盖，将身体降低至蹲姿，保持背部挺直，挺胸。",
+        "掌心向前握住杠铃，握距略宽于肩宽。",
+        "将杠铃从架子上提起并向后退一步，确保双脚仍与肩同宽。",
+        "降低身体蹲下，保持膝盖与脚趾在一条线上。",
+        "在底部停顿片刻，然后推动脚后跟回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0029",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0029",
+      "nameEn": "barbell clean-grip front squat",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "glutes",
+      "secondaryMuscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves",
+        "core"
+      ],
+      "stepsZh": [
+        "首先，双脚分开与肩同宽，将杠铃放在上胸部，肘部向前。",
+        "弯曲膝盖并将臀部向后推，降低身体，就像坐在椅子上一样。",
+        "下降时保持挺胸、背部挺直，确保膝盖不超过脚趾。",
+        "继续降低，直到大腿与地面平行，或者尽可能低。",
+        "在底部停顿片刻，然后用脚跟推动站起来，伸展臀部和膝盖。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0032",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0032",
+      "nameEn": "barbell deadlift",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "glutes",
+      "secondaryMuscles": [
+        "hamstrings",
+        "lower back"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，杠铃放在你面前的地面上。",
+        "弯曲膝盖并以臀部为铰链，降低躯干，掌心向前握住杠铃，双手分开略宽于肩宽。",
+        "当你通过脚后跟将杠铃抬离地面时，保持背部挺直，胸部抬起，伸展臀部和膝盖。",
+        "当你站直时，挤压你的臀部并保持你的核心参与。",
+        "弯曲臀部和膝盖，将杠铃放回地面，保持背部挺直。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-1370",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "1370",
+      "nameEn": "barbell floor calf raise",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "calves",
+      "secondaryMuscles": [
+        "hamstrings"
+      ],
+      "stepsZh": [
+        "将杠铃放在您面前的地板上。",
+        "站立，脚掌放在杠铃边缘，脚跟悬垂。",
+        "如果需要，请抓住一个稳定的物体以保持平衡。",
+        "尽可能高地抬高脚后跟，用小腿来抬起身体。",
+        "在顶部停顿片刻，然后慢慢降低脚后跟回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0039",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0039",
+      "nameEn": "barbell front chest squat",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "glutes",
+      "secondaryMuscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves",
+        "core"
+      ],
+      "stepsZh": [
+        "首先站立，双脚分开与肩同宽，脚趾稍微向外。",
+        "将杠铃放在胸前，双手与肩同宽，肘部向前。",
+        "当你将身体降低到蹲姿时，收紧核心并保持挺胸，将臀部向后推并弯曲膝盖。",
+        "降低直到大腿与地面平行，或者尽可能降低到您能舒服的高度。",
+        "在底部停顿片刻，然后推动脚后跟回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0042",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0042",
+      "nameEn": "barbell front squat",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "glutes",
+      "secondaryMuscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves",
+        "core"
+      ],
+      "stepsZh": [
+        "首先站立，双脚分开与肩同宽，脚趾稍微向外。",
+        "将杠铃放在肩膀前面，将其放在锁骨和肩膀上。",
+        "当你将身体降低到蹲姿时，收紧核心并保持挺胸，将臀部向后推并弯曲膝盖。",
+        "降低直到大腿与地面平行，或者尽可能降低到您能舒服的高度。",
+        "在底部停顿片刻，然后推动脚后跟回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0043",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0043",
+      "nameEn": "barbell full squat",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "glutes",
+      "secondaryMuscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves",
+        "core"
+      ],
+      "stepsZh": [
+        "站立，双脚分开与肩同宽，脚趾稍微向外。",
+        "将杠铃放在上背部，将其放在斜方肌或三角肌后束上。",
+        "当你开始降低身体时，启动你的核心并保持胸部挺直。",
+        "弯曲膝盖和臀部，向后和向下推臀部，就像坐在椅子上一样。",
+        "放低身体，直到大腿与地面平行或稍低于地面。",
+        "保持膝盖与脚趾对齐，并将重量放在脚后跟上。",
+        "通过脚后跟站起来，伸展臀部和膝盖。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-1545",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "1545",
+      "nameEn": "barbell full zercher squat",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "glutes",
+      "secondaryMuscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves",
+        "core"
+      ],
+      "stepsZh": [
+        "站立，双脚分开与肩同宽，脚趾稍微外翻。",
+        "将杠铃放在肘部的弯曲处，双手握住杠铃以保持稳定。",
+        "当你将臀部向后降低到蹲姿时，启动你的核心并保持胸部抬起。",
+        "保持膝盖与脚趾对齐，并将重量放在脚后跟上。",
+        "降低直到大腿与地面平行，或者尽可能降低到您能舒服的高度。",
+        "通过脚跟发力站起来，在动作的最高点挤压臀部。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0046",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0046",
+      "nameEn": "barbell hack squat",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "glutes",
+      "secondaryMuscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves"
+      ],
+      "stepsZh": [
+        "首先站立，双脚分开与肩同宽，脚趾稍微向外。",
+        "将杠铃放在腿后面，将其放在大腿上部。",
+        "弯曲膝盖和臀部，降低身体，保持背部挺直，挺胸。",
+        "继续降低，直到大腿与地面平行，或者尽可能低。",
+        "暂停片刻，然后用力推动脚后跟，回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-1436",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "1436",
+      "nameEn": "barbell high bar squat",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "glutes",
+      "secondaryMuscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves",
+        "core"
+      ],
+      "stepsZh": [
+        "站立，双脚分开与肩同宽，脚趾稍微向外。",
+        "将杠铃放在上背部，放在斜方肌上。",
+        "当你开始蹲下时，启动你的核心并保持胸部挺直，将臀部向后推并弯曲膝盖。",
+        "放低身体，直到大腿与地面平行，或者尽可能低到您能舒服的高度。",
+        "通过脚后跟站起来，伸展臀部和膝盖。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0051",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0051",
+      "nameEn": "barbell jefferson squat",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "glutes",
+      "secondaryMuscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves"
+      ],
+      "stepsZh": [
+        "站立，双脚分开与肩同宽，脚趾稍微外翻。",
+        "掌心向前握住杠铃，将其放在身体前部、腰部下方。",
+        "左脚向前迈出，右脚向后迈出，双脚分开与肩同宽。",
+        "弯曲膝盖，将身体降低至蹲姿，保持背部挺直，挺胸。",
+        "脚后跟用力，站回起始位置。",
+        "重复该动作，每次重复时交替使用前脚和后脚。"
+      ]
+    },
+    {
+      "id": "ext-0053",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0053",
+      "nameEn": "barbell jump squat",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "glutes",
+      "secondaryMuscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves"
+      ],
+      "stepsZh": [
+        "首先，双脚分开与肩同宽站立，将杠铃放在上背部。",
+        "弯曲膝盖并将臀部向后推，将身体降低至蹲姿。",
+        "一旦到达深蹲底部，就从地面跳起向上爆发。",
+        "跳跃时，伸展臀部、膝盖和脚踝，推动脚趾。",
+        "轻轻地回到蹲姿，然后立即重复该动作达到计划次数。"
+      ]
+    },
+    {
+      "id": "ext-1410",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "1410",
+      "nameEn": "barbell lateral lunge",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "glutes",
+      "secondaryMuscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，将杠铃放在上背部。",
+        "右脚向一侧迈出一大步，保持左脚踩地。",
+        "弯曲右膝，将身体降低到弓步位置，保持左腿伸直。",
+        "用右脚推出并返回到起始位置。",
+        "在另一侧重复，用左脚迈步。"
+      ]
+    },
+    {
+      "id": "ext-1435",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "1435",
+      "nameEn": "barbell low bar squat",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "glutes",
+      "secondaryMuscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，杠铃放在上背部。",
+        "保持挺胸，核心收紧，弯曲膝盖并向后推臀部，慢慢降低身体。",
+        "继续降低，直到大腿与地面平行或略低于地面。",
+        "暂停片刻，然后用力推动脚后跟，回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0054",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0054",
+      "nameEn": "barbell lunge",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "glutes",
+      "secondaryMuscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves"
+      ],
+      "stepsZh": [
+        "首先，双脚分开与肩同宽，将杠铃放在上背部。",
+        "右脚向前迈出一步，保持躯干直立。",
+        "弯曲右膝降低身体，直到大腿与地面平行。",
+        "推动右脚跟回到起始位置。",
+        "用左腿重复上述动作，交替腿进行计划次数。"
+      ]
+    },
+    {
+      "id": "ext-0063",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0063",
+      "nameEn": "barbell narrow stance squat",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "glutes",
+      "secondaryMuscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves"
+      ],
+      "stepsZh": [
+        "站立，双脚分开与肩同宽，脚趾稍微向外。",
+        "将杠铃放在上背部，将其放在斜方肌或三角肌后束上。",
+        "收紧核心并保持挺胸，同时弯曲膝盖并向后推臀部，慢慢降低身体。",
+        "继续降低，直到大腿与地面平行或略低于地面。",
+        "暂停片刻，然后用力推动脚后跟，回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0068",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0068",
+      "nameEn": "barbell one leg squat",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "quads",
+      "secondaryMuscles": [
+        "glutes",
+        "hamstrings",
+        "calves"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，将杠铃放在上背部。",
+        "将一只脚抬离地面并向前伸展，保持与地面平行。",
+        "弯曲站立的腿，放低身体，就像坐回椅子上一样，保持挺胸、背部挺直。",
+        "降低身体直到大腿与地面平行，然后通过脚后跟推回到起始位置。",
+        "按计划次数重复。，然后换腿并重复。"
+      ]
+    },
+    {
+      "id": "ext-0069",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0069",
+      "nameEn": "barbell overhead squat",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "quads",
+      "secondaryMuscles": [
+        "glutes",
+        "hamstrings",
+        "calves",
+        "core"
+      ],
+      "stepsZh": [
+        "站立，双脚分开与肩同宽，脚趾稍微外翻。",
+        "宽握距握住杠铃，将其置于头顶，双臂完全伸展。",
+        "收紧核心肌群，将身体放低至蹲姿，保持胸部向上，膝盖位于脚趾上方。",
+        "在底部停顿片刻，然后推动脚后跟回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0078",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0078",
+      "nameEn": "barbell rear lunge",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "glutes",
+      "secondaryMuscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves"
+      ],
+      "stepsZh": [
+        "首先，双脚分开与肩同宽，将杠铃放在上背部。",
+        "右脚向后退一步，用脚掌着地。",
+        "弯曲双膝降低身体，直到左大腿与地面平行。",
+        "推动左脚跟返回到起始位置。",
+        "换另一条腿重复上述步骤。"
+      ]
+    },
+    {
+      "id": "ext-0077",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0077",
+      "nameEn": "barbell rear lunge v. 2",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "glutes",
+      "secondaryMuscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，将杠铃放在上背部。",
+        "右脚向后退一步，用脚掌着地。",
+        "弯曲双膝降低身体，直到左大腿与地面平行。",
+        "推动左脚跟返回到起始位置。",
+        "换另一条腿重复上述步骤。"
+      ]
+    },
+    {
+      "id": "ext-0085",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0085",
+      "nameEn": "barbell romanian deadlift",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "glutes",
+      "secondaryMuscles": [
+        "hamstrings",
+        "lower back"
+      ],
+      "stepsZh": [
+        "站立，双脚分开与肩同宽，脚趾指向前方。",
+        "掌心向前握住杠铃，双手分开略宽于肩宽。",
+        "弯曲臀部，保持背部挺直，膝盖稍微弯曲。",
+        "将杠铃向地面降低，使其靠近身体。",
+        "当你降低杠铃时，感受腿筋的拉伸。",
+        "一旦感觉到腿筋拉伸，就将臀部向前推并站直。",
+        "在动作的最高点挤压臀部。",
+        "将杠铃放回起始位置，然后按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0088",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0088",
+      "nameEn": "barbell seated calf raise",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "calves",
+      "secondaryMuscles": [
+        "hamstrings",
+        "quadriceps"
+      ],
+      "stepsZh": [
+        "坐在长凳上，双脚平放在地板上，杠铃放在大腿上。",
+        "将脚掌放在升高的平台上，例如木块或台阶。",
+        "将杠铃放在大腿上，并用手牢牢握住它。",
+        "保持背部挺直，核心收紧，伸展脚踝，将脚后跟抬离地面。",
+        "在顶部停顿片刻，然后慢慢降低脚后跟回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-1371",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "1371",
+      "nameEn": "barbell seated calf raise",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "calves",
+      "secondaryMuscles": [
+        "hamstrings"
+      ],
+      "stepsZh": [
+        "坐在长凳上，双脚平放在地板上，杠铃放在大腿上。",
+        "将脚掌放在升高的平台上，例如木块或台阶。",
+        "尽可能降低脚后跟，感受小腿的拉伸。",
+        "尽可能高地抬高脚后跟，收缩小腿。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0098",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0098",
+      "nameEn": "barbell side split squat",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "quads",
+      "secondaryMuscles": [
+        "glutes",
+        "hamstrings",
+        "calves"
+      ],
+      "stepsZh": [
+        "站立，双脚分开比肩宽，脚趾稍微向外。",
+        "将杠铃放在上背部，将其放在斜方肌上。",
+        "当你将身体降低到蹲姿时，收紧你的核心并保持胸部向上，弯曲膝盖和臀部。",
+        "当你下降时，将膝盖向两侧推出，并将体重保持在脚后跟上。",
+        "降低直到大腿与地面平行，然后通过脚后跟推回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0097",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0097",
+      "nameEn": "barbell side split squat v. 2",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "quads",
+      "secondaryMuscles": [
+        "glutes",
+        "hamstrings",
+        "calves"
+      ],
+      "stepsZh": [
+        "站立，双脚分开比肩宽，脚趾稍微向外。",
+        "将杠铃放在上背部，将其放在肩膀上。",
+        "右脚向一侧迈出一大步，保持左脚踩地。",
+        "弯曲右膝，将身体放低至蹲姿，保持挺胸、背部挺直。",
+        "推动右脚跟回到起始位置。",
+        "在另一侧重复，左脚迈出。",
+        "继续交替进行计划次数。"
+      ]
+    },
+    {
+      "id": "ext-0101",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0101",
+      "nameEn": "barbell speed squat",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "glutes",
+      "secondaryMuscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves"
+      ],
+      "stepsZh": [
+        "站立，双脚分开与肩同宽，脚趾稍微向外。",
+        "将杠铃放在上背部，将其放在斜方肌或三角肌后束上。",
+        "收紧核心肌群，保持挺胸，同时向后和向下降低臀部，就像坐在椅子上一样。",
+        "降低直到大腿与地面平行，或者尽可能降低到您能舒服的高度。",
+        "通过脚跟发力站起来，在顶部挤压臀部。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-2810",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "2810",
+      "nameEn": "barbell split squat v. 2",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "quads",
+      "secondaryMuscles": [
+        "glutes",
+        "hamstrings",
+        "calves"
+      ],
+      "stepsZh": [
+        "首先，双脚分开与肩同宽站立，将杠铃放在上背部。",
+        "右脚向前迈出一大步，保持躯干直立。",
+        "弯曲膝盖和臀部，降低身体，直到右大腿与地面平行。",
+        "暂停片刻，然后推动右脚跟回到起始位置。",
+        "左腿向前重复此动作，达到计划次数。"
+      ]
+    },
+    {
+      "id": "ext-2798",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "2798",
+      "nameEn": "barbell squat jump step rear lunge",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "quads",
+      "secondaryMuscles": [
+        "glutes",
+        "hamstrings",
+        "calves"
+      ],
+      "stepsZh": [
+        "首先，双脚分开与肩同宽站立，将杠铃放在上背部。",
+        "弯曲膝盖并将臀部向后推，将身体降低至蹲姿。",
+        "向上爆炸，尽可能高地跳离地面。",
+        "双脚轻轻落地，然后立即单腿向后退一步，形成反向弓步。",
+        "降低身体，直到大腿前侧与地面平行，保持背部挺直。",
+        "推动前脚跟以返回到起始位置。",
+        "在另一条腿上重复跳跃和弓步序列。",
+        "继续交替双腿达到计划次数。"
+      ]
+    },
+    {
+      "id": "ext-1372",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "1372",
+      "nameEn": "barbell standing calf raise",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "target": "calves",
+      "secondaryMuscles": [
+        "hamstrings",
+        "glutes"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，将杠铃放在上背部。",
+        "仅用脚趾将脚后跟抬离地面，尽可能高。",
+        "在顶部停顿片刻，然后慢慢降低脚后跟回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0041",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0041",
+      "nameEn": "barbell front raise",
+      "bodyPart": "shoulders",
+      "equipment": "barbell",
+      "target": "delts",
+      "secondaryMuscles": [
+        "biceps",
+        "triceps"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，掌心向前握住杠铃于大腿前方。",
+        "保持手臂伸直，向前向上举起杠铃，直至达到肩部水平。",
+        "在顶部停顿片刻，然后慢慢将杠铃放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0075",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0075",
+      "nameEn": "barbell rear delt raise",
+      "bodyPart": "shoulders",
+      "equipment": "barbell",
+      "target": "delts",
+      "secondaryMuscles": [
+        "traps",
+        "rhomboids"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，掌心向前握住杠铃，手掌朝下。",
+        "稍微弯曲膝盖，髋部向前转动，保持背部挺直。",
+        "将杠铃向两侧举起，保持手臂伸直，直到它们与地面平行。",
+        "在顶部停顿片刻，然后慢慢将杠铃放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0076",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0076",
+      "nameEn": "barbell rear delt row",
+      "bodyPart": "shoulders",
+      "equipment": "barbell",
+      "target": "delts",
+      "secondaryMuscles": [
+        "trapezius",
+        "rhomboids",
+        "biceps"
+      ],
+      "stepsZh": [
+        "站立，双脚分开与肩同宽，膝盖稍微弯曲。",
+        "掌心向前握住杠铃，双手分开略宽于肩宽。",
+        "臀部向前弯曲，保持背部挺直，挺胸。",
+        "将杠铃拉向胸部，将肩胛骨挤压在一起。",
+        "在顶部停顿片刻，然后慢慢将杠铃放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0107",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0107",
+      "nameEn": "barbell standing front raise over head",
+      "bodyPart": "shoulders",
+      "equipment": "barbell",
+      "target": "delts",
+      "secondaryMuscles": [
+        "triceps",
+        "upper back"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，掌心向前握住杠铃于大腿前方。",
+        "保持背部挺直并启动核心肌群。",
+        "慢慢地将杠铃举到你面前，保持手臂伸直，手掌朝下。",
+        "继续举起杠铃，直到杠铃略高于肩部水平。",
+        "在顶部停顿片刻，然后慢慢将杠铃放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0120",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0120",
+      "nameEn": "barbell upright row",
+      "bodyPart": "shoulders",
+      "equipment": "barbell",
+      "target": "delts",
+      "secondaryMuscles": [
+        "traps",
+        "biceps"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，掌心向前握住杠铃，双手分开略宽于肩宽。",
+        "让杠铃悬挂在大腿前面，双臂完全伸展。",
+        "保持背部挺直，核心收紧，呼气，将杠铃笔直向上举向下巴，用肘部引导。",
+        "在顶部停顿片刻，然后吸气，慢慢将杠铃放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0119",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0119",
+      "nameEn": "barbell upright row v. 2",
+      "bodyPart": "shoulders",
+      "equipment": "barbell",
+      "target": "delts",
+      "secondaryMuscles": [
+        "traps",
+        "biceps"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，掌心向前握住杠铃，双手分开略宽于肩宽。",
+        "让杠铃悬挂在大腿前面，双臂完全伸展。",
+        "保持背部挺直，呼气，将杠铃向上举至下巴，用肘部引导。",
+        "在顶部停顿片刻，然后吸气，慢慢将杠铃放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0121",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0121",
+      "nameEn": "barbell upright row v. 3",
+      "bodyPart": "shoulders",
+      "equipment": "barbell",
+      "target": "delts",
+      "secondaryMuscles": [
+        "traps",
+        "biceps"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，掌心向前握住杠铃，双手分开略宽于肩宽。",
+        "让杠铃悬挂在大腿前面，双臂完全伸展。",
+        "保持核心收紧，背部挺直，呼气，将杠铃向上举至下巴，用肘部引导。",
+        "在顶部暂停片刻，然后吸气，慢慢将杠铃放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0123",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0123",
+      "nameEn": "barbell wide-grip upright row",
+      "bodyPart": "shoulders",
+      "equipment": "barbell",
+      "target": "delts",
+      "secondaryMuscles": [
+        "traps",
+        "biceps"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，掌心向前握住杠铃，双手分开比肩宽。",
+        "让杠铃悬挂在大腿前面，双臂完全伸展。",
+        "保持背部挺直，呼气，将杠铃向上举至下巴，用肘部引导。",
+        "在顶部停顿片刻，然后吸气，慢慢将杠铃放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0161",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0161",
+      "nameEn": "cable forward raise",
+      "bodyPart": "shoulders",
+      "equipment": "cable",
+      "target": "delts",
+      "secondaryMuscles": [
+        "triceps",
+        "forearms"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，膝盖稍微弯曲。",
+        "掌心向前握住电缆手柄，手掌朝下，双臂在身前完全伸展。",
+        "保持手臂伸直，将电缆手柄抬高至肩部水平。",
+        "在顶部暂停片刻，然后慢慢将缆索手柄放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0162",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0162",
+      "nameEn": "cable front raise",
+      "bodyPart": "shoulders",
+      "equipment": "cable",
+      "target": "delts",
+      "secondaryMuscles": [
+        "triceps",
+        "forearms"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，并用掌心向前握住电缆手柄。",
+        "保持背部挺直，核心肌群参与。",
+        "将电缆手柄举到您面前，保持手臂伸直，手掌朝下。",
+        "继续抬起，直到手臂与地板平行。",
+        "在顶部暂停片刻，然后慢慢将拉索手柄放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0164",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0164",
+      "nameEn": "cable front shoulder raise",
+      "bodyPart": "shoulders",
+      "equipment": "cable",
+      "target": "delts",
+      "secondaryMuscles": [
+        "trapezius",
+        "biceps"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，并用掌心向前握住电缆手柄。",
+        "保持背部挺直，核心肌群参与。",
+        "将电缆手柄举到您面前，保持手臂伸直，手掌朝下。",
+        "继续抬起，直到手臂与地板平行。",
+        "在顶部暂停片刻，然后慢慢将拉索手柄放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0178",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0178",
+      "nameEn": "cable lateral raise",
+      "bodyPart": "shoulders",
+      "equipment": "cable",
+      "target": "delts",
+      "secondaryMuscles": [
+        "traps",
+        "triceps"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，并用掌心向前握住电缆手柄。",
+        "保持双臂伸直，核心肌群参与。",
+        "将手臂向两侧举起，直到与地板平行。",
+        "在顶部暂停片刻，然后慢慢将手臂放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0215",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0215",
+      "nameEn": "cable seated rear lateral raise",
+      "bodyPart": "shoulders",
+      "equipment": "cable",
+      "target": "delts",
+      "secondaryMuscles": [
+        "traps",
+        "rhomboids"
+      ],
+      "stepsZh": [
+        "坐在长凳上，面向电缆机，双脚平放在地面上。",
+        "掌心向前握住电缆手柄，并将双臂伸直至前方。",
+        "保持手臂伸直，慢慢向两侧举起，直到与地板平行。",
+        "在顶部停顿片刻，然后慢慢将手臂放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0246",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0246",
+      "nameEn": "cable upright row",
+      "bodyPart": "shoulders",
+      "equipment": "cable",
+      "target": "delts",
+      "secondaryMuscles": [
+        "traps",
+        "biceps"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，膝盖稍微弯曲，并用掌心向前握住电缆附件。",
+        "在整个练习过程中保持背部挺直，核心肌群参与其中。",
+        "用肘部引导，将电缆附件笔直向上拉向下巴。",
+        "在顶部暂停片刻，将肩胛骨挤压在一起。",
+        "缓慢地将电缆附件放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0310",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0310",
+      "nameEn": "dumbbell front raise",
+      "bodyPart": "shoulders",
+      "equipment": "dumbbell",
+      "target": "delts",
+      "secondaryMuscles": [
+        "biceps",
+        "trapezius"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，双手各握一个哑铃，手掌朝向大腿。",
+        "保持双臂伸直，呼气并将哑铃举至身前，直至与肩齐平。",
+        "在顶部停顿片刻，然后吸气，慢慢将哑铃放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0309",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0309",
+      "nameEn": "dumbbell front raise v. 2",
+      "bodyPart": "shoulders",
+      "equipment": "dumbbell",
+      "target": "delts",
+      "secondaryMuscles": [
+        "trapezius",
+        "biceps"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，双手各握一个哑铃，手掌朝向大腿。",
+        "保持背部挺直并启动核心肌群。",
+        "慢慢举起你面前的哑铃，手臂伸直，直到与肩齐平。",
+        "在顶部停顿片刻，然后慢慢将哑铃放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0311",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0311",
+      "nameEn": "dumbbell full can lateral raise",
+      "bodyPart": "shoulders",
+      "equipment": "dumbbell",
+      "target": "delts",
+      "secondaryMuscles": [
+        "traps",
+        "rotator cuff"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，双手各握一个哑铃，手掌朝向身体。",
+        "保持背部挺直并启动核心肌群。",
+        "将手臂向两侧举起，肘部保持轻微弯曲，直到与地面平行。",
+        "在顶部暂停片刻，然后慢慢将手臂放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0325",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0325",
+      "nameEn": "dumbbell incline raise",
+      "bodyPart": "shoulders",
+      "equipment": "dumbbell",
+      "target": "delts",
+      "secondaryMuscles": [
+        "trapezius",
+        "triceps"
+      ],
+      "stepsZh": [
+        "坐在上斜凳上，每只手各拿一个哑铃，放在大腿上。",
+        "向后靠在长凳上，将哑铃举至肩高，手掌朝前。",
+        "背部靠在长凳上，呼气并将哑铃举过头顶，充分伸展双臂。",
+        "在顶部停顿片刻，然后吸气，慢慢将哑铃放回肩部高度。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0326",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0326",
+      "nameEn": "dumbbell incline rear lateral raise",
+      "bodyPart": "shoulders",
+      "equipment": "dumbbell",
+      "target": "delts",
+      "secondaryMuscles": [
+        "traps",
+        "rhomboids"
+      ],
+      "stepsZh": [
+        "设置一个 45 度角的上斜凳。",
+        "坐在长凳上，胸部靠在靠背上，双手各握一个哑铃。",
+        "双臂伸直向下，手掌相对。",
+        "保持肘部轻微弯曲，将手臂向两侧抬起，直到与地面平行。",
+        "在顶部暂停片刻，然后慢慢将手臂放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-3542",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "3542",
+      "nameEn": "dumbbell incline t-raise",
+      "bodyPart": "shoulders",
+      "equipment": "dumbbell",
+      "target": "delts",
+      "secondaryMuscles": [
+        "traps",
+        "rhomboids"
+      ],
+      "stepsZh": [
+        "将上斜凳摆成 45 度角，坐在上面，双手各握一个哑铃，掌心向内。",
+        "向前倾斜，让手臂笔直向下垂，垂直于地板。",
+        "保持手臂伸直，将它们向两侧举起，直到与地板平行，与身体形成“T”形。",
+        "在顶部暂停片刻，然后慢慢将手臂放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0334",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0334",
+      "nameEn": "dumbbell lateral raise",
+      "bodyPart": "shoulders",
+      "equipment": "dumbbell",
+      "target": "delts",
+      "secondaryMuscles": [
+        "traps"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，双手各握一个哑铃，手掌朝向身体。",
+        "保持背部挺直并启动核心肌群。",
+        "将手臂向两侧抬起，直到与地板平行，保持肘部稍微弯曲。",
+        "在顶部暂停片刻，然后慢慢将手臂放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0335",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0335",
+      "nameEn": "dumbbell lateral to front raise",
+      "bodyPart": "shoulders",
+      "equipment": "dumbbell",
+      "target": "delts",
+      "secondaryMuscles": [
+        "trapezius",
+        "biceps"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，双手各握一个哑铃，手掌朝向身体。",
+        "保持背部挺直并启动核心肌群。",
+        "将手臂向两侧举起，直到与地面平行，保持肘部稍微弯曲。",
+        "在顶部暂停片刻，然后慢慢将手臂放回起始位置。",
+        "接下来，将手臂举到身前，直到它们与地面平行，再次保持肘部稍微弯曲。",
+        "在顶部暂停片刻，然后慢慢将手臂放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-2470",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "2470",
+      "nameEn": "dumbbell lying on floor rear delt raise",
+      "bodyPart": "shoulders",
+      "equipment": "dumbbell",
+      "target": "delts",
+      "secondaryMuscles": [
+        "trapezius",
+        "rhomboids"
+      ],
+      "stepsZh": [
+        "脸朝下躺在地板上，双手各握一个哑铃，手掌相对。",
+        "将手臂伸直在身前，保持肘部轻微弯曲。",
+        "调动肩部肌肉，将手臂向上并向两侧抬起，将肩胛骨挤压在一起。",
+        "在顶部暂停片刻，然后慢慢将手臂放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0348",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0348",
+      "nameEn": "dumbbell lying rear lateral raise",
+      "bodyPart": "shoulders",
+      "equipment": "dumbbell",
+      "target": "delts",
+      "secondaryMuscles": [
+        "traps",
+        "rhomboids"
+      ],
+      "stepsZh": [
+        "脸朝下躺在平坦的长凳上，双手各握一个哑铃，手掌相对。",
+        "将手臂伸直向下伸向地板，肘部保持轻微弯曲。",
+        "调动肩部肌肉，将手臂向两侧抬起，直到与地板平行。",
+        "在顶部暂停片刻，然后慢慢将手臂放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0376",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0376",
+      "nameEn": "dumbbell raise",
+      "bodyPart": "shoulders",
+      "equipment": "dumbbell",
+      "target": "delts",
+      "secondaryMuscles": [
+        "traps",
+        "rhomboids"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，双手各握一个哑铃，手掌朝向身体。",
+        "保持背部挺直并启动核心肌群。",
+        "将手臂向两侧抬起，直到与地板平行，保持肘部稍微弯曲。",
+        "在顶部暂停片刻，然后慢慢将手臂放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0030",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0030",
+      "nameEn": "barbell close-grip bench press",
+      "bodyPart": "arms",
+      "equipment": "barbell",
+      "target": "triceps",
+      "secondaryMuscles": [
+        "chest",
+        "shoulders"
+      ],
+      "stepsZh": [
+        "平躺在长凳上，双脚平放在地上，背部紧贴长凳。",
+        "紧紧握住杠铃，握距略窄于肩宽。",
+        "松开杠铃并将其缓慢降低至胸部，保持肘部靠近身体。",
+        "当杠铃触及胸部时暂停片刻。",
+        "将杠铃推回到起始位置，完全伸展双臂。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0031",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0031",
+      "nameEn": "barbell curl",
+      "bodyPart": "arms",
+      "equipment": "barbell",
+      "target": "biceps",
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "stepsZh": [
+        "站直，双脚分开与肩同宽，反手握住杠铃，手掌朝前。",
+        "保持肘部靠近躯干，在弯举哑铃时呼气，同时收缩二头肌。",
+        "继续抬高杠铃，直到二头肌完全收缩并且杠铃与肩部齐平。",
+        "挤压二头肌时，保持收缩位置短暂停顿。",
+        "吸气，慢慢开始将杠铃放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0038",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0038",
+      "nameEn": "barbell drag curl",
+      "bodyPart": "arms",
+      "equipment": "barbell",
+      "target": "biceps",
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，反手握住杠铃，手掌朝上。",
+        "让杠铃悬挂在大腿前面，与手臂保持一定距离。",
+        "保持上臂静止，通过收缩二头肌将杠铃向上卷曲至胸部。",
+        "在顶部停顿片刻，然后慢慢将杠铃放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-1719",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "1719",
+      "nameEn": "barbell incline close grip bench press",
+      "bodyPart": "arms",
+      "equipment": "barbell",
+      "target": "triceps",
+      "secondaryMuscles": [
+        "chest",
+        "shoulders"
+      ],
+      "stepsZh": [
+        "设置一个 45 度角的上斜凳。",
+        "躺在长凳上，双脚平放在地上。",
+        "紧紧握住杠铃，握距略窄于肩宽。",
+        "松开杠铃并将其缓慢降低至胸部，保持肘部靠近身体。",
+        "当杠铃触及胸部时暂停片刻。",
+        "将杠铃推回到起始位置，完全伸展双臂。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0052",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0052",
+      "nameEn": "barbell jm bench press",
+      "bodyPart": "arms",
+      "equipment": "barbell",
+      "target": "triceps",
+      "secondaryMuscles": [
+        "chest",
+        "shoulders"
+      ],
+      "stepsZh": [
+        "平躺在长凳上，双脚平放在地上，背部紧贴长凳。",
+        "掌心向前握住杠铃，握距略宽于肩宽。",
+        "将杠铃降低到胸部，保持肘部靠近身体。",
+        "将杠铃推回到起始位置，完全伸展双臂。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-1720",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "1720",
+      "nameEn": "barbell lying back of the head tricep extension",
+      "bodyPart": "arms",
+      "equipment": "barbell",
+      "target": "triceps",
+      "secondaryMuscles": [
+        "shoulders"
+      ],
+      "stepsZh": [
+        "平躺在长凳上，双脚平放在地上，头放在长凳的末端。",
+        "掌心向前握住杠铃，双手与肩同宽，将手臂伸直至胸部上方。",
+        "保持上臂静止，弯曲肘部，慢慢将杠铃降低到脑后。",
+        "暂停片刻，然后将手臂伸回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0056",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0056",
+      "nameEn": "barbell lying close-grip triceps extension",
+      "bodyPart": "arms",
+      "equipment": "barbell",
+      "target": "triceps",
+      "secondaryMuscles": [
+        "shoulders"
+      ],
+      "stepsZh": [
+        "平躺在长凳上，双脚平放在地上，头放在长凳的末端。",
+        "紧握杠铃，双手与肩同宽，掌心向上。",
+        "充分伸展双臂，将杠铃举至胸部上方。",
+        "保持上臂静止，弯曲肘部，慢慢将杠铃降低到前额。",
+        "在底部停顿片刻，然后将手臂伸展回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0057",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0057",
+      "nameEn": "barbell lying extension",
+      "bodyPart": "arms",
+      "equipment": "barbell",
+      "target": "triceps",
+      "secondaryMuscles": [
+        "shoulders"
+      ],
+      "stepsZh": [
+        "平躺在长凳上，双脚平放在地上，头放在长凳的末端。",
+        "掌心向前握住杠铃，双手与肩同宽，将手臂伸直至胸部上方。",
+        "保持上臂静止，弯曲肘部，慢慢将杠铃降低到前额。",
+        "暂停片刻，然后将手臂伸回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0059",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0059",
+      "nameEn": "barbell lying preacher curl",
+      "bodyPart": "arms",
+      "equipment": "barbell",
+      "target": "biceps",
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "stepsZh": [
+        "坐在牧师长凳上，胸部靠在垫子上，手臂伸出边缘，反手握住杠铃。",
+        "保持上臂静止，呼气并弯举哑铃，同时收缩二头肌。",
+        "继续抬高杠铃，直到二头肌完全收缩并且杠铃与肩部齐平。",
+        "挤压二头肌时，保持收缩位置短暂停顿。",
+        "吸气并慢慢开始将杠铃放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0061",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0061",
+      "nameEn": "barbell lying triceps extension",
+      "bodyPart": "arms",
+      "equipment": "barbell",
+      "target": "triceps",
+      "secondaryMuscles": [
+        "shoulders"
+      ],
+      "stepsZh": [
+        "平躺在长凳上，双脚平放在地上，头放在长凳的末端。",
+        "掌心向前握住杠铃，双手与肩同宽，将手臂伸直至胸部上方。",
+        "保持上臂静止，弯曲肘部，慢慢将杠铃降低到前额。",
+        "在底部停顿片刻，然后将手臂伸回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0060",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0060",
+      "nameEn": "barbell lying triceps extension skull crusher",
+      "bodyPart": "arms",
+      "equipment": "barbell",
+      "target": "triceps",
+      "secondaryMuscles": [
+        "shoulders"
+      ],
+      "stepsZh": [
+        "平躺在长凳上，双脚平放在地上，头放在长凳的末端。",
+        "掌心向前握住杠铃，双手与肩同宽，将手臂伸直至胸部上方。",
+        "保持上臂静止，弯曲肘部，慢慢将杠铃降低到前额。",
+        "当杠铃位于前额上方时暂停片刻，然后将手臂向后伸展至起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-1411",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "1411",
+      "nameEn": "barbell palms down wrist curl over a bench",
+      "bodyPart": "arms",
+      "equipment": "barbell",
+      "target": "forearms",
+      "secondaryMuscles": [
+        "biceps",
+        "brachialis"
+      ],
+      "stepsZh": [
+        "坐在长凳上，双脚平放在地上，前臂放在大腿上，手掌朝下。",
+        "掌心向前握住杠铃，双手与肩同宽。",
+        "弯曲手腕，将杠铃降低到地面，保持前臂静止。",
+        "在底部停顿片刻，然后通过伸展手腕慢慢将杠铃举起。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-1412",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "1412",
+      "nameEn": "barbell palms up wrist curl over a bench",
+      "bodyPart": "arms",
+      "equipment": "barbell",
+      "target": "forearms",
+      "secondaryMuscles": [
+        "biceps",
+        "shoulders"
+      ],
+      "stepsZh": [
+        "坐在长凳上，双脚平放在地面上，反手握住杠铃，手掌朝上。",
+        "将前臂放在长凳上，让手腕悬在长凳边缘。",
+        "保持前臂静止，呼气并尽可能向上弯曲手腕。",
+        "保持收缩位置短暂停顿，然后吸气并慢慢将杠铃放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0070",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0070",
+      "nameEn": "barbell preacher curl",
+      "bodyPart": "arms",
+      "equipment": "barbell",
+      "target": "biceps",
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "stepsZh": [
+        "坐在牧师凳上，上臂放在垫子上，胸部靠在支撑物上。",
+        "反手握住杠铃，握距略宽于肩宽。",
+        "保持上臂静止，呼气并将杠铃向上弯向肩膀。",
+        "在顶部暂停片刻，挤压你的二头肌。",
+        "吸气并慢慢将杠铃放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0072",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0072",
+      "nameEn": "barbell prone incline curl",
+      "bodyPart": "arms",
+      "equipment": "barbell",
+      "target": "biceps",
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "stepsZh": [
+        "设置一个 45 度角的上斜凳。",
+        "脸朝下躺在长凳上，胸部和腹部靠在长凳上。",
+        "反手握住杠铃，距离与肩同宽。",
+        "充分伸展双臂，让杠铃垂向地板。",
+        "保持上臂静止，呼气并弯举哑铃，同时收缩二头肌。",
+        "继续举起杠铃，直到二头肌完全收缩并且杠铃与肩部齐平。",
+        "挤压二头肌时，保持收缩位置短暂停顿。",
+        "吸气并慢慢开始将杠铃放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0079",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0079",
+      "nameEn": "barbell revers wrist curl v. 2",
+      "bodyPart": "arms",
+      "equipment": "barbell",
+      "target": "forearms",
+      "secondaryMuscles": [
+        "biceps",
+        "brachialis"
+      ],
+      "stepsZh": [
+        "坐在长凳上，双脚平放在地上，膝盖弯曲。",
+        "掌心向前握住杠铃，手掌朝下，双手与肩同宽。",
+        "将前臂放在大腿上，让手腕悬在边缘。",
+        "保持前臂静止，呼气并尽可能向上弯曲手腕。",
+        "保持收缩位置短暂停顿，然后吸气并慢慢将杠铃放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0089",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0089",
+      "nameEn": "barbell seated close-grip concentration curl",
+      "bodyPart": "arms",
+      "equipment": "barbell",
+      "target": "biceps",
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "stepsZh": [
+        "坐在长凳上，双脚平放在地板上，反手握住杠铃，双手与肩同宽。",
+        "将你的上臂靠在大腿内侧，就在膝盖上方，让杠铃垂在你面前。",
+        "保持上臂静止，呼气并将杠铃向上卷曲至肩膀，收缩二头肌。",
+        "保持收缩位置短暂停顿，然后吸气并慢慢将杠铃放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0092",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0092",
+      "nameEn": "barbell seated overhead triceps extension",
+      "bodyPart": "arms",
+      "equipment": "barbell",
+      "target": "triceps",
+      "secondaryMuscles": [
+        "shoulders"
+      ],
+      "stepsZh": [
+        "坐在长凳上，背部挺直，双脚平放在地上。",
+        "掌心向前握住杠铃，双手与肩同宽，并将其举过头顶。",
+        "弯曲肘部，将杠铃降低到脑后，保持上臂靠近头部。",
+        "暂停片刻，然后伸展双臂将杠铃举回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0104",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0104",
+      "nameEn": "barbell standing back wrist curl",
+      "bodyPart": "arms",
+      "equipment": "barbell",
+      "target": "forearms",
+      "secondaryMuscles": [
+        "biceps",
+        "shoulders"
+      ],
+      "stepsZh": [
+        "站直，双脚分开与肩同宽，掌心向前握住杠铃。",
+        "将杠铃放在手背上，手掌朝下，手指指向身体。",
+        "保持上臂静止，呼气并尽可能向上弯曲手腕。",
+        "保持收缩位置短暂停顿，然后吸气并慢慢将杠铃放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0106",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0106",
+      "nameEn": "barbell standing close grip curl",
+      "bodyPart": "arms",
+      "equipment": "barbell",
+      "target": "biceps",
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "stepsZh": [
+        "站直，双脚分开与肩同宽，反手握住杠铃，双手并拢。",
+        "在整个运动过程中，保持肘部靠近躯干，上臂保持静止。",
+        "弯举哑铃时呼气，同时收缩二头肌。继续抬高杠铃，直到二头肌完全收缩并且杠铃与肩部齐平。",
+        "挤压二头肌时，保持收缩位置短暂停顿。",
+        "吸气，慢慢开始将杠铃拉回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-2414",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "2414",
+      "nameEn": "barbell standing concentration curl",
+      "bodyPart": "arms",
+      "equipment": "barbell",
+      "target": "biceps",
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，一手握住杠铃，掌心朝上。",
+        "将另一只手放在大腿上以获得支撑。",
+        "保持上臂静止，呼气并将重量向上弯向肩膀。",
+        "在顶部暂停片刻，挤压你的二头肌。",
+        "吸气并慢慢将重量放回起始位置。",
+        "按计划次数重复。，然后换臂。"
+      ]
+    },
+    {
+      "id": "ext-0109",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0109",
+      "nameEn": "barbell standing overhead triceps extension",
+      "bodyPart": "arms",
+      "equipment": "barbell",
+      "target": "triceps",
+      "secondaryMuscles": [
+        "shoulders"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，掌心向前握住杠铃。",
+        "将杠铃举过头顶，充分伸展双臂。",
+        "保持上臂靠近头部，弯曲肘部，慢慢将杠铃降低到脑后。",
+        "暂停片刻，然后伸展双臂将杠铃举回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-1629",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "1629",
+      "nameEn": "barbell standing wide grip biceps curl",
+      "bodyPart": "arms",
+      "equipment": "barbell",
+      "target": "biceps",
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "stepsZh": [
+        "双脚分开与肩同宽站立，反握握住杠铃，双手分开比肩宽。",
+        "保持背部挺直，肘部靠近躯干。",
+        "呼气并将杠铃向上弯向肩膀，保持上臂静止。",
+        "在顶部暂停片刻，挤压你的二头肌。",
+        "吸气，慢慢将杠铃放回起始位置，充分伸展双臂。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0113",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0113",
+      "nameEn": "barbell standing wide-grip curl",
+      "bodyPart": "arms",
+      "equipment": "barbell",
+      "target": "biceps",
+      "secondaryMuscles": [
+        "forearms",
+        "shoulders"
+      ],
+      "stepsZh": [
+        "站直，双脚分开与肩同宽，掌心向前握住杠铃，双手分开比肩宽。",
+        "让杠铃悬挂在大腿前面，与手掌保持一臂距离，手掌背向身体。",
+        "保持上臂静止，呼气并通过收缩二头肌向上弯曲杠铃。",
+        "继续举起杠铃，直到二头肌完全收缩并且杠铃与肩部齐平。",
+        "挤压二头肌时，保持收缩位置短暂停顿。",
+        "吸气并慢慢开始将杠铃放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0126",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0126",
+      "nameEn": "barbell wrist curl",
+      "bodyPart": "arms",
+      "equipment": "barbell",
+      "target": "forearms",
+      "secondaryMuscles": [
+        "biceps",
+        "brachialis"
+      ],
+      "stepsZh": [
+        "坐在长凳上，双脚平放在地面上，前臂放在大腿上，反握杠铃。",
+        "让杠铃向下滚动到指尖，保持手腕伸直。",
+        "弯曲手腕，慢慢地将杠铃向上卷向前臂。",
+        "在顶部停顿片刻，然后慢慢将杠铃放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-3544",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "3544",
+      "nameEn": "bodyweight incline side plank",
+      "bodyPart": "core",
+      "equipment": "bodyweight",
+      "target": "abs",
+      "secondaryMuscles": [
+        "obliques",
+        "shoulders"
+      ],
+      "stepsZh": [
+        "首先侧躺，双腿伸展并叠放在一起。",
+        "将前臂放在肩膀正下方的地面上，肘部弯曲成 90 度角。",
+        "启动你的核心并将臀部抬离地面，从头到脚形成一条直线。",
+        "保持此位置所需的时间。",
+        "将臀部放回到地面，然后在另一侧重复。"
+      ]
+    },
+    {
+      "id": "ext-0175",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0175",
+      "nameEn": "cable kneeling crunch",
+      "bodyPart": "core",
+      "equipment": "cable",
+      "target": "abs",
+      "secondaryMuscles": [
+        "obliques"
+      ],
+      "stepsZh": [
+        "将绳索手柄连接到高滑轮上，然后面向远离机器的方向跪下。",
+        "双手握住绳柄，将其放在脑后，肘部向两侧伸出。",
+        "保持臀部不动，弯曲腰部并将躯干向大腿方向挤压。",
+        "在底部停顿片刻，然后慢慢回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0212",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0212",
+      "nameEn": "cable seated crunch",
+      "bodyPart": "core",
+      "equipment": "cable",
+      "target": "abs",
+      "secondaryMuscles": [
+        "obliques"
+      ],
+      "stepsZh": [
+        "坐在缆绳机上，双脚平放在地面上，膝盖弯曲。",
+        "用双手握住电缆手柄并将其放在脑后。",
+        "收紧腹肌，慢慢向前弯曲上半身，使胸部靠近膝盖。",
+        "在顶部停顿片刻，然后慢慢回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0223",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0223",
+      "nameEn": "cable side crunch",
+      "bodyPart": "core",
+      "equipment": "cable",
+      "target": "abs",
+      "secondaryMuscles": [
+        "obliques"
+      ],
+      "stepsZh": [
+        "将电缆手柄连接到低滑轮上并站在机器旁边。",
+        "用距离机器最远的手抓住手柄，并将另一只手放在臀部上。",
+        "双脚分开与肩同宽，膝盖稍微弯曲。",
+        "收紧腹肌，腰部向侧面弯曲，将肘部向下拉向臀部。",
+        "在底部停顿片刻，然后慢慢回到起始位置。",
+        "按计划次数重复。，然后换边。"
+      ]
+    },
+    {
+      "id": "ext-0226",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0226",
+      "nameEn": "cable standing crunch",
+      "bodyPart": "core",
+      "equipment": "cable",
+      "target": "abs",
+      "secondaryMuscles": [
+        "obliques"
+      ],
+      "stepsZh": [
+        "将电缆手柄连接到高滑轮上，并背对机器站立。",
+        "双手握住手柄并将其放在脑后，保持肘部弯曲。",
+        "双脚分开与肩同宽站立，膝盖稍微弯曲。",
+        "保持腹肌收紧，呼气，将躯干压向膝盖，将肘部拉向大腿。",
+        "在动作底部暂停片刻，然后慢慢回到起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-2963",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "2963",
+      "nameEn": "captains chair straight leg raise",
+      "bodyPart": "core",
+      "equipment": "bodyweight",
+      "target": "abs",
+      "secondaryMuscles": [
+        "hip flexors"
+      ],
+      "stepsZh": [
+        "坐在船长椅上，背部靠在靠背上，前臂放在扶手垫上。",
+        "保持上半身稳定，背部挺直。",
+        "收紧腹肌并将双腿抬起到身前，保持伸直。",
+        "继续抬起，直到双腿与地面平行或达到您可以舒适地达到的高度。",
+        "在顶部暂停片刻，然后慢慢将双腿放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0262",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0262",
+      "nameEn": "cross body crunch",
+      "bodyPart": "core",
+      "equipment": "bodyweight",
+      "target": "abs",
+      "secondaryMuscles": [
+        "obliques"
+      ],
+      "stepsZh": [
+        "平躺，膝盖弯曲，双脚平放在地上。",
+        "将双手放在脑后，肘部朝外。",
+        "收紧腹肌，将上半身抬离地面，然后扭转，使右肘靠近左膝盖。",
+        "在顶部停顿片刻，然后慢慢将上半身放回起始位置。",
+        "在另一侧重复，将左肘靠近右膝盖。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0274",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0274",
+      "nameEn": "crunch floor",
+      "bodyPart": "core",
+      "equipment": "bodyweight",
+      "target": "abs",
+      "secondaryMuscles": [
+        "hip flexors"
+      ],
+      "stepsZh": [
+        "平躺，膝盖弯曲，双脚平放在地上。",
+        "将双手放在脑后，肘部朝外。",
+        "收紧腹肌，将肩膀抬离地面，向前向膝盖弯曲。",
+        "在顶部停顿片刻，然后慢慢将肩膀放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-3016",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "3016",
+      "nameEn": "curl-up",
+      "bodyPart": "core",
+      "equipment": "bodyweight",
+      "target": "abs",
+      "secondaryMuscles": [
+        "hip flexors"
+      ],
+      "stepsZh": [
+        "平躺，膝盖弯曲，双脚平放在地上。",
+        "将双手放在脑后，肘部朝外。",
+        "收紧腹肌，慢慢将上半身抬离地面，向前卷曲，直到躯干呈 45 度角。",
+        "在顶部停顿片刻，然后慢慢将上半身放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0277",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0277",
+      "nameEn": "decline crunch",
+      "bodyPart": "core",
+      "equipment": "bodyweight",
+      "target": "abs",
+      "secondaryMuscles": [
+        "hip flexors"
+      ],
+      "stepsZh": [
+        "躺在倾斜的长凳上，双脚固定，膝盖弯曲成 90 度角。",
+        "将双手放在脑后或放在胸前。",
+        "收紧腹肌，将上半身抬向膝盖，卷曲躯干。",
+        "在顶部停顿片刻，然后慢慢将上半身放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-2429",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "2429",
+      "nameEn": "frog crunch",
+      "bodyPart": "core",
+      "equipment": "bodyweight",
+      "target": "abs",
+      "secondaryMuscles": [
+        "hip flexors"
+      ],
+      "stepsZh": [
+        "平躺，膝盖弯曲，双脚平放在地上。",
+        "将双手放在脑后，肘部朝外。",
+        "收紧腹肌，将上半身抬离地面，向前卷曲直到躯干呈 45 度角。",
+        "在顶部停顿片刻，然后慢慢将上半身放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0464",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0464",
+      "nameEn": "front plank with twist",
+      "bodyPart": "core",
+      "equipment": "bodyweight",
+      "target": "abs",
+      "secondaryMuscles": [
+        "obliques",
+        "shoulders"
+      ],
+      "stepsZh": [
+        "从高平板支撑位置开始，双手直接放在肩膀下方，身体从头到脚成一条直线。",
+        "调动你的核心和臀部以保持稳定的位置。",
+        "将躯干向右旋转，抬起右臂并向天花板延伸。",
+        "扭转时保持臀部和腿部稳定。",
+        "保持片刻，然后回到起始位置。",
+        "在左侧重复扭转。",
+        "继续交替进行计划次数。"
+      ]
+    },
+    {
+      "id": "ext-0469",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0469",
+      "nameEn": "groin crunch",
+      "bodyPart": "core",
+      "equipment": "bodyweight",
+      "target": "abs",
+      "secondaryMuscles": [
+        "hip flexors",
+        "inner thighs"
+      ],
+      "stepsZh": [
+        "平躺，膝盖弯曲，双脚平放在地上。",
+        "将双手放在脑后，肘部朝外。",
+        "收紧腹肌，将双腿抬离地面，将膝盖靠近胸部。",
+        "在顶部暂停片刻，然后慢慢将双腿放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-1764",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "1764",
+      "nameEn": "hanging leg hip raise",
+      "bodyPart": "core",
+      "equipment": "bodyweight",
+      "target": "abs",
+      "secondaryMuscles": [
+        "hip flexors",
+        "lower back"
+      ],
+      "stepsZh": [
+        "悬挂在引体向上杆上，双臂完全伸展，手掌背向自己。",
+        "弯曲臀部和膝盖，收紧核心并抬起双腿，直到大腿与地面平行。",
+        "在顶部暂停片刻，然后慢慢将双腿放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0472",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0472",
+      "nameEn": "hanging leg raise",
+      "bodyPart": "core",
+      "equipment": "bodyweight",
+      "target": "abs",
+      "secondaryMuscles": [
+        "hip flexors"
+      ],
+      "stepsZh": [
+        "悬挂在引体向上杆上，双臂完全伸展，手掌背向自己。",
+        "启动你的核心并将双腿抬起到你面前，保持伸直。",
+        "继续抬起，直到双腿与地面平行或达到您可以舒适地达到的高度。",
+        "在顶部暂停片刻，然后慢慢将双腿放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-1761",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "1761",
+      "nameEn": "hanging oblique knee raise",
+      "bodyPart": "core",
+      "equipment": "bodyweight",
+      "target": "abs",
+      "secondaryMuscles": [
+        "obliques"
+      ],
+      "stepsZh": [
+        "悬挂在引体向上杆上，双臂完全伸展，手掌背向自己。",
+        "收紧核心并将膝盖抬向胸部，同时将躯干扭转到一侧。",
+        "在顶部暂停片刻，然后慢慢将双腿放回起始位置。",
+        "在另一侧重复上述步骤，向相反方向扭转躯干。",
+        "继续交替进行计划次数。"
+      ]
+    },
+    {
+      "id": "ext-0474",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0474",
+      "nameEn": "hanging straight leg hip raise",
+      "bodyPart": "core",
+      "equipment": "bodyweight",
+      "target": "abs",
+      "secondaryMuscles": [
+        "hip flexors"
+      ],
+      "stepsZh": [
+        "悬挂在引体向上杆上，双臂完全伸展，手掌背向自己。",
+        "启动你的核心并将双腿抬起到你面前，直到它们与地面平行。",
+        "在顶部暂停片刻，然后慢慢将双腿放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0475",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0475",
+      "nameEn": "hanging straight leg raise",
+      "bodyPart": "core",
+      "equipment": "bodyweight",
+      "target": "abs",
+      "secondaryMuscles": [
+        "hip flexors"
+      ],
+      "stepsZh": [
+        "悬挂在引体向上杆上，双臂完全伸展，手掌背向自己。",
+        "启动你的核心并将双腿抬起到你面前，保持伸直。",
+        "继续抬起，直到双腿与地面平行或达到您可以舒适地达到的高度。",
+        "在顶部暂停片刻，然后慢慢将双腿放回起始位置。",
+        "按计划次数重复。"
+      ]
+    },
+    {
+      "id": "ext-0476",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "0476",
+      "nameEn": "hanging straight twisting leg hip raise",
+      "bodyPart": "core",
+      "equipment": "bodyweight",
+      "target": "abs",
+      "secondaryMuscles": [
+        "obliques",
+        "hip flexors"
+      ],
+      "stepsZh": [
+        "悬挂在引体向上杆上，双臂完全伸展，双腿伸直。",
+        "启动你的核心并将双腿抬向胸部，保持伸直。",
+        "一旦双腿与地面平行，将臀部向一侧扭转，将双腿移向一侧。",
+        "暂停片刻，然后回到起始位置。",
+        "重复这个动作，但这次将臀部扭向另一侧。",
+        "继续交替进行计划次数。"
+      ]
+    },
+    {
+      "id": "ext-3640",
+      "source": "hasaneyldrm/exercises-dataset",
+      "sourceId": "3640",
+      "nameEn": "knee touch crunch",
+      "bodyPart": "core",
+      "equipment": "bodyweight",
+      "target": "abs",
+      "secondaryMuscles": [
+        "hip flexors"
+      ],
+      "stepsZh": [
+        "平躺，膝盖弯曲，双脚平放在地上。",
+        "将双手放在脑后，肘部朝外。",
+        "收紧腹肌，将肩胛骨抬离地面，并将右手伸向左膝盖。",
+        "返回起始位置并重复，这次将左手伸向右膝盖。",
+        "继续交替进行计划次数。"
+      ]
+    }
+  ]
+}

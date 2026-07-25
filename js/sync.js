@@ -1,7 +1,7 @@
 // ===== Cloud Sync Engine =====
 // Supabase-powered sync: local-first, background push, last-write-wins
 
-import { getSyncQueue, markSynced, clearSyncQueue, getState, setState } from './db.js';
+import { addToSyncQueue, getSyncQueue, markSynced, getState, setState } from './db.js';
 
 const SUPABASE_URL = 'https://nyzjftghajaecdcbulkt.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55empmdGdoYWphZWNkY2J1bGt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5MTMyMDAsImV4cCI6MjA5MjQ4OTIwMH0.1yuWKiNZ-Ky6lkmY74DYOfz2FIVf3aFzaxkHO4Pd0uw';
@@ -90,13 +90,40 @@ export function onAuthChange(callback) {
 
 // ===== Sync =====
 
+export async function queueUpsert(table, localId, data) {
+  const item = {
+    table,
+    localId,
+    data: {
+      ...data,
+      _updatedAt: data._updatedAt || new Date().toISOString(),
+    },
+    operation: 'upsert',
+  };
+  await addToSyncQueue(item);
+  syncAll();
+}
+
+export async function queueDelete(table, localId) {
+  await addToSyncQueue({
+    table,
+    localId,
+    data: { _updatedAt: new Date().toISOString() },
+    operation: 'delete',
+  });
+  syncAll();
+}
+
 export async function syncPull() {
   if (!supabaseClient) return;
   setStatus('pulling');
 
   try {
     const session = await getCurrentUser();
-    if (!session) return;
+    if (!session) {
+      setStatus('idle');
+      return;
+    }
 
     const now = new Date().toISOString();
 
@@ -112,21 +139,21 @@ export async function syncPull() {
     if (customRes.error) throw customRes.error;
 
     // Merge into local state
-    const localState = await getState();
-    if (!localState) return;
+    const localState = await getState() || {};
 
     const merged = mergeRecords(localState.trainingRecords || [], trainingRes.data || [], 'training');
-    const mergedBody = mergeRecords(localState.bodyRecords || [], bodyRes.data || [], 'body');
+    const mergedWeights = mergeRecords(getLocalWeightRecords(localState), bodyRes.data || [], 'weight');
     const mergedCustom = mergeRecords(localState.customExercises || [], customRes.data || [], 'custom');
 
     await setState({
       ...localState,
       trainingRecords: merged,
-      bodyRecords: mergedBody,
+      weightRecords: mergedWeights,
+      bodyRecords: mergedWeights,
       customExercises: mergedCustom,
     });
 
-    if (_onDataPulled) _onDataPulled({ trainingRecords: merged, bodyRecords: mergedBody, customExercises: mergedCustom });
+    if (_onDataPulled) _onDataPulled({ trainingRecords: merged, weightRecords: mergedWeights, customExercises: mergedCustom });
 
     lastSyncTime = now;
     setStatus('idle');
@@ -142,7 +169,10 @@ export async function syncPush() {
 
   try {
     const session = await getCurrentUser();
-    if (!session) return;
+    if (!session) {
+      setStatus('idle');
+      return;
+    }
 
     const queue = await getSyncQueue();
     if (queue.length === 0) {
@@ -158,22 +188,14 @@ export async function syncPush() {
 
       try {
         if (operation === 'delete') {
-          await supabaseClient
+          const { error } = await supabaseClient
             .from(table)
             .update({ deleted: true, updated_at: new Date().toISOString() })
             .eq('local_id', localId)
             .eq('deleted', false);
-        } else if (operation === 'upsert') {
-          const row = {
-            user_id: session.id,
-            local_id: localId,
-            ...data,
-            updated_at: new Date().toISOString(),
-          };
-          const { error } = await supabaseClient
-            .from(table)
-            .upsert(row, { onConflict: 'user_id,local_id' });
           if (error) throw error;
+        } else if (operation === 'upsert') {
+          await upsertMappedRow(table, localId, data, session.id);
         }
         pushedIds.push(item.id);
       } catch (e) {
@@ -237,13 +259,106 @@ function normalizeCloudRecord(c, type) {
   if (type === 'training') {
     return { ...base, id: c.local_id, bodyPart: c.body_part, exercises: c.exercises, duration: c.duration || 0, date: c.date };
   }
-  if (type === 'body') {
-    return { ...base, id: c.local_id, weight: c.weight, bodyFat: c.body_fat, diet: c.diet, notes: c.notes, date: c.date };
+  if (type === 'weight') {
+    return { ...base, id: c.local_id, weight: Number(c.weight), date: c.date };
   }
   if (type === 'custom') {
-    return { ...base, id: c.local_id, name: c.name, defaultSets: c.default_sets, defaultReps: c.default_reps };
+    return {
+      ...base,
+      id: c.local_id,
+      name: c.name,
+      bodyPart: c.body_part || c.bodyPart || 'custom',
+      type: c.type || 'free',
+      defaultSets: c.default_sets,
+      defaultReps: c.default_reps,
+    };
   }
   return { ...base };
+}
+
+function getLocalWeightRecords(state) {
+  return state.weightRecords || (state.bodyRecords || [])
+    .filter(r => r.weight)
+    .map(r => ({ id: r.id, date: r.date, weight: r.weight, _cloudId: r._cloudId, _updatedAt: r._updatedAt }));
+}
+
+async function upsertMappedRow(table, localId, data, userId) {
+  const row = mapLocalToCloudRow(table, localId, data, userId);
+  const { error } = await supabaseClient
+    .from(table)
+    .upsert(row, { onConflict: 'user_id,local_id' });
+
+  if (!error) return;
+
+  // Older installations may not yet have body_part/type on custom_exercises.
+  // Keep the sync alive with the legacy shape instead of blocking all pushes.
+  if (table === 'custom_exercises' && /body_part|type|column/i.test(error.message || '')) {
+    const fallback = {
+      user_id: userId,
+      local_id: localId,
+      name: data.name,
+      default_sets: data.defaultSets || null,
+      default_reps: data.defaultReps || null,
+      updated_at: data._updatedAt || new Date().toISOString(),
+      deleted: false,
+    };
+    const retry = await supabaseClient
+      .from(table)
+      .upsert(fallback, { onConflict: 'user_id,local_id' });
+    if (retry.error) throw retry.error;
+    return;
+  }
+
+  throw error;
+}
+
+export function mapLocalToCloudRow(table, localId, data, userId) {
+  const updatedAt = data._updatedAt || new Date().toISOString();
+  if (table === 'training_records') {
+    return {
+      user_id: userId,
+      local_id: localId,
+      body_part: data.bodyPart,
+      exercises: data.exercises || [],
+      duration: data.duration || 0,
+      date: data.date,
+      updated_at: updatedAt,
+      deleted: false,
+    };
+  }
+  if (table === 'body_records') {
+    return {
+      user_id: userId,
+      local_id: localId,
+      weight: data.weight || null,
+      body_fat: null,
+      diet: null,
+      notes: null,
+      date: data.date,
+      updated_at: updatedAt,
+      deleted: false,
+    };
+  }
+  if (table === 'custom_exercises') {
+    return {
+      user_id: userId,
+      local_id: localId,
+      name: data.name,
+      body_part: data.bodyPart,
+      type: data.type,
+      default_sets: data.defaultSets || null,
+      default_reps: data.defaultReps || null,
+      updated_at: updatedAt,
+      deleted: false,
+    };
+  }
+  return {
+    user_id: userId,
+    local_id: localId,
+    ...data,
+    updated_at: updatedAt,
+    deleted: false,
+  };
 }
 
 // ===== Network Awareness =====

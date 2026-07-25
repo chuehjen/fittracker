@@ -4,14 +4,9 @@
 import { aiWeeklyReport } from '../ai.js';
 import { renderCharts } from '../charts.js';
 import { doExport, doImport } from '../data.js';
-
-function escapeHtml(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
+import { genId, today } from '../helpers.js';
+import { escapeHtml } from '../html.js';
+import { queueUpsert } from '../sync.js';
 
 function showToast(msg, type = 'ok') {
   const existing = document.getElementById('profileToast');
@@ -36,11 +31,12 @@ export function renderProfile(container, S, stateChanged) {
   const totalDuration = S.trainingRecords.reduce((t, r) => t + (r.duration || 0), 0);
   const isEmpty = totalTrainings === 0;
   const report = aiWeeklyReport(S);
+  const weights = [...(S.weightRecords || [])].sort((a, b) => b.date.localeCompare(a.date));
 
   container.innerHTML = `
     <div class="profile-header">
       <div class="avatar" id="avatarBtn">
-        ${S.profile.avatar ? `<img src="${S.profile.avatar}">` : `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/></svg>`}
+        ${S.profile.avatar ? `<img src="${escapeHtml(S.profile.avatar)}">` : `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/></svg>`}
         <input type="file" accept="image/*" id="avatarInput" style="display:none">
       </div>
       <div class="profile-info">
@@ -62,6 +58,23 @@ export function renderProfile(container, S, stateChanged) {
     <div class="ai-card">
       <div class="ai-header"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.5 3.5L13 6l-3.5 1.5L8 11 6.5 7.5 3 6l3.5-1.5L8 1z"/></svg> ${report.title}</div>
       <div class="ai-body">${report.body}</div>
+    </div>
+
+    <div class="card" style="padding:14px">
+      <div class="flex-between mb-12">
+        <div>
+          <div class="section-title" style="font-size:15px;margin:0">体重</div>
+          <div class="text-xs text-muted">${weights[0] ? `最近 ${weights[0].weight}kg · ${weights[0].date}` : '可选记录，不影响训练流程'}</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end">
+        <div class="input-group" style="margin:0"><label>日期</label><input type="date" class="input-field" id="weightDate" value="${today()}"></div>
+        <div class="input-group" style="margin:0"><label>kg</label><input type="number" class="input-field" id="weightValue" placeholder="72.5" inputmode="decimal" step="0.1"></div>
+        <button class="btn btn-primary btn-sm" id="saveWeightBtn" style="height:42px">保存</button>
+      </div>
+      ${weights.length ? `<div class="weight-list">${weights.slice(0, 5).map(w => `
+        <div class="weight-row"><span>${escapeHtml(w.date)}</span><strong>${escapeHtml(w.weight)}kg</strong></div>
+      `).join('')}</div>` : ''}
     </div>
 
     <div class="sync-card">
@@ -95,6 +108,7 @@ export function renderProfile(container, S, stateChanged) {
   });
 
   container.querySelector('#editProfileBtn').addEventListener('click', () => showProfileModal(S, stateChanged));
+  container.querySelector('#saveWeightBtn').addEventListener('click', () => saveWeight(container, S, stateChanged));
 
   setupSyncHandlers(container, S, stateChanged);
 
@@ -132,7 +146,7 @@ function renderSyncSection(S) {
   return `
     <div class="flex-between">
       <div>
-        <div class="sync-email">${S.user.email}</div>
+        <div class="sync-email">${escapeHtml(S.user.email)}</div>
         <div class="sync-status" style="color:${syncColor}">
           <span class="sync-dot" style="background:${syncColor}"></span>
           ${syncLabel}
@@ -145,6 +159,26 @@ function renderSyncSection(S) {
       <button class="btn btn-sm btn-ghost" style="flex:1" id="signOutBtn">登出</button>
     </div>
   `;
+}
+
+function saveWeight(container, S, stateChanged) {
+  const date = container.querySelector('#weightDate').value || today();
+  const weight = parseFloat(container.querySelector('#weightValue').value);
+  if (!weight || weight <= 0) {
+    showToast('请输入有效体重', 'warn');
+    return;
+  }
+
+  S.weightRecords = S.weightRecords || [];
+  const existing = S.weightRecords.find(r => r.date === date);
+  const record = existing || { id: genId(), date };
+  record.weight = Math.round(weight * 10) / 10;
+  record._updatedAt = new Date().toISOString();
+  if (!existing) S.weightRecords.push(record);
+
+  queueUpsert('body_records', record.id, record).catch(e => console.warn('[Sync] Queue weight failed:', e));
+  showToast('体重已保存', 'ok');
+  stateChanged();
 }
 
 function setupSyncHandlers(container, S, stateChanged) {
