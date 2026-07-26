@@ -62,10 +62,20 @@ function validateAddMoreFallback() {
   assert(app.includes('S.selectedBodyPart = S.currentTraining.bodyPart'), 'app restore must preserve selected body part for active training');
 }
 
+function validateCrossBodyPartAddMore() {
+  const training = read('js/views/training.js');
+  const css = read('css/style.css');
+  assert(training.includes('exerciseBodyPartBar'), 'add-more exercise screen must expose body-part switching');
+  assert(training.includes('S.selectedBodyPart = chip.dataset.part'), 'body-part switch must update selectedBodyPart');
+  assert(training.includes('S.pendingExercises.push({ name, type, bodyPart: bp })'), 'pending exercises must preserve their selected body part');
+  assert(css.includes('.exercise-bodypart-chip.active'), 'body-part switcher must have an active style');
+}
+
 validateNoDietUi();
 validatePwa();
 validateCatalog();
 validateSync();
 validateAddMoreFallback();
+validateCrossBodyPartAddMore();
 
 console.log('Validation passed');

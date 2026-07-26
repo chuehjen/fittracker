@@ -952,6 +952,33 @@ textarea.input-field { min-height: 80px; resize: vertical; }
 /* ===== Exercise Selection Screen (docs/exercise-selection) ===== */
 .exercise-select-header { margin-bottom: 12px; }
 
+.exercise-bodypart-bar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 0 10px;
+  margin: -2px 0 10px;
+  scrollbar-width: none;
+}
+.exercise-bodypart-bar::-webkit-scrollbar { display: none; }
+.exercise-bodypart-chip {
+  flex: 0 0 auto;
+  border: 1px solid var(--bd);
+  background: var(--input);
+  color: var(--t2);
+  border-radius: var(--r-f);
+  padding: 7px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.exercise-bodypart-chip.active {
+  border-color: var(--acc);
+  background: var(--acc-g);
+  color: var(--acc);
+}
+
 .exercise-search {
   display: flex;
   align-items: center;

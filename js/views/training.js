@@ -405,6 +405,16 @@ function renderSelectExercise(container, S) {
     ...availableEquipment.map(eq => ({ key: eq, label: EQUIPMENT_LABELS[eq] })),
   ];
 
+  const bodyPartSwitchHtml = isAddMore ? `
+    <div class="exercise-bodypart-bar" id="exerciseBodyPartBar" aria-label="切换动作部位">
+      ${BODY_PARTS.map(part => `
+        <button class="exercise-bodypart-chip${bp === part.id ? ' active' : ''}" data-part="${part.id}">
+          ${escapeHtml(getBodyPartFullName(part.id))}
+        </button>
+      `).join('')}
+    </div>
+  ` : '';
+
   const isEmpty = finalList.length === 0;
 
   container.innerHTML = `
@@ -415,6 +425,8 @@ function renderSelectExercise(container, S) {
       </div>
       <div class="text-xs text-muted" id="exerciseHelperCopy">${headerHelper}</div>
     </div>
+
+    ${bodyPartSwitchHtml}
 
     <div class="exercise-search">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
@@ -519,13 +531,22 @@ function renderSelectExercise(container, S) {
     });
   });
 
+  container.querySelectorAll('#exerciseBodyPartBar .exercise-bodypart-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      S.selectedBodyPart = chip.dataset.part;
+      S.exerciseSearch = '';
+      S.exerciseFilter = 'recommended';
+      onStateChange();
+    });
+  });
+
   function toggleSelection(name, type) {
     if (lockedNames.has(name)) return; // cannot deselect locked (already logged) exercises
     const idx = S.pendingExercises.findIndex(p => p.name === name);
     if (idx >= 0) {
       S.pendingExercises.splice(idx, 1);
     } else {
-      S.pendingExercises.push({ name, type });
+      S.pendingExercises.push({ name, type, bodyPart: bp });
     }
     onStateChange();
   }
@@ -594,7 +615,7 @@ function startTrainingWithSelectedExercises(S) {
   for (const item of S.pendingExercises || []) {
     if (!S.currentTraining.exercises.find(e => e.name === item.name)) {
       // Insert at the top so the newest exercise is immediately visible without scrolling
-      S.currentTraining.exercises.unshift({ name: item.name, type: item.type, sets: [] });
+      S.currentTraining.exercises.unshift({ name: item.name, type: item.type, bodyPart: item.bodyPart || S.selectedBodyPart, sets: [] });
     }
   }
 
