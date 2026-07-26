@@ -81,6 +81,9 @@ async function init() {
       } else {
         S.trainingTimerActive = false;
       }
+      if (S.currentTraining?.bodyPart) {
+        S.selectedBodyPart = S.currentTraining.bodyPart;
+      }
       S.trainingScreen = S.currentTraining ? 'active' : 'home';
     }
   } catch (e) {

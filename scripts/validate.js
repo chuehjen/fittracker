@@ -54,9 +54,18 @@ function validateSync() {
   assert(profile.includes("queueUpsert('body_records'"), 'weight records must sync through body_records');
 }
 
+function validateAddMoreFallback() {
+  const training = read('js/views/training.js');
+  const app = read('js/app.js');
+  assert(training.includes('S.selectedBodyPart || S.currentTraining?.bodyPart'), 'add-more exercise screen must fall back to currentTraining.bodyPart');
+  assert(training.includes('S.selectedBodyPart = S.currentTraining.bodyPart'), 'add-more button must restore selectedBodyPart from active training');
+  assert(app.includes('S.selectedBodyPart = S.currentTraining.bodyPart'), 'app restore must preserve selected body part for active training');
+}
+
 validateNoDietUi();
 validatePwa();
 validateCatalog();
 validateSync();
+validateAddMoreFallback();
 
 console.log('Validation passed');

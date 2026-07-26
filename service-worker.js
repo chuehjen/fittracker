@@ -1,7 +1,7 @@
 // ===== FitTracker PWA Service Worker =====
 // Caches the app shell so core workout logging can open offline.
 
-const CACHE_NAME = 'fittracker-shell-v4';
+const CACHE_NAME = 'fittracker-shell-v5';
 const APP_SHELL = [
   './',
   './index.html',

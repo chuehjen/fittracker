@@ -292,7 +292,13 @@ function exerciseMatchesQuery(opt, query) {
 
 // ----- 5. Main render function -----
 function renderSelectExercise(container, S) {
-  const bp = S.selectedBodyPart;
+  const bp = S.selectedBodyPart || S.currentTraining?.bodyPart;
+  if (!bp) {
+    S.trainingScreen = S.currentTraining ? 'active' : 'selectPart';
+    onStateChange();
+    return;
+  }
+  S.selectedBodyPart = bp;
   const isAddMore = !!S.currentTraining; // user came from active training "加动作"
 
   S.exerciseSearch = S.exerciseSearch || '';
@@ -685,6 +691,7 @@ function renderActiveTraining(container, S) {
 
   fab.querySelector('#btnAddMore').addEventListener('click', () => {
     removeFab();
+    S.selectedBodyPart = S.currentTraining.bodyPart;
     S.pendingExercises = [];
     S.exerciseSearch = '';
     S.exerciseFilter = 'recommended';
