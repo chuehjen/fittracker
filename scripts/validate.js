@@ -54,6 +54,17 @@ function validateSync() {
   assert(profile.includes("queueUpsert('body_records'"), 'weight records must sync through body_records');
 }
 
+function validateSyncDataIntegrity() {
+  const sync = read('js/sync.js');
+  const schema = read('supabase-schema.sql');
+  assert(!sync.includes("select('*').eq('deleted', false)"), 'sync pull must include soft-deleted rows');
+  assert(sync.includes('if (c.deleted)'), 'sync merge must apply remote soft deletions');
+  assert(sync.includes('notes: c.notes ||'), 'sync pull must retain training notes');
+  assert(sync.includes('notes: data.notes || null'), 'sync push must send training notes');
+  assert(sync.includes("table === 'training_records' && /notes|column/i"), 'training sync must tolerate a schema awaiting the notes migration');
+  assert(schema.includes('ALTER TABLE training_records ADD COLUMN IF NOT EXISTS notes TEXT'), 'schema must migrate existing projects for synced training notes');
+}
+
 function validateAddMoreFallback() {
   const training = read('js/views/training.js');
   const app = read('js/app.js');
@@ -64,18 +75,47 @@ function validateAddMoreFallback() {
 
 function validateCrossBodyPartAddMore() {
   const training = read('js/views/training.js');
+  const history = read('js/views/history.js');
+  const ai = read('js/ai.js');
+  const achievements = read('js/achievements.js');
+  const charts = read('js/charts.js');
   const css = read('css/style.css');
   assert(training.includes('exerciseBodyPartBar'), 'add-more exercise screen must expose body-part switching');
   assert(training.includes('S.selectedBodyPart = chip.dataset.part'), 'body-part switch must update selectedBodyPart');
   assert(training.includes('S.pendingExercises.push({ name, type, bodyPart: bp })'), 'pending exercises must preserve their selected body part');
+  assert(training.includes('getRecordBodyParts(r).includes(bp)'), 'exercise recommendations must recognize multi-part sessions');
+  assert(history.includes('getRecordBodyParts(r).includes(S.historyFilter)'), 'history filters must recognize multi-part sessions');
+  assert(ai.includes('getRecordBodyParts(r).forEach(bodyPart =>'), 'AI insights must recognize multi-part sessions');
+  assert(achievements.includes('getRecordBodyParts(r).includes(bp)'), 'all-parts achievement must recognize multi-part sessions');
+  assert(charts.includes('getRecordBodyParts(r).includes(bp.id)'), 'body-part chart must recognize multi-part sessions');
   assert(css.includes('.exercise-bodypart-chip.active'), 'body-part switcher must have an active style');
+}
+
+function validateTrainingGuidance() {
+  const training = read('js/views/training.js');
+  const guidance = read('js/training_guidance.js');
+  const detail = read('js/exercise_detail.js');
+  const css = read('css/style.css');
+  const sw = read('service-worker.js');
+  assert(guidance.includes("id: 'beginner-full-body-a'"), 'guidance must include beginner full-body template A');
+  assert(guidance.includes("id: 'beginner-full-body-b'"), 'guidance must include beginner full-body template B');
+  assert(guidance.includes("id: 'beginner-upper-machine'"), 'guidance must include upper-body machine template');
+  assert(guidance.includes("mode: 'consider-load'"), 'progression must avoid inventing a concrete load increase');
+  assert(training.includes('startTrainingFromRecord'), 'training home must support reusing a previous workout');
+  assert(training.includes('renderTemplateSelect'), 'training view must render template selection');
+  assert(training.includes('data-apply-suggestion'), 'active training must support applying a progression suggestion');
+  assert(detail.includes('新手安全卡'), 'exercise detail must render the safety card');
+  assert(css.includes('.progression-hint') && css.includes('.safety-card'), 'guidance UI must have styles');
+  assert(sw.includes('./js/training_guidance.js'), 'service worker must cache the guidance module');
 }
 
 validateNoDietUi();
 validatePwa();
 validateCatalog();
 validateSync();
+validateSyncDataIntegrity();
 validateAddMoreFallback();
 validateCrossBodyPartAddMore();
+validateTrainingGuidance();
 
 console.log('Validation passed');

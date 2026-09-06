@@ -128,10 +128,12 @@ export async function syncPull() {
     const now = new Date().toISOString();
 
     // Pull all tables
+    // Include soft-deleted rows so a deletion made on another device can remove
+    // its local copy. Filtering them here leaves stale records forever.
     const [trainingRes, bodyRes, customRes] = await Promise.all([
-      supabaseClient.from('training_records').select('*').eq('deleted', false),
-      supabaseClient.from('body_records').select('*').eq('deleted', false),
-      supabaseClient.from('custom_exercises').select('*').eq('deleted', false),
+      supabaseClient.from('training_records').select('*'),
+      supabaseClient.from('body_records').select('*'),
+      supabaseClient.from('custom_exercises').select('*'),
     ]);
 
     if (trainingRes.error) throw trainingRes.error;
@@ -228,19 +230,21 @@ export async function syncAll() {
 
 function mergeRecords(local, cloud, type) {
   const merged = [...local];
-  const cloudByLocalId = {};
-  for (const c of cloud) {
-    if (c.local_id) cloudByLocalId[c.local_id] = c;
-  }
 
-  // Update or insert cloud records
+  // Update, insert, or remove records using the same last-write-wins rule.
   for (const c of cloud) {
     if (!c.local_id) continue;
-    const existing = merged.find(r => r.id === c.local_id || r._cloudId === c.id);
+    const index = merged.findIndex(r => r.id === c.local_id || r._cloudId === c.id);
+    const existing = index >= 0 ? merged[index] : null;
+    const cloudTs = new Date(c.updated_at).getTime() || 0;
+    const localTs = existing?._updatedAt ? new Date(existing._updatedAt).getTime() || 0 : 0;
+
+    if (c.deleted) {
+      if (existing && cloudTs >= localTs) merged.splice(index, 1);
+      continue;
+    }
+
     if (existing) {
-      // last-write-wins
-      const cloudTs = new Date(c.updated_at).getTime();
-      const localTs = existing._updatedAt ? new Date(existing._updatedAt).getTime() : 0;
       if (cloudTs > localTs) {
         // Cloud is newer, update local
         Object.assign(existing, normalizeCloudRecord(c, type));
@@ -257,7 +261,15 @@ function mergeRecords(local, cloud, type) {
 function normalizeCloudRecord(c, type) {
   const base = { _cloudId: c.id, _updatedAt: c.updated_at };
   if (type === 'training') {
-    return { ...base, id: c.local_id, bodyPart: c.body_part, exercises: c.exercises, duration: c.duration || 0, date: c.date };
+    return {
+      ...base,
+      id: c.local_id,
+      bodyPart: c.body_part,
+      exercises: c.exercises,
+      duration: c.duration || 0,
+      date: c.date,
+      notes: c.notes || '',
+    };
   }
   if (type === 'weight') {
     return { ...base, id: c.local_id, weight: Number(c.weight), date: c.date };
@@ -289,6 +301,18 @@ async function upsertMappedRow(table, localId, data, userId) {
     .upsert(row, { onConflict: 'user_id,local_id' });
 
   if (!error) return;
+
+  // A deployed app can update before its Supabase schema migration is applied.
+  // Keep the workout itself syncing; notes will join the next successful sync
+  // after the idempotent schema migration has been run.
+  if (table === 'training_records' && /notes|column/i.test(error.message || '')) {
+    const { notes, ...legacyRow } = row;
+    const retry = await supabaseClient
+      .from(table)
+      .upsert(legacyRow, { onConflict: 'user_id,local_id' });
+    if (retry.error) throw retry.error;
+    return;
+  }
 
   // Older installations may not yet have body_part/type on custom_exercises.
   // Keep the sync alive with the legacy shape instead of blocking all pushes.
@@ -322,6 +346,7 @@ export function mapLocalToCloudRow(table, localId, data, userId) {
       exercises: data.exercises || [],
       duration: data.duration || 0,
       date: data.date,
+      notes: data.notes || null,
       updated_at: updatedAt,
       deleted: false,
     };

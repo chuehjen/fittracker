@@ -8,6 +8,7 @@ import {
   getLevelLabel,
   getEquipmentLabel,
 } from './exercise_db.js';
+import { getSafetyCard } from './training_guidance.js';
 
 function escapeHtml(str = '') {
   return String(str)
@@ -21,6 +22,7 @@ function escapeHtml(str = '') {
 export function showExerciseDetailDrawer(name) {
   const detail = getExerciseDetail(name);
   if (!detail) return;
+  const safetyCard = getSafetyCard(name);
 
   // Remove any existing drawer
   document.querySelectorAll('.ex-detail-overlay').forEach(el => el.remove());
@@ -44,6 +46,18 @@ export function showExerciseDetailDrawer(name) {
         </button>
       </div>
       <div class="ex-detail-body">
+        ${safetyCard ? `
+          <section class="safety-card" aria-label="新手安全卡">
+            <div class="safety-card-title">新手安全卡</div>
+            <div class="safety-card-section">
+              <strong>关键姿势</strong>
+              <ul>${safetyCard.cues.map(cue => `<li>${escapeHtml(cue)}</li>`).join('')}</ul>
+            </div>
+            <div class="safety-card-section"><strong>常见错误</strong><p>${escapeHtml(safetyCard.commonMistake)}</p></div>
+            <div class="safety-card-section safety-stop"><strong>立即停止</strong><p>${escapeHtml(safetyCard.stopSignal)}</p></div>
+            <p class="safety-card-disclaimer">仅供训练参考，不替代医疗诊断或专业指导。</p>
+          </section>
+        ` : ''}
         ${imgs.length > 0 ? `
           <div class="ex-detail-image-wrap">
             <img class="ex-detail-image" src="${imgs[0]}" alt="${escapeHtml(name)}" loading="lazy" />

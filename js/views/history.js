@@ -1,7 +1,7 @@
 // ===== History View =====
 
 import { BODY_PARTS } from '../exercises.js';
-import { fmtDateFull, fmtDuration, fmtVol, calcVolume } from '../helpers.js';
+import { fmtDateFull, fmtDuration, fmtVol, calcVolume, getRecordBodyParts } from '../helpers.js';
 import { escapeHtml } from '../html.js';
 import { showUndoToast } from '../toast.js';
 import { queueDelete, queueUpsert } from '../sync.js';
@@ -18,7 +18,7 @@ export function renderHistory(container, S, stateChanged) {
 function renderTrainingHistory(container, S, stateChanged) {
   const recs = [...S.trainingRecords].reverse();
   const filters = ['all', ...BODY_PARTS.map(b => b.id)];
-  const filtered = S.historyFilter === 'all' ? recs : recs.filter(r => r.bodyPart === S.historyFilter);
+  const filtered = S.historyFilter === 'all' ? recs : recs.filter(r => getRecordBodyParts(r).includes(S.historyFilter));
 
   container.innerHTML = `
     <div class="filter-bar">
@@ -29,7 +29,7 @@ function renderTrainingHistory(container, S, stateChanged) {
         <div class="history-card-header" data-toggle="${r.id}">
           <div class="hc-left">
             <div class="hc-date">${fmtDateFull(r.date)}${r.duration ? ` · ${fmtDuration(r.duration)}` : ''}</div>
-            <div class="hc-title">${getBodyPartName(r.bodyPart)}训练</div>
+            <div class="hc-title">${getRecordBodyParts(r).map(getBodyPartName).join(' + ')}训练</div>
           </div>
           <div class="hc-right">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>

@@ -15,6 +15,7 @@ CREATE TABLE training_records (
   exercises JSONB NOT NULL,
   duration INTEGER DEFAULT 0,
   date TEXT NOT NULL,
+  notes TEXT,
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now(),
   deleted BOOLEAN DEFAULT false,
@@ -65,6 +66,7 @@ ALTER TABLE body_records ENABLE ROW LEVEL SECURITY;
 ALTER TABLE custom_exercises ENABLE ROW LEVEL SECURITY;
 
 -- Existing projects created before custom exercise body-part sync can run these safely.
+ALTER TABLE training_records ADD COLUMN IF NOT EXISTS notes TEXT;
 ALTER TABLE custom_exercises ADD COLUMN IF NOT EXISTS body_part TEXT;
 ALTER TABLE custom_exercises ADD COLUMN IF NOT EXISTS type TEXT;
 

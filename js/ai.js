@@ -1,7 +1,7 @@
 // ===== AI Analysis Engine =====
 
 import { BODY_PARTS } from './exercises.js';
-import { calcVolume } from './helpers.js';
+import { calcVolume, getRecordBodyParts } from './helpers.js';
 
 // ===== Rule-Based Fallback Engine =====
 
@@ -16,8 +16,10 @@ export function aiPreWorkout(state) {
   const partCount = {};
   const lastPart = {};
   recent.forEach(r => {
-    partCount[r.bodyPart] = (partCount[r.bodyPart] || 0) + 1;
-    if (!lastPart[r.bodyPart] || r.date > lastPart[r.bodyPart]) lastPart[r.bodyPart] = r.date;
+    getRecordBodyParts(r).forEach(bodyPart => {
+      partCount[bodyPart] = (partCount[bodyPart] || 0) + 1;
+      if (!lastPart[bodyPart] || r.date > lastPart[bodyPart]) lastPart[bodyPart] = r.date;
+    });
   });
 
   const allParts = BODY_PARTS.map(b => b.id);
@@ -83,7 +85,11 @@ export function aiWeeklyReport(state) {
   let report = [];
   report.push(`本周训练了<strong>${weekRecs.length}次</strong>。`);
   const partCounts = {};
-  weekRecs.forEach(r => { partCounts[r.bodyPart] = (partCounts[r.bodyPart] || 0) + 1; });
+  weekRecs.forEach(r => {
+    getRecordBodyParts(r).forEach(bodyPart => {
+      partCounts[bodyPart] = (partCounts[bodyPart] || 0) + 1;
+    });
+  });
   const untrained = BODY_PARTS.filter(b => !partCounts[b.id]).map(b => b.name);
   if (untrained.length > 0) report.push(`未训练部位：<strong>${untrained.join('、')}</strong>`);
   return { title: '本周 AI 周报', body: report.join('<br>') };

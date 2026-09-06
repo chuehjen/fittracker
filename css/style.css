@@ -158,6 +158,27 @@ button { cursor: pointer; }
 .btn-danger:active { background: rgba(255,68,68,.25); }
 .btn-sm { padding: 8px 16px; font-size: 13px; border-radius: var(--r-s); }
 .btn-block { width: 100%; display: flex; }
+
+/* ===== Training guidance ===== */
+.training-home-actions { display: grid; gap: 8px; margin: -8px 0 16px; }
+.training-home-actions .btn { min-height: 44px; }
+.template-list { display: grid; gap: 12px; }
+.template-card { background: var(--card); border: 1px solid var(--bd); border-radius: var(--r-l); padding: 16px; }
+.template-card h3 { font-size: 17px; margin-bottom: 4px; }
+.template-card p { color: var(--t2); font-size: 13px; margin-bottom: 12px; }
+.template-card .btn { margin-top: 14px; min-height: 44px; }
+.template-exercises { color: var(--t1); font-size: 13px; line-height: 1.7; padding: 10px 0 0; border-top: 1px solid var(--bd); }
+.progression-hint { display: flex; align-items: center; justify-content: space-between; gap: 8px; color: var(--t2); font-size: 12px; line-height: 1.4; padding: 8px 2px 2px; }
+.progression-apply { flex: 0 0 auto; color: var(--acc); border: 1px solid rgba(50,205,50,.45); border-radius: var(--r-f); min-height: 30px; padding: 4px 10px; font-size: 12px; font-weight: 700; }
+.progression-apply:active { background: var(--acc-g); }
+.safety-card { background: rgba(50,205,50,.07); border: 1px solid rgba(50,205,50,.35); border-radius: var(--r-m); padding: 14px; margin-bottom: 16px; }
+.safety-card-title { color: var(--acc); font-size: 14px; font-weight: 800; margin-bottom: 10px; }
+.safety-card-section { margin-top: 10px; color: var(--t2); font-size: 13px; line-height: 1.55; }
+.safety-card-section strong { display: block; color: var(--t1); margin-bottom: 2px; }
+.safety-card-section ul { padding-left: 18px; }
+.safety-card-section p { margin: 0; }
+.safety-stop strong, .safety-stop p { color: #fbbf24; }
+.safety-card-disclaimer { color: var(--t3); font-size: 11px; line-height: 1.45; margin: 12px 0 0; }
 .btn-icon { width: 40px; height: 40px; padding: 0; border-radius: var(--r-m); display: flex; align-items: center; justify-content: center; }
 
 /* ===== Forms ===== */

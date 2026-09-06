@@ -3,6 +3,7 @@
 // Renders: training frequency (bar) + body part distribution (doughnut)
 
 import { BODY_PARTS } from './exercises.js';
+import { getRecordBodyParts } from './helpers.js';
 
 const chartInstances = {};
 let chartLoaded = false;
@@ -59,7 +60,7 @@ function renderDistChart(container, S) {
 
   const partDist = BODY_PARTS.map(bp => ({
     name: bp.name,
-    count: (S.trainingRecords || []).filter(r => r.bodyPart === bp.id).length
+    count: (S.trainingRecords || []).filter(r => getRecordBodyParts(r).includes(bp.id)).length
   }));
 
   const chart = new Chart(canvas.getContext('2d'), {

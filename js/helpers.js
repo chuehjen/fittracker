@@ -18,3 +18,12 @@ export function fmtVol(v) { if (v === 0) return '0'; if (v >= 10000) return (v /
 export function calcVolume(exercises) {
   return exercises.reduce((t, ex) => t + ex.sets.reduce((st, s) => st + s.weight * s.reps, 0), 0);
 }
+
+// A session can contain exercises from multiple body parts. Older records only
+// have a session-level bodyPart, so keep that as a backward-compatible fallback.
+export function getRecordBodyParts(record) {
+  const exerciseParts = (record.exercises || [])
+    .map(exercise => exercise.bodyPart)
+    .filter(Boolean);
+  return [...new Set(exerciseParts.length > 0 ? exerciseParts : [record.bodyPart].filter(Boolean))];
+}

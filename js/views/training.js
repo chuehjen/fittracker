@@ -7,11 +7,12 @@ import { showExerciseDetailDrawer } from '../exercise_detail.js';
 import { getWeeklyNews } from '../news.js';
 import { ACHIEVEMENTS, getUnlockedAchievements } from '../achievements.js';
 import { aiPreWorkout, aiPostWorkout } from '../ai.js';
-import { genId, today, fmtDateFull, fmtDuration, fmtTime, fmtVol, calcVolume } from '../helpers.js';
+import { genId, today, fmtDateFull, fmtDuration, fmtTime, fmtVol, calcVolume, getRecordBodyParts } from '../helpers.js';
 import { escapeAttr, escapeHtml } from '../html.js';
 import { doExport, doImport } from '../data.js';
 import { showConfirm } from '../toast.js';
 import { queueUpsert } from '../sync.js';
+import { TRAINING_TEMPLATES, getLastExercisePerformance, getProgressionSuggestion } from '../training_guidance.js';
 
 let onStateChange = null;
 let currentRender = null;
@@ -29,6 +30,7 @@ export function renderTraining(container, S, stateChanged) {
     home: renderTrainingHome,
     selectPart: renderSelectPart,
     selectExercise: renderSelectExercise,
+    templateSelect: renderTemplateSelect,
     active: renderActiveTraining,
     summary: renderTrainingSummary
   };
@@ -43,6 +45,7 @@ function renderTrainingHome(container, S) {
   const ai = aiPreWorkout(S);
   const news = getWeeklyNews();
   const unlocked = getUnlockedAchievements(S);
+  const latestRecord = getMostRecentTrainingRecord(S);
   container.innerHTML = `
     <div class="app-header">
       <div class="title">FITTRACKER PRO</div>
@@ -55,6 +58,12 @@ function renderTrainingHome(container, S) {
     <button class="btn btn-primary btn-block" id="btnStartTraining" style="padding:16px;font-size:17px;border-radius:var(--r-l);margin-bottom:16px">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> 开始训练
     </button>
+    <div class="training-home-actions">
+      ${latestRecord ? `<button class="btn btn-outline" id="btnReuseLastTraining">
+        复用上次训练 · ${getRecordBodyParts(latestRecord).map(id => getBodyPartName(S, id)).join(' + ')}
+      </button>` : ''}
+      <button class="btn btn-ghost" id="btnChooseTemplate">选择训练模板</button>
+    </div>
     <div class="achievements-section">
       <div class="section-title" style="font-size:15px">成就徽章</div>
       <div class="achievements-grid">
@@ -88,6 +97,14 @@ function renderTrainingHome(container, S) {
     S.trainingScreen = 'selectPart';
     onStateChange();
   });
+  const reuseLastBtn = container.querySelector('#btnReuseLastTraining');
+  if (reuseLastBtn && latestRecord) {
+    reuseLastBtn.addEventListener('click', () => startTrainingFromRecord(latestRecord, S));
+  }
+  container.querySelector('#btnChooseTemplate').addEventListener('click', () => {
+    S.trainingScreen = 'templateSelect';
+    onStateChange();
+  });
   const backupBtn = container.querySelector('#btnBackup');
   const restoreBtn = container.querySelector('#btnRestore');
   if (backupBtn) backupBtn.addEventListener('click', () => doExport(S));
@@ -118,10 +135,87 @@ function renderRecentTraining(S) {
   return `<div class="mt-16"><div class="section-title" style="font-size:15px">最近训练</div>
     ${recent.map(r => `
       <div class="card" style="padding:12px 14px;display:flex;align-items:center;justify-content:space-between">
-        <div><div class="text-sm fw-700">${getBodyPartName(S, r.bodyPart)}</div><div class="text-xs text-muted">${fmtDateFull(r.date)} · ${fmtDuration(r.duration || 0)}</div></div>
+        <div><div class="text-sm fw-700">${getRecordBodyParts(r).map(id => getBodyPartName(S, id)).join(' + ')}</div><div class="text-xs text-muted">${fmtDateFull(r.date)} · ${fmtDuration(r.duration || 0)}</div></div>
         <div class="badge badge-accent">${fmtVol(calcVolume(r.exercises))} kg</div>
       </div>
     `).join('')}</div>`;
+}
+
+function getMostRecentTrainingRecord(S) {
+  return [...(S.trainingRecords || [])].filter(record => (record.exercises || []).length > 0).sort((a, b) => {
+    const aTime = new Date(a._updatedAt || a.date || 0).getTime();
+    const bTime = new Date(b._updatedAt || b.date || 0).getTime();
+    return bTime - aTime;
+  })[0] || null;
+}
+
+function startNewTraining(S, bodyPart, exercises, { prefillFromHistory = false } = {}) {
+  S.currentTraining = {
+    id: genId(),
+    date: today(),
+    bodyPart,
+    exercises: exercises.map(exercise => ({ ...exercise, sets: [] })),
+    duration: 0,
+    photo: '',
+    notes: '',
+    totalVolume: 0,
+    prefillFromHistory,
+  };
+  S.selectedBodyPart = bodyPart;
+  S.trainingTimerActive = true;
+  S.trainingTimerStart = Date.now();
+  S.trainingTimerElapsed = 0;
+  S.trainingScreen = 'active';
+  onStateChange();
+}
+
+function startTrainingFromRecord(record, S) {
+  startNewTraining(S, record.bodyPart, (record.exercises || []).map(exercise => ({
+    name: exercise.name,
+    type: exercise.type || 'free',
+    bodyPart: exercise.bodyPart || record.bodyPart,
+  })), { prefillFromHistory: true });
+}
+
+function startTrainingFromTemplate(template, S) {
+  startNewTraining(S, template.primaryBodyPart, template.exercises);
+}
+
+function renderTemplateSelect(container, S) {
+  container.innerHTML = `
+    <div class="flex-between mb-16">
+      <div>
+        <div class="section-title" style="margin:0">选择训练模板</div>
+        <div class="text-xs text-muted">选一套直接开始，训练中仍可自由调整。</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" id="btnBackTemplateHome">返回</button>
+    </div>
+    <div class="template-list">
+      ${TRAINING_TEMPLATES.map(template => `
+        <article class="template-card">
+          <div class="flex-between" style="align-items:flex-start;gap:12px">
+            <div>
+              <h3>${template.name}</h3>
+              <p>${template.description}</p>
+            </div>
+            <span class="badge badge-accent">${template.duration}</span>
+          </div>
+          <div class="template-exercises">${template.exercises.map(exercise => escapeHtml(exercise.name)).join(' · ')}</div>
+          <button class="btn btn-primary btn-block" data-template-id="${template.id}">开始这套训练</button>
+        </article>
+      `).join('')}
+    </div>
+  `;
+  container.querySelector('#btnBackTemplateHome').addEventListener('click', () => {
+    S.trainingScreen = 'home';
+    onStateChange();
+  });
+  container.querySelectorAll('[data-template-id]').forEach(button => {
+    button.addEventListener('click', () => {
+      const template = TRAINING_TEMPLATES.find(item => item.id === button.dataset.templateId);
+      if (template) startTrainingFromTemplate(template, S);
+    });
+  });
 }
 
 function renderSelectPart(container, S) {
@@ -216,7 +310,7 @@ function getRecommendedExercises(options, S, bp) {
 
   // exercises used for this body part in the most recent matching workout
   const sameBodyPartRecords = recs
-    .filter(r => r.bodyPart === bp)
+    .filter(r => getRecordBodyParts(r).includes(bp))
     .sort((a, b) => b.date.localeCompare(a.date));
   const recentNamesForBodyPart = new Set();
   if (sameBodyPartRecords.length > 0) {
@@ -225,7 +319,7 @@ function getRecommendedExercises(options, S, bp) {
 
   // has this body part been trained recently (within last 14 days, last 14 records)?
   const recent14 = recs.slice(-14);
-  const trainedRecently = recent14.some(r => r.bodyPart === bp);
+  const trainedRecently = recent14.some(r => getRecordBodyParts(r).includes(bp));
 
   const scored = options.map(opt => {
     let score = 0;
@@ -657,8 +751,10 @@ function renderActiveTraining(container, S) {
       const currentMax = ex.sets.length > 0 ? Math.max(...ex.sets.map(s => s.weight)) : 0;
       const isPR = currentMax > 0 && currentMax > getPRBefore(S, ex.name, ct.id) && getPRBefore(S, ex.name, ct.id) > 0;
       const nextNum = ex.sets.length + 1;
-      const lastW = ex.sets.length > 0 ? ex.sets[ex.sets.length - 1].weight : '';
-      const lastR = ex.sets.length > 0 ? ex.sets[ex.sets.length - 1].reps : '';
+      const progression = getProgressionSuggestion(getLastExercisePerformance(S.trainingRecords, ex.name));
+      const shouldPrefill = ct.prefillFromHistory && ex.sets.length === 0 && progression.canApply;
+      const lastW = ex.sets.length > 0 ? ex.sets[ex.sets.length - 1].weight : (shouldPrefill ? progression.weight : '');
+      const lastR = ex.sets.length > 0 ? ex.sets[ex.sets.length - 1].reps : (shouldPrefill ? progression.reps : '');
       return `<div class="card" style="padding:12px">
         <div class="flex-between mb-8">
           <div>
@@ -675,6 +771,10 @@ function renderActiveTraining(container, S) {
             <input type="number" placeholder="kg" id="w-${ei}" inputmode="decimal" step="0.5" value="${lastW}">
             <input type="number" placeholder="次数" id="r-${ei}" inputmode="numeric" value="${lastR}">
             <button class="s-check-btn" data-ei="${ei}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></button>
+          </div>
+          <div class="progression-hint">
+            <span>${progression.lastText ? `${progression.lastText} · ${progression.goalText}` : progression.goalText}</span>
+            ${progression.canApply ? `<button class="progression-apply" data-apply-suggestion="${ei}">${progression.mode === 'consider-load' ? '带入上次' : '应用建议'}</button>` : ''}
           </div>
           ${ex.sets.slice().reverse().map((s, revIdx) => { const si = ex.sets.length - 1 - revIdx; return `<div class="swipe-wrap" data-ei="${ei}" data-si="${si}">
             <div class="swipe-del">删除</div>
@@ -737,6 +837,18 @@ function renderActiveTraining(container, S) {
 
   container.querySelectorAll('.s-check-btn').forEach(btn => {
     btn.addEventListener('click', () => addSet(parseInt(btn.dataset.ei), S));
+  });
+  container.querySelectorAll('[data-apply-suggestion]').forEach(button => {
+    button.addEventListener('click', () => {
+      const exerciseIndex = parseInt(button.dataset.applySuggestion);
+      const exercise = S.currentTraining.exercises[exerciseIndex];
+      const suggestion = getProgressionSuggestion(getLastExercisePerformance(S.trainingRecords, exercise.name));
+      if (!suggestion.canApply) return;
+      const weightInput = container.querySelector(`#w-${exerciseIndex}`);
+      const repsInput = container.querySelector(`#r-${exerciseIndex}`);
+      if (weightInput) weightInput.value = suggestion.weight;
+      if (repsInput) repsInput.value = suggestion.reps;
+    });
   });
   ct.exercises.forEach((ex, ei) => {
     const wI = container.querySelector(`#w-${ei}`);
@@ -816,6 +928,7 @@ function renderTrainingSummary(container, S) {
   container.querySelector('#btnSaveTraining').addEventListener('click', () => {
     ct.notes = container.querySelector('#trainingNotes').value;
     ct._updatedAt = new Date().toISOString();
+    delete ct.prefillFromHistory;
     S.trainingRecords.push(ct);
     queueUpsert('training_records', ct.id, ct).catch(e => console.warn('[Sync] Queue training failed:', e));
     S.currentTraining = null;
